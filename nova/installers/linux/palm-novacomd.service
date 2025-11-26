@@ -1,0 +1,11 @@
+[Unit]
+Description=Palm NovaCom, Palm's debug/control protocol server.
+
+[Service]
+#Environment=
+WorkingDirectory=/opt/Palm/novacom/
+ExecStart=/opt/Palm/novacom/novacomd
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
