@@ -192,6 +192,12 @@ else
         exit 1
     fi
     log_success "Build tools available"
+
+    # Check for libusb development headers
+    if ! dpkg -l | grep -q "^ii.*libusb-dev"; then
+        log_error "libusb-dev not found - required for building"
+        exit 1
+    fi
 fi
 
 # Build novacomd
