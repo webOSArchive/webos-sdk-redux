@@ -180,9 +180,9 @@ if [ "$PLATFORM" = "macos" ]; then
     # Check for libusb-compat (non-fatal warning)
     # Use $BREW_CMD to run as the original user when running via sudo
     if ! $BREW_CMD list --versions libusb-compat >/dev/null 2>&1; then
-        log_warning "Unable to verify libusb-compat via Homebrew"
-        log_info "If the build fails, install with: brew install libusb-compat"
-        log_info "Continuing anyway - the build will fail if library is truly missing"
+        log_error "libusb-compat not found - required for building"
+        log_info "Install libusb-compat via Homebrew (install Homebrew if needed first!)
+        exit 1
     else
         log_success "libusb-compat is installed ($($BREW_CMD list --versions libusb-compat))"
     fi
@@ -205,6 +205,7 @@ echo ""
 log_step "2/4 - Building components..."
 echo ""
 log_info "Building novacomd..."
+log_step "(Some warnings are normal and safe to ignore if the build succeeds)"
 cd "$SCRIPT_DIR/novacomd"
 if ! make host; then
     log_error "Failed to build novacomd"
@@ -215,6 +216,7 @@ log_success "novacomd built successfully"
 # Build novacom
 echo ""
 log_info "Building novacom..."
+log_step "(Some warnings are normal and safe to ignore if the build succeeds)"
 cd "$SCRIPT_DIR/novacom"
 if ! make; then
     log_error "Failed to build novacom"

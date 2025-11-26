@@ -406,6 +406,7 @@ main() {
 
     # Build
     print_header "Building novacomd"
+    print_header "(Some warnings are normal and safe to ignore if the build succeeds)"
 
     if ! build_novacomd; then
         log_error "Build failed"
