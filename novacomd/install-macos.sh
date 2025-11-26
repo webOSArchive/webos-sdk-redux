@@ -28,6 +28,55 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
+# Check for required dependencies
+log_info "Checking for required dependencies..."
+MISSING_DEPS=()
+HOMEBREW_MISSING=false
+
+# Check if Homebrew is installed
+if ! command -v brew > /dev/null 2>&1; then
+    HOMEBREW_MISSING=true
+    log_error "Homebrew is not installed!"
+    echo ""
+    log_info "Homebrew is required to install libusb-compat dependency."
+    log_info "To install Homebrew, visit: https://brew.sh"
+    echo ""
+    log_info "Or run this command:"
+    echo ""
+    echo '  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
+    echo ""
+    log_error "Installation cancelled. Please install Homebrew and try again."
+    exit 1
+else
+    log_success "Homebrew is installed"
+
+    # Check for libusb-compat
+    if ! brew list libusb-compat > /dev/null 2>&1; then
+        MISSING_DEPS+=("libusb-compat")
+    fi
+fi
+
+# If dependencies are missing, show error and exit
+if [ ${#MISSING_DEPS[@]} -gt 0 ]; then
+    echo ""
+    log_error "Missing required dependencies!"
+    echo ""
+    log_info "The following packages are required but not installed:"
+    for dep in "${MISSING_DEPS[@]}"; do
+        echo "  - $dep"
+    done
+    echo ""
+    log_info "To install the missing dependencies, run:"
+    echo ""
+    echo "  brew install ${MISSING_DEPS[@]}"
+    echo ""
+    log_error "Installation cancelled. Please install the dependencies and try again."
+    exit 1
+fi
+
+log_success "All required dependencies are installed"
+echo ""
+
 # Check if binary exists
 if [ ! -f "$NOVACOMD_BIN" ]; then
     log_error "Binary not found at $NOVACOMD_BIN"
