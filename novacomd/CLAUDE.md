@@ -68,7 +68,7 @@ sudo make install
 sudo make install PREFIX=/usr/local
 
 # Manual installation
-cp build-novacomd-host/novacomd /opt/nova/bin/
+cp build-novacomd/novacomd /opt/nova/bin/
 ```
 
 ## Development Notes
@@ -149,7 +149,7 @@ novacomd is built in two variants using conditional compilation:
 
 The Makefile handles two separate build configurations:
 - Source files compiled twice with different flags (`-DHOST=1` or `-DDEVICE=1`)
-- Host build outputs to `build-novacomd-host/`
+- Host build outputs to `build-novacomd/`
 - Device build outputs to `build-novacomd-device/`
 - Automatic dependency tracking via `.d` files
 

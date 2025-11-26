@@ -151,7 +151,7 @@ HOSTOBJS += \
 HOSTCFLAGS += -DPLATFORM_PTHREADS=1
 endif
 
-HOSTOBJS := $(addprefix $(BUILDDIR)-host/,$(HOSTOBJS))
+HOSTOBJS := $(addprefix $(BUILDDIR)/,$(HOSTOBJS))
 DEVICEOBJS := $(addprefix $(BUILDDIR)-device/,$(DEVICEOBJS))
 
 DEPS := $(OBJS:.o=.d) $(HOSTOBJS:.o=.d) $(DEVICEOBJS:.o=.d)
@@ -164,7 +164,7 @@ all: host device
 # Build targets
 device: $(BUILDDIR)-device/$(TARGET)
 
-host: $(BUILDDIR)-host/$(TARGET)
+host: $(BUILDDIR)/$(TARGET)
 
 # Universal binary (macOS only - Intel + Apple Silicon)
 universal:
@@ -206,7 +206,7 @@ help:
 	@echo "  BUILD_ARCH=arch  - Build for specific architecture (x86_64, arm64, etc.)"
 	@echo "  UNIVERSAL=1      - Build universal binary (macOS only)"
 
-$(BUILDDIR)-host/$(TARGET): $(HOSTOBJS)
+$(BUILDDIR)/$(TARGET): $(HOSTOBJS)
 	@echo HOST linking $@
 	@${ENVP} $(CC) $(LDFLAGS) $(HOSTOBJS) -o $@ $(HOSTLDLIBS)
 
@@ -216,7 +216,7 @@ $(BUILDDIR)-device/$(TARGET): $(DEVICEOBJS)
 
 .PHONY: clean
 clean:
-	rm -f $(HOSTOBJS) $(DEVICEOBJS) $(DEPS) $(BUILDDIR)-host/$(TARGET) $(BUILDDIR)-device/$(TARGET)
+	rm -f $(HOSTOBJS) $(DEVICEOBJS) $(DEPS) $(BUILDDIR)/$(TARGET) $(BUILDDIR)-device/$(TARGET)
 
 .PHONY: spotless
 spotless:
@@ -230,7 +230,7 @@ BINDIR = $(PREFIX)/bin
 install: host
 	@echo "Installing novacomd to $(BINDIR)..."
 	@mkdir -p $(BINDIR)
-	install -m 755 $(BUILDDIR)-host/$(TARGET) $(BINDIR)/$(TARGET)
+	install -m 755 $(BUILDDIR)/$(TARGET) $(BINDIR)/$(TARGET)
 	@echo "Installation complete!"
 	@echo "Note: You may need to run 'sudo make install' for system-wide installation."
 
@@ -243,17 +243,17 @@ uninstall:
 # makes sure the target dir exists
 MKDIR = if [ ! -d $(dir $@) ]; then mkdir -p $(dir $@); fi
 
-$(BUILDDIR)-host/%.o: %.c
+$(BUILDDIR)/%.o: %.c
 	@$(MKDIR)
 	@echo HOST compiling $<
 	@${ENVP} $(CC) -DHOST=1 $(HOSTCFLAGS) -c $< -MD -MT $@ -MF $(@:%o=%d) -o $@
 
-$(BUILDDIR)-host/%.o: %.cpp
+$(BUILDDIR)/%.o: %.cpp
 	@$(MKDIR)
 	@echo HOST compiling $<
 	@${ENVP} $(CC) -DHOST=1 $(HOSTCPPFLAGS) -c $< -MD -MT $@ -MF $(@:%o=%d) -o $@
 
-$(BUILDDIR)-host/%.o: %.S
+$(BUILDDIR)/%.o: %.S
 	@$(MKDIR)
 	@echo HOST compiling $<
 	@${ENVP} $(CC) -DHOST=1 $(HOSTASMFLAGS) -c $< -MD -MT $@ -MF $(@:%o=%d) -o $@

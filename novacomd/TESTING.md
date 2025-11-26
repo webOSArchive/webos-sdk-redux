@@ -4,7 +4,7 @@ This document describes how to test the modernized novacomd driver with your web
 
 ## Prerequisites
 
-1. **Built novacomd binary**: Run `make host` to build `build-novacomd-host/novacomd`
+1. **Built novacomd binary**: Run `make host` to build `build-novacomd/novacomd`
 2. **Connected webOS device**: Device must be connected via USB and in developer mode
 3. **Root access**: novacomd requires sudo to access USB devices
 4. **Palm SDK tools** (optional): For testing device communication
@@ -18,7 +18,7 @@ This document describes how to test the modernized novacomd driver with your web
 sudo killall novacomd 2>/dev/null || true
 
 # 2. Start the new novacomd
-sudo ./build-novacomd-host/novacomd
+sudo ./build-novacomd/novacomd
 
 # Leave it running in this terminal
 # Open a new terminal for the following commands:
@@ -110,7 +110,7 @@ Failed: 1
 You can modify the script behavior by editing these variables at the top:
 
 ```bash
-NOVACOMD_BIN="./build-novacomd-host/novacomd"  # Path to binary
+NOVACOMD_BIN="./build-novacomd/novacomd"  # Path to binary
 CLEANUP_ON_EXIT=true                            # Auto-stop novacomd when done
 ```
 
@@ -121,7 +121,7 @@ Set `CLEANUP_ON_EXIT=false` if you want to leave novacomd running after tests.
 ### Issue: "need to run as super user to access usb"
 **Solution**: Must run with sudo:
 ```bash
-sudo ./build-novacomd-host/novacomd
+sudo ./build-novacomd/novacomd
 ```
 
 ### Issue: "Port 6969 already in use"
@@ -129,7 +129,7 @@ sudo ./build-novacomd-host/novacomd
 ```bash
 sudo killall novacomd
 # Wait a few seconds
-sudo ./build-novacomd-host/novacomd
+sudo ./build-novacomd/novacomd
 ```
 
 ### Issue: "No webOS device detected"
@@ -151,7 +151,7 @@ export PATH=$PATH:/opt/nova/bin
 
 ### Issue: Device detected but communication fails
 **Solutions**:
-1. Restart novacomd: `sudo killall novacomd && sudo ./build-novacomd-host/novacomd`
+1. Restart novacomd: `sudo killall novacomd && sudo ./build-novacomd/novacomd`
 2. Restart the device
 3. Check device USB mode (should be in developer/diagnostics mode)
 4. Try a different USB port or cable
@@ -198,14 +198,14 @@ Use this checklist for thorough manual testing:
 
 Run novacomd in foreground to see all output:
 ```bash
-sudo ./build-novacomd-host/novacomd
+sudo ./build-novacomd/novacomd
 # All logs will appear in terminal
 ```
 
 ### Save Logs to File
 
 ```bash
-sudo ./build-novacomd-host/novacomd > novacomd.log 2>&1 &
+sudo ./build-novacomd/novacomd > novacomd.log 2>&1 &
 # Check logs: tail -f novacomd.log
 ```
 
@@ -246,8 +246,8 @@ If tests fail, please collect this information:
 
 3. **Binary information**:
    ```bash
-   file build-novacomd-host/novacomd > binary-info.txt
-   otool -L build-novacomd-host/novacomd >> binary-info.txt
+   file build-novacomd/novacomd > binary-info.txt
+   otool -L build-novacomd/novacomd >> binary-info.txt
    ```
 
 4. **Novacomd logs**: Copy from terminal or log file

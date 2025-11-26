@@ -55,7 +55,7 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 # Configuration
-NOVACOMD_BIN="./build-novacomd-host/novacomd"
+NOVACOMD_BIN="./build-novacomd/novacomd"
 NOVACOMD_PID=""
 CLEANUP_ON_EXIT=true
 

@@ -109,24 +109,24 @@ sudo make install PREFIX=/usr/local
 
 ```bash
 # Copy binary to Palm SDK directory
-sudo cp build-novacomd-host/novacomd /opt/nova/bin/
+sudo cp build-novacomd/novacomd /opt/nova/bin/
 
 # Or to a custom location
-sudo cp build-novacomd-host/novacomd /usr/local/bin/
+sudo cp build-novacomd/novacomd /usr/local/bin/
 ```
 
 ## Verifying the Build
 
 ```bash
 # Check binary architecture
-file build-novacomd-host/novacomd
+file build-novacomd/novacomd
 
 # Check version
-./build-novacomd-host/novacomd -V
+./build-novacomd/novacomd -V
 
 # Check library dependencies
-otool -L build-novacomd-host/novacomd  # macOS
-ldd build-novacomd-host/novacomd       # Linux
+otool -L build-novacomd/novacomd  # macOS
+ldd build-novacomd/novacomd       # Linux
 ```
 
 ## Dependencies

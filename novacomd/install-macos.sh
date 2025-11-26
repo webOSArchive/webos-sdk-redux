@@ -19,7 +19,7 @@ log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 log_warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
 
 # Configuration
-NOVACOMD_BIN="./build-novacomd-host/novacomd"
+NOVACOMD_BIN="./build-novacomd/novacomd"
 ARCH=$(uname -m)
 
 # Check if running as root

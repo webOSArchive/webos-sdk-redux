@@ -87,7 +87,7 @@ Building novacomd
 [INFO] Running make host...
 HOST compiling src/main.c
 ...
-HOST linking build-novacomd-host/novacomd
+HOST linking build-novacomd/novacomd
 
 [SUCCESS] Build completed successfully
 
@@ -106,7 +106,7 @@ Build Complete!
 
 [SUCCESS] novacomd has been built successfully
 
-Binary location: ./build-novacomd-host/novacomd
+Binary location: ./build-novacomd/novacomd
 ```
 
 ## Troubleshooting
@@ -146,7 +146,7 @@ sudo ./install-linux.sh
 ### Run directly
 ```bash
 # Connect your webOS device via USB first
-sudo ./build-novacomd-host/novacomd
+sudo ./build-novacomd/novacomd
 ```
 
 ## Complete Workflow

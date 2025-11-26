@@ -261,7 +261,7 @@ build_novacomd() {
     log_step "Building novacomd..."
 
     # Clean previous build
-    if [ -d "build-novacomd-host" ]; then
+    if [ -d "build-novacomd" ]; then
         log_info "Cleaning previous build..."
         make clean >/dev/null 2>&1 || true
     fi
@@ -285,7 +285,7 @@ build_novacomd() {
 verify_build() {
     log_step "Verifying build..."
 
-    local binary="./build-novacomd-host/novacomd"
+    local binary="./build-novacomd/novacomd"
 
     if [ ! -f "$binary" ]; then
         log_error "Binary not found at $binary"
@@ -425,7 +425,7 @@ main() {
 
     log_success "novacomd has been built successfully"
     echo ""
-    log_info "Binary location: ./build-novacomd-host/novacomd"
+    log_info "Binary location: ./build-novacomd/novacomd"
     echo ""
     # Determine install script based on OS
     if [ "$OS" = "macos" ]; then
@@ -443,7 +443,7 @@ main() {
     echo "     sudo $INSTALL_SCRIPT"
     echo ""
     echo "  3. Or run directly:"
-    echo "     sudo ./build-novacomd-host/novacomd"
+    echo "     sudo ./build-novacomd/novacomd"
     echo ""
 
     # Offer to run tests
