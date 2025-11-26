@@ -259,7 +259,7 @@ install_deps_linux() {
 # Build novacomd
 build_novacomd() {
     log_step "Building novacomd..."
-    log_step "(Some warnings are normal and safe to ignore if the build succeeds)"
+    log_info "(Some warnings are normal and safe to ignore if the build succeeds)"
 
     # Clean previous build
     if [ -d "build-novacomd" ]; then

@@ -205,7 +205,7 @@ echo ""
 log_step "2/4 - Building components..."
 echo ""
 log_info "Building novacomd..."
-log_step "(Some warnings are normal and safe to ignore if the build succeeds)"
+log_info "(Some warnings are normal and safe to ignore if the build succeeds)"
 cd "$SCRIPT_DIR/novacomd"
 if ! make host; then
     log_error "Failed to build novacomd"
@@ -216,7 +216,7 @@ log_success "novacomd built successfully"
 # Build novacom
 echo ""
 log_info "Building novacom..."
-log_step "(Some warnings are normal and safe to ignore if the build succeeds)"
+log_info "(Some warnings are normal and safe to ignore if the build succeeds)"
 cd "$SCRIPT_DIR/novacom"
 if ! make; then
     log_error "Failed to build novacom"

@@ -133,7 +133,7 @@ clean_build() {
 # Build the project
 build_project() {
     log_step "Building novacom..."
-    log_step "(Some warnings are normal and safe to ignore if the build succeeds)"
+    log_info "(Some warnings are normal and safe to ignore if the build succeeds)"
 
     # Determine build options
     BUILD_OPTS=""
