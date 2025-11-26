@@ -238,7 +238,7 @@ if [ "$CREATE_SYMLINKS" = true ]; then
 
             # Create symlink
             ln -sf "$SDK_INSTALL_DIR/$SDK_VERSION/bin/$CMD_NAME" "$BIN_INSTALL_DIR/$CMD_NAME"
-            ((SYMLINK_COUNT++))
+            SYMLINK_COUNT=$((SYMLINK_COUNT + 1))
         fi
     done
     log_success "Created $SYMLINK_COUNT command symlinks in $BIN_INSTALL_DIR"

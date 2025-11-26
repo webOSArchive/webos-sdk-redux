@@ -215,7 +215,7 @@ echo ""
 
 # Offer to create systemd service
 echo ""
-read -p "Would you like to create a systemd service for automatic startup? [y/N]: " create_service
+read -p "Would you like to create a systemd service for automatic startup? [Y/n]: " create_service
 if [[ ! $create_service =~ ^[Nn]$ ]]; then
     SERVICE_FILE="/etc/systemd/system/novacomd.service"
 
