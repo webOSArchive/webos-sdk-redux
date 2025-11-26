@@ -28,6 +28,7 @@ int novacom_usb_transport_stop(void);
 int novacom_usb_transport_deviceonline(char *nduid);
 /* usb recovery */
 int usbrecords_init( void );
+int usbrecords_cleanup( void );
 int usbrecords_add(transport_recovery_token_t *t_token);
 int usbrecords_find(transport_recovery_token_t *t_token);
 int usbrecords_update(int elapsed);

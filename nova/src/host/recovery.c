@@ -59,6 +59,17 @@ int usbrecords_init( void )
 }
 
 /*
+ * usbrecords_cleanup
+ * cleanup records
+ * @ret 0 - success
+ */
+int usbrecords_cleanup( void )
+{
+	platform_mutex_destroy(&recovery_lock); /* destroy mutex */
+	return 0;
+}
+
+/*
  * usbrecords_add
  * save recovery records in array
  * @param[t_token]	recovery token

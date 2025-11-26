@@ -67,20 +67,9 @@ typedef struct {
 	int iface;
 } novacom_usb_handle_t;
 
-typedef struct recovery_entry_s {
-	transport_recovery_token_t	*t_token;		/* transport recovery token */
-	int timeout;								/* timout value */
-
-	TAILQ_ENTRY(recovery_entry_s) entries;		/* holds pointers to prev, next entries */
-} recovery_entry_t;
-
 /* vars */
 static platform_thread_t findandattach_thread;
 volatile int novacom_shutdown = 0;
-		/* list of recovery tokens */
-TAILQ_HEAD(recovery_queue_s, recovery_entry_s)  t_recovery_queue;
-static platform_mutex_t recovery_lock;
-
 
 /* find_endpoints */
 static int novacom_usb_find_endpoints(usb_dev_handle *handle, int eps[2], int *iface)
@@ -540,9 +529,6 @@ static void *novacom_usb_findandattach_thread(void *arg)
 	/* init records */
 	usbrecords_init();
 
-	/* initialize records queue */
-	TAILQ_INIT(&t_recovery_queue);
-
 	/* device discovery */
 	while (!novacom_shutdown) {
 
@@ -577,7 +563,6 @@ int novacom_usb_transport_start(void)
 {
 	novacom_shutdown = 0;
 	platform_create_thread(&findandattach_thread, &novacom_usb_findandattach_thread, NULL);
-	platform_mutex_init(&recovery_lock);
 	return 0;
 }
 
@@ -586,7 +571,7 @@ int novacom_usb_transport_stop(void)
 	novacom_shutdown = 1;
 
 	platform_waitfor_thread(findandattach_thread);
-	platform_mutex_destroy(&recovery_lock);
+	usbrecords_cleanup();
 
 	return 0;
 }

@@ -427,13 +427,20 @@ main() {
     echo ""
     log_info "Binary location: ./build-novacomd-host/novacomd"
     echo ""
+    # Determine install script based on OS
+    if [ "$OS" = "macos" ]; then
+        INSTALL_SCRIPT="./install-macos.sh"
+    else
+        INSTALL_SCRIPT="./install-linux.sh"
+    fi
+
     log_info "Next steps:"
     echo ""
     echo "  1. Test the binary:"
     echo "     sudo ./test-novacomd.sh"
     echo ""
     echo "  2. Install the binary:"
-    echo "     sudo ./install.sh"
+    echo "     sudo $INSTALL_SCRIPT"
     echo ""
     echo "  3. Or run directly:"
     echo "     sudo ./build-novacomd-host/novacomd"
@@ -456,12 +463,12 @@ main() {
     echo ""
     read -p "Would you like to install novacomd now? [y/N]: " run_install
     if [[ $run_install =~ ^[Yy]$ ]]; then
-        if [ -x "./install.sh" ]; then
+        if [ -x "$INSTALL_SCRIPT" ]; then
             echo ""
             log_info "Running installer..."
-            sudo ./install.sh
+            sudo "$INSTALL_SCRIPT"
         else
-            log_warning "install.sh not found or not executable"
+            log_warning "$INSTALL_SCRIPT not found or not executable"
         fi
     fi
 

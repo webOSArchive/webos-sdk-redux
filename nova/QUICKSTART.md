@@ -30,8 +30,9 @@ make host
 # Test
 sudo ./test-novacomd.sh
 
-# Install
-sudo ./install.sh
+# Install (use the appropriate script for your OS)
+sudo ./install-macos.sh   # macOS
+sudo ./install-linux.sh   # Linux
 ```
 
 ## What Gets Detected
@@ -132,8 +133,14 @@ sudo ./test-novacomd.sh
 
 ### Install system-wide
 ```bash
-sudo ./install.sh
+# macOS
+sudo ./install-macos.sh
 # Choose option 4 (Hybrid) for best compatibility
+
+# Linux (with optional systemd service)
+sudo ./install-linux.sh
+# Choose option 4 (Hybrid) for best compatibility
+# Optionally set up systemd service for auto-start
 ```
 
 ### Run directly
@@ -152,7 +159,8 @@ sudo ./build-novacomd-host/novacomd
 sudo ./test-novacomd.sh
 
 # 3. Install if tests pass
-sudo ./install.sh
+sudo ./install-macos.sh   # macOS
+sudo ./install-linux.sh   # Linux
 
 # 4. Use Palm SDK tools
 palm-device-info
@@ -163,7 +171,8 @@ palm-install --list
 
 - **`build.sh`** - Automated build with dependency installation
 - **`test-novacomd.sh`** - Comprehensive test suite
-- **`install.sh`** - Interactive installation wizard
+- **`install-macos.sh`** - Interactive installation wizard for macOS
+- **`install-linux.sh`** - Interactive installation wizard for Linux (with systemd support)
 - **`makefile`** - Build configuration (use via build.sh or directly)
 
 ## Getting Help

@@ -1,7 +1,7 @@
 #!/bin/bash
 #
-# Installation script for modernized novacomd
-# Supports multiple installation strategies for modern macOS
+# Installation script for novacomd on Linux
+# Supports systemd service integration
 #
 
 set -e
@@ -11,12 +11,14 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
+CYAN='\033[0;36m'
 NC='\033[0m'
 
 log_info() { echo -e "${BLUE}[INFO]${NC} $1"; }
 log_success() { echo -e "${GREEN}[SUCCESS]${NC} $1"; }
 log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 log_warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
+log_step() { echo -e "${CYAN}[STEP]${NC} $1"; }
 
 # Configuration
 NOVACOMD_BIN="./build-novacomd-host/novacomd"
@@ -24,20 +26,20 @@ ARCH=$(uname -m)
 
 # Check if running as root
 if [ "$EUID" -ne 0 ]; then
-    log_error "Please run with sudo: sudo ./install.sh"
+    log_error "Please run with sudo: sudo ./install-linux.sh"
     exit 1
 fi
 
 # Check if binary exists
 if [ ! -f "$NOVACOMD_BIN" ]; then
     log_error "Binary not found at $NOVACOMD_BIN"
-    log_info "Run 'make host' first to build the binary"
+    log_info "Run './build.sh' or 'make host' first to build the binary"
     exit 1
 fi
 
 echo ""
 echo "=========================================="
-echo "  novacomd Installation for Modern macOS"
+echo "  novacomd Installation for Linux"
 echo "=========================================="
 echo ""
 log_info "Binary: $NOVACOMD_BIN"
@@ -47,9 +49,9 @@ echo ""
 # Installation options
 echo "Choose installation location:"
 echo ""
-echo "  1) /usr/local/bin (Recommended - Standard for user binaries)"
-echo "  2) /opt/homebrew/bin (Apple Silicon Homebrew standard)"
-echo "  3) /opt/nova/bin (Legacy Palm SDK location)"
+echo "  1) /usr/local/bin (Recommended - Standard for user-installed binaries)"
+echo "  2) /opt/nova/bin (Legacy Palm SDK location)"
+echo "  3) /usr/bin (System binaries location)"
 echo "  4) Hybrid (Both /opt/nova/bin + symlink to /usr/local/bin)"
 echo "  5) Custom location"
 echo ""
@@ -61,19 +63,17 @@ case $choice in
         CREATE_SYMLINK=false
         ;;
     2)
-        INSTALL_DIR="/opt/homebrew/bin"
-        CREATE_SYMLINK=false
-        if [ ! -d "/opt/homebrew" ]; then
-            log_warning "/opt/homebrew does not exist - is Homebrew installed?"
-            read -p "Continue anyway? [y/N]: " confirm
-            if [[ ! $confirm =~ ^[Yy]$ ]]; then
-                exit 1
-            fi
-        fi
-        ;;
-    3)
         INSTALL_DIR="/opt/nova/bin"
         CREATE_SYMLINK=false
+        ;;
+    3)
+        INSTALL_DIR="/usr/bin"
+        CREATE_SYMLINK=false
+        log_warning "Installing to /usr/bin may conflict with package managers"
+        read -p "Continue anyway? [y/N]: " confirm
+        if [[ ! $confirm =~ ^[Yy]$ ]]; then
+            exit 1
+        fi
         ;;
     4)
         INSTALL_DIR="/opt/nova/bin"
@@ -117,6 +117,13 @@ if pgrep -x novacomd > /dev/null; then
     log_success "Stopped"
 fi
 
+# Stop systemd service if running
+if systemctl is-active --quiet novacomd.service 2>/dev/null; then
+    log_warning "Stopping novacomd systemd service..."
+    systemctl stop novacomd.service
+    log_success "Service stopped"
+fi
+
 # Backup existing binary if present
 if [ -f "$INSTALL_DIR/novacomd" ]; then
     BACKUP="$INSTALL_DIR/novacomd.backup.$(date +%Y%m%d-%H%M%S)"
@@ -129,7 +136,7 @@ fi
 log_info "Installing novacomd..."
 cp "$NOVACOMD_BIN" "$INSTALL_DIR/novacomd"
 chmod 755 "$INSTALL_DIR/novacomd"
-chown root:wheel "$INSTALL_DIR/novacomd"
+chown root:root "$INSTALL_DIR/novacomd"
 log_success "Binary installed to $INSTALL_DIR/novacomd"
 
 # Create symlink if requested
@@ -161,10 +168,17 @@ fi
 
 # Check dependencies
 log_info "Checking dependencies..."
-if otool -L "$INSTALL_DIR/novacomd" | grep -q libusb; then
+if ldd "$INSTALL_DIR/novacomd" 2>/dev/null | grep -q libusb; then
     log_success "libusb dependency found"
+
+    # Show libusb location
+    LIBUSB_PATH=$(ldd "$INSTALL_DIR/novacomd" 2>/dev/null | grep libusb | awk '{print $3}')
+    if [ -n "$LIBUSB_PATH" ]; then
+        log_info "libusb location: $LIBUSB_PATH"
+    fi
 else
     log_error "libusb dependency not found"
+    log_warning "You may need to install libusb-dev or libusb-compat"
 fi
 
 # PATH check
@@ -175,20 +189,10 @@ if echo "$PATH" | grep -q "$INSTALL_DIR"; then
 else
     log_warning "$INSTALL_DIR is NOT in your PATH"
 
-    SHELL_RC=""
-    if [ -n "$ZSH_VERSION" ]; then
-        SHELL_RC="$HOME/.zshrc"
-    elif [ -n "$BASH_VERSION" ]; then
-        SHELL_RC="$HOME/.bash_profile"
-    fi
-
-    if [ -n "$SHELL_RC" ]; then
-        log_info "To add it to your PATH, run:"
-        echo ""
-        echo "  echo 'export PATH=\"\$PATH:$INSTALL_DIR\"' >> $SHELL_RC"
-        echo "  source $SHELL_RC"
-        echo ""
-    fi
+    log_info "To add it to your PATH, add this to ~/.bashrc or ~/.profile:"
+    echo ""
+    echo "  export PATH=\"\$PATH:$INSTALL_DIR\""
+    echo ""
 fi
 
 # Installation complete
@@ -202,59 +206,99 @@ if [ "$CREATE_SYMLINK" = true ]; then
     log_info "Symlink at: $SYMLINK_DIR/novacomd"
 fi
 echo ""
-log_info "To start novacomd:"
+log_info "To start novacomd manually:"
 echo "  sudo $INSTALL_DIR/novacomd"
 echo ""
 log_info "To start as daemon:"
 echo "  sudo $INSTALL_DIR/novacomd -d"
 echo ""
-log_info "To test the installation:"
-echo "  sudo ./test-novacomd.sh"
-echo ""
 
-# Offer to create launchd service
+# Offer to create systemd service
 echo ""
-read -p "Would you like to create a launchd service for automatic startup? [y/N]: " create_service
+read -p "Would you like to create a systemd service for automatic startup? [y/N]: " create_service
 if [[ $create_service =~ ^[Yy]$ ]]; then
-    PLIST="/Library/LaunchDaemons/com.palm.novacomd.plist"
+    SERVICE_FILE="/etc/systemd/system/novacomd.service"
 
-    log_info "Creating launchd plist at: $PLIST"
+    log_step "Creating systemd service unit..."
+    log_info "Service file: $SERVICE_FILE"
 
-    cat > "$PLIST" << EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-    <key>Label</key>
-    <string>com.palm.novacomd</string>
-    <key>ProgramArguments</key>
-    <array>
-        <string>$INSTALL_DIR/novacomd</string>
-    </array>
-    <key>RunAtLoad</key>
-    <true/>
-    <key>KeepAlive</key>
-    <true/>
-    <key>StandardOutPath</key>
-    <string>/var/log/novacomd.log</string>
-    <key>StandardErrorPath</key>
-    <string>/var/log/novacomd.log</string>
-</dict>
-</plist>
+    cat > "$SERVICE_FILE" << EOF
+[Unit]
+Description=Palm/HP webOS novacom daemon
+Documentation=https://github.com/webos-internals/novacomd
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=$INSTALL_DIR/novacomd
+Restart=on-failure
+RestartSec=5s
+StandardOutput=journal
+StandardError=journal
+
+# Security hardening
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
 EOF
 
-    chmod 644 "$PLIST"
-    chown root:wheel "$PLIST"
+    chmod 644 "$SERVICE_FILE"
+    log_success "Systemd service unit created"
 
-    log_success "Launchd plist created"
-    log_info "To load the service:"
-    echo "  sudo launchctl load $PLIST"
+    # Reload systemd
+    log_info "Reloading systemd daemon..."
+    systemctl daemon-reload
+    log_success "Systemd reloaded"
+
     echo ""
-    log_info "To start the service now:"
-    echo "  sudo launchctl start com.palm.novacomd"
+    log_info "Systemd service commands:"
     echo ""
-    log_info "To unload the service:"
-    echo "  sudo launchctl unload $PLIST"
+    echo "  Start service now:"
+    echo "    sudo systemctl start novacomd.service"
+    echo ""
+    echo "  Enable service at boot:"
+    echo "    sudo systemctl enable novacomd.service"
+    echo ""
+    echo "  Start and enable service:"
+    echo "    sudo systemctl enable --now novacomd.service"
+    echo ""
+    echo "  Check service status:"
+    echo "    sudo systemctl status novacomd.service"
+    echo ""
+    echo "  View service logs:"
+    echo "    sudo journalctl -u novacomd.service -f"
+    echo ""
+    echo "  Stop service:"
+    echo "    sudo systemctl stop novacomd.service"
+    echo ""
+    echo "  Disable service:"
+    echo "    sudo systemctl disable novacomd.service"
+    echo ""
+
+    # Ask if user wants to enable and start now
+    read -p "Would you like to enable and start the service now? [y/N]: " enable_now
+    if [[ $enable_now =~ ^[Yy]$ ]]; then
+        log_info "Enabling and starting novacomd service..."
+        systemctl enable --now novacomd.service
+
+        sleep 2
+
+        # Check if service is running
+        if systemctl is-active --quiet novacomd.service; then
+            log_success "Service is running!"
+            echo ""
+            log_info "Service status:"
+            systemctl status novacomd.service --no-pager | head -10
+        else
+            log_error "Service failed to start"
+            log_info "Check logs with: sudo journalctl -u novacomd.service -n 50"
+        fi
+    else
+        log_info "Service created but not enabled"
+        log_info "You can enable it later with: sudo systemctl enable --now novacomd.service"
+    fi
 fi
 
 echo ""
