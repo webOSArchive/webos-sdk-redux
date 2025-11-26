@@ -11,7 +11,7 @@ This is `novacomd`, the daemon that enables communication between the webOS SDK 
 - **macOS**: Tested on Big Sur 11.0.1, should work on newer versions
 - **GNU Make**: 3.81 or newer
 - **libusb-compat**: Install via Homebrew: `brew install libusb-compat`
-- **Java 1.5+**: Required by SDK tools that communicate with novacomd
+- **Java 1.8+**: Required by SDK tools that communicate with novacomd
 
 ## Build Commands
 

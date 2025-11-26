@@ -29,7 +29,7 @@ This is the HP webOS SDK version 3.0.5 (build 676), a legacy development kit for
 
 All webOS command-line tools are located in `0.1/bin/` and follow the `palm-*` naming convention. These are bash scripts that invoke Java tools from `0.1/share/jars/webos-tools.jar`.
 
-**Requirements**: Java 1.5 or greater is required to run the SDK tools.
+**Requirements**: Java 1.8 or greater is required to run the SDK tools.
 
 ### Common Commands
 

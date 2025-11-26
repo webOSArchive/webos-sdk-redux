@@ -216,7 +216,7 @@ echo ""
 # Offer to create systemd service
 echo ""
 read -p "Would you like to create a systemd service for automatic startup? [y/N]: " create_service
-if [[ $create_service =~ ^[Yy]$ ]]; then
+if [[ ! $create_service =~ ^[Nn]$ ]]; then
     SERVICE_FILE="/etc/systemd/system/novacomd.service"
 
     log_step "Creating systemd service unit..."
@@ -277,12 +277,9 @@ EOF
     echo "    sudo systemctl disable novacomd.service"
     echo ""
 
-    # Ask if user wants to enable and start now
-    read -p "Would you like to enable and start the service now? [y/N]: " enable_now
-    if [[ $enable_now =~ ^[Yy]$ ]]; then
-        log_info "Enabling and starting novacomd service..."
-        systemctl enable --now novacomd.service
-
+    # Automatically enable and start the service
+    log_info "Enabling and starting novacomd service..."
+    if systemctl enable --now novacomd.service 2>/dev/null; then
         sleep 2
 
         # Check if service is running
@@ -292,12 +289,12 @@ EOF
             log_info "Service status:"
             systemctl status novacomd.service --no-pager | head -10
         else
-            log_error "Service failed to start"
+            log_warning "Service enabled but may not be running"
             log_info "Check logs with: sudo journalctl -u novacomd.service -n 50"
         fi
     else
-        log_info "Service created but not enabled"
-        log_info "You can enable it later with: sudo systemctl enable --now novacomd.service"
+        log_warning "Failed to enable service automatically"
+        log_info "Enable manually with: sudo systemctl enable --now novacomd.service"
     fi
 fi
 

@@ -214,8 +214,8 @@ echo ""
 
 # Offer to create launchd service
 echo ""
-read -p "Would you like to create a launchd service for automatic startup? [y/N]: " create_service
-if [[ $create_service =~ ^[Yy]$ ]]; then
+read -p "Would you like to create a launchd service for automatic startup? [Y/n]: " create_service
+if [[ ! $create_service =~ ^[Nn]$ ]]; then
     PLIST="/Library/LaunchDaemons/com.palm.novacomd.plist"
 
     log_info "Creating launchd plist at: $PLIST"
@@ -247,14 +247,32 @@ EOF
     chown root:wheel "$PLIST"
 
     log_success "Launchd plist created"
-    log_info "To load the service:"
-    echo "  sudo launchctl load $PLIST"
+
+    # Load and start the service
+    log_info "Loading and starting the service..."
+    if launchctl load "$PLIST" 2>/dev/null; then
+        log_success "Service loaded and started!"
+
+        # Give it a moment to start
+        sleep 2
+
+        # Verify it's running
+        if launchctl list | grep -q "com.palm.novacomd"; then
+            log_success "novacomd service is running"
+        else
+            log_warning "Service loaded but may not be running"
+            log_info "Check status with: sudo launchctl list | grep novacomd"
+        fi
+    else
+        log_warning "Failed to load service automatically"
+        log_info "Load manually with: sudo launchctl load $PLIST"
+    fi
+
     echo ""
-    log_info "To start the service now:"
-    echo "  sudo launchctl start com.palm.novacomd"
-    echo ""
-    log_info "To unload the service:"
-    echo "  sudo launchctl unload $PLIST"
+    log_info "Service management commands:"
+    echo "  Check status:  sudo launchctl list | grep novacomd"
+    echo "  Stop service:  sudo launchctl stop com.palm.novacomd"
+    echo "  Unload:        sudo launchctl unload $PLIST"
 fi
 
 echo ""
