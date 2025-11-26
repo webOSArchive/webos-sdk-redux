@@ -181,7 +181,7 @@ if [ "$PLATFORM" = "macos" ]; then
     # Use $BREW_CMD to run as the original user when running via sudo
     if ! $BREW_CMD list --versions libusb-compat >/dev/null 2>&1; then
         log_error "libusb-compat not found - required for building"
-        log_info "Install libusb-compat via Homebrew (install Homebrew if needed first!)
+        log_info "Install libusb-compat via Homebrew (install Homebrew if needed first!)"
         exit 1
     else
         log_success "libusb-compat is installed ($($BREW_CMD list --versions libusb-compat))"
