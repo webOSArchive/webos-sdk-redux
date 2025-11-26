@@ -1,0 +1,20 @@
+{
+	"id": "com.palmdts.synergy.contact:1",
+	"sync": true,
+	"indexes": [{
+		"name": "accountId",
+		"props": [{
+			"name": "accountId"
+		}]
+	},
+	{
+		"name": "accountId_rev_incDel",
+		"props": [{
+			"name": "accountId"
+		}, {
+			"name": "_rev"
+		}],
+		"incDel": true
+	}],
+	"extends": ["com.palm.contact:1"]
+}

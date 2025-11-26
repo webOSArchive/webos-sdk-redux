@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="launching-a-hidden-app-from-device-info">
+      Launching a Hidden App from Device Info
+    </h1>
+    <p>
+      Beginning with webOS 3.0 (build #3025+), you no longer need to use the PhoneApp's dial-pad to run hidden applications such as &quot;CollectLogs&quot; and &quot;USBPassthrough&quot;.
+    </p>
+    <p>
+      Because we cannot rely on the PhoneApp's dial-pad to be easily accessible, we added a new screen to the Device Info application to enter the codes for these applications.
+    </p>
+    <p>
+      <strong>To run a hidden application</strong>
+    </p>
+    <ol style="list-style-type: decimal">
+      <li>
+        <p>
+          Launch Device Info and tap its top-left menu.
+        </p>
+      </li>
+      <li>
+        <p>
+          Select &quot;Custom Application...&quot;
+        </p>
+      </li>
+      <li>
+        <p>
+          Enter the code you would have entered in the PhoneApp's dial-pad.
+        </p>
+      </li>
+    </ol>
+    <p>
+      <strong>Notes:</strong>
+    </p>
+    <ul>
+      <li>
+        <p>
+          Eventually, support for the PhoneApp dial-pad is going to be removed but, currently, its only unsupported 'hidden' application is the in-store demo.
+        </p>
+      </li>
+      <li>
+        <p>
+          You can use either the ## or #* prefix.
+        </p>
+      </li>
+      <li>
+        <p>
+          You can use either the numeric code (i.e., ##5647# ) or the alphabetic code (i.e., ##LOGS# ) from the normal keypad.
+        </p>
+      </li>
+      <li>
+        <p>
+          Entries for alphabetic codes are not case sensitive. For example, the following are identical: ##LOGS#, ##logs#, ##Logs#
+        </p>
+      </li>
+      <li>
+        <p>
+          &quot;CollectLogs&quot; will be hidden before the TouchPad ships.
+        </p>
+      </li>
+    </ul>
+		</div>
+	</body>
+</html>

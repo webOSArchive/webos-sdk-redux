@@ -1,0 +1,9 @@
+{
+    "id": "com.plaxo.newcontacts",
+    "version": "1.0.1",
+    "vendor": "Palm",
+    "type": "web",
+    "main": "index.html",
+    "title": "Sample Synergy Service - Dummy App",
+    "icon": "icon.png"
+}

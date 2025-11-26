@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="providing-feedback">
+      Providing Feedback
+    </h1>
+    <h2 id="pressed-states">
+      Pressed States
+    </h2>
+    <p>
+      <img src="/images/design/providing-feedback-pressed-states.png"><br>
+      <br>
+      All tappable UI controls should have a pressed state as well as a normal state.
+    </p>
+    <p>
+      Display the pressed state immediately when the user presses the item to provide feedback to the user that the item has been pressed.
+    </p>
+    <h2 id="spinners">
+      Spinners
+    </h2>
+    <p>
+      Display a spinner if the app performs an action that takes more than 1 second to perform and when it is not possible to make a reasonable guess as to the total duration of the process.
+    </p>
+    <p>
+      A spinner spins in a loop indefinitely until the process is completed. The spinner informs the user that the app is busy, but gives no overall indication to the user of the overall progress of the process.
+    </p>
+    <p>
+      Spinners can be embedded within other UI components, such as buttons, notifications, menu items, and list items. Whenever possible, show the spinner embedded in this way so that the user can understand what action is in progress.
+    </p>
+    <p>
+      <img src="/images/design/providing-feedback-spinners.png"><br>
+      <br>
+      <img src="/images/design/providing-feedback-spinners-2.png"><br>
+      <br>
+      Alternatively, when showing more general progress for a view, display a large spinner over the entire content area.
+    </p>
+    <p>
+      <img src="/images/design/providing-feedback-spinners-3.png"><br>
+      <br>
+      When displaying a spinner inside a button, the button should be in a disabled state while the spinner is displayed.
+    </p>
+    <h2 id="progress-indicators">
+      Progress Indicators
+    </h2>
+    <p>
+      Display a progress indicator when the app knows the approximate time taken to complete an action and the rough progress towards completion of the action. There are several kinds of progress indicators:
+    </p>
+    <h3 id="progress-button">
+      Progress Button
+    </h3>
+    <p>
+      <img src="/images/design/providing-feedback-progress-button.png"><br>
+      <br>
+      Use this when you need to show download progress, loading from a database, or progress during a long operation. The horizontal bar in the button updates as the task progresses. Tap the X to cancel the task.
+    </p>
+    <h3 id="progress-bar-item">
+      Progress Bar Item
+    </h3>
+    <p>
+      <img src="/images/design/providing-feedback-progress-bar-item.png"><br>
+      <br>
+      Use this progress indicator to show progress within a list item. For example, in a list that display songs names, a progress bar item could show the progress of listening to a song.
+    </p>
+    <h3 id="progress-bar">
+      Progress Bar
+    </h3>
+    <p>
+      <img src="/images/design/providing-feedback-progress-bar.png"><br>
+      <br>
+      Display this control when you need to show the progress of a task (for example, launching or initializing). The progress bar simply shows overall progress. It does not allow the user to cancel the task.
+    </p>
+    <h3 id="progress-slider">
+      Progress Slider
+    </h3><img src="/images/design/providing-feedback-progress-slider.png"><br>
+    <br>
+    Commonly used in audio or video apps when the app knows how long the content is. You want to tell users where they are in the playback process, and allow them to control it. The slider thumb moves as the content plays. Drag it to move the playback position or tap anywhere along the slider to reposition it there directly.<br>
+    <br>
+    <br>
+		</div>
+	</body>
+</html>

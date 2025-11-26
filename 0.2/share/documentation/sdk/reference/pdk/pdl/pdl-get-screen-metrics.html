@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="pdl_getscreenmetrics">
+      PDL_GetScreenMetrics
+    </h1>
+    <h2 id="description">
+      Description
+    </h2>
+    <p>
+      Fills the passed <code>PDL_ScreenMetrics</code> struct (that your app has allocated) with the device's screen metrics.
+    </p>
+    <p>
+      For a Palm Pre 2 it would be set like this:
+    </p>
+    <blockquote>
+      <pre>
+<code>outMetrics-&gt;horizontalPixels = 320; // Number of pixels horizontally
+outMetrics-&gt;verticalPixels = 480;   // Number of pixels vertically
+outMetrics-&gt;horizontalDPI = 213;    // Number of pixels per inch horizontally
+outMetrics-&gt;verticalDPI = 183;      // Number of pixels per inch vertically
+outMetrics-&gt;aspectRatio = 1.164;    // horizontalDPI/verticalDPI
+</code>
+</pre>
+    </blockquote>
+    <table border="1" cellpadding="5" cellspacing="5">
+      <thead>
+        <tr>
+          <th>
+            Device(s)
+          </th>
+          <th>
+            horizontalPixels
+          </th>
+          <th>
+            verticalPixels
+          </th>
+          <th>
+            horizontalDPI
+          </th>
+          <th>
+            verticalDPI
+          </th>
+          <th>
+            aspectRatio
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            Pre, Pre2, Pre+
+          </td>
+          <td>
+            320
+          </td>
+          <td>
+            480
+          </td>
+          <td>
+            213
+          </td>
+          <td>
+            183
+          </td>
+          <td>
+            1.164
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Pixi, Veer
+          </td>
+          <td>
+            320
+          </td>
+          <td>
+            400
+          </td>
+          <td>
+            190
+          </td>
+          <td>
+            190
+          </td>
+          <td>
+            1.0
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Pre3
+          </td>
+          <td>
+            480
+          </td>
+          <td>
+            800
+          </td>
+          <td>
+            260
+          </td>
+          <td>
+            260
+          </td>
+          <td>
+            1.0
+          </td>
+        </tr>
+        <tr>
+          <td>
+            TouchPad
+          </td>
+          <td>
+            1024
+          </td>
+          <td>
+            768
+          </td>
+          <td>
+            132
+          </td>
+          <td>
+            132
+          </td>
+          <td>
+            1.0
+          </td>
+        </tr>
+        <tr>
+          <td>
+            TouchPad GO
+          </td>
+          <td>
+            1024
+          </td>
+          <td>
+            768
+          </td>
+          <td>
+            182
+          </td>
+          <td>
+            182
+          </td>
+          <td>
+            1.0
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h2 id="syntax">
+      Syntax
+    </h2>
+    <blockquote>
+      <pre>
+<code>PDL_Err PDL_GetScreenMetrics(PDL_ScreenMetrics *outMetrics);
+</code>
+</pre>
+    </blockquote>
+    <table border="1">
+      <tbody>
+        <tr>
+          <th>
+            Argument
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+        <tr>
+          <td>
+            outMetrics
+          </td>
+          <td>
+            Pointer to a <code>PDL_ScreenMetrics</code> struct that your app has allocated.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h2 id="returns">
+      Returns
+    </h2>
+    <blockquote>
+      <pre>
+<code>PDL_INVALIDINPUT - outMetrics must not be NULL.
+PDL_EOTHER - Unknown hardware.
+PDL_NOERROR - Success.
+</code>
+</pre>
+    </blockquote>
+		</div>
+	</body>
+</html>

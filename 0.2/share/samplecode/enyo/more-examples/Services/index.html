@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+<head>
+	<title>Services</title>
+	<script src="../../../../framework/enyo/1.0/framework/enyo.js" type="text/javascript"></script>
+</head>
+<body>
+<script type="text/javascript">
+	var services = enyo.create({kind: "Services"});
+   
+   if (window.PalmSystem && enyo.windowParams) {
+      services.setLaunchParams(enyo.windowParams);
+   }
+   
+   services.renderInto(document.body);
+</script>
+</body>
+</html>

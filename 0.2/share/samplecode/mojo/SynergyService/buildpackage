@@ -1,0 +1,4 @@
+palm-package plaxo.application plaxo.srv plaxo.accts plaxo.package 
+#palm-install -r com.plaxo.contacts
+palm-install com.plaxo.newcontacts_1.0.0_all.ipk
+ 

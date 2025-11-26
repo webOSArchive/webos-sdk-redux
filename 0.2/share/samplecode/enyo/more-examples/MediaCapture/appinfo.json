@@ -1,0 +1,10 @@
+{
+	"id": "com.palmdts.app.enyomediacapture",
+	"version": "1.0.0",
+	"vendor": "dts",
+	"type": "web",
+	"main": "index.html",
+	"title": "EnyoMediaCapture",
+	"icon": "icon.png",
+	"uiRevision":"2"
+}

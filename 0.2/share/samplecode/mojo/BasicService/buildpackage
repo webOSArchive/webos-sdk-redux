@@ -1,0 +1,3 @@
+call palm-package servicesample.application servicesample.srv servicesample.package 
+call palm-install com.palmdts.servicesample_1.0.0_all.ipk
+ 

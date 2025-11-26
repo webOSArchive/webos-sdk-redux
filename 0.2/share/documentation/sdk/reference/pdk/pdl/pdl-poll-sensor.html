@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="pdl_pollsensor">
+      PDL_PollSensor
+    </h1>
+    <h2 id="description">
+      Description
+    </h2>
+    <p>
+      Polls and returns an event for a specific sensor. Before being polled, the sensor must be enabled with <a href="/reference/pdk/pdl/pdl-enable-sensor.html"><code>PDL_EnableSensor</code></a>.
+    </p>
+    <p>
+      For this API, you are required to pass a pointer to an allocated <code>PDL_SensorEvent</code> struct. The sensor event data is then returned in this struct.
+    </p>
+    <p>
+      If there is no event, the API returns <code>PDL_NOERROR</code> and sets the event struct's <code>type</code> field to PDL_SENSOR_NONE.
+    </p>
+    <h2 id="syntax">
+      Syntax
+    </h2>
+    <blockquote>
+      <pre>
+<code>PDL_ERR PDL_PollSensor(PDL_SensorType sensor, PDL_SensorEvent *event)     
+</code>
+</pre>
+    </blockquote>
+    <p>
+      Both fields are <strong>required</strong>.
+    </p>
+    <table border="0">
+      <thead>
+        <tr>
+          <th>
+            Argument
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            sensor
+          </td>
+          <td>
+            Type of sensor to poll - see <a href="/reference/pdk/pdl-data-types.html#sensorDefines" target="_blank">defines</a> for <code>PDL_SensorType</code>.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            event
+          </td>
+          <td>
+            Pointer to <code>PDL_SensorEvent</code>, the union struct used for all sensor events.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h2 id="returns">
+      Returns
+    </h2>
+    <blockquote>
+      <pre>
+<code>PDL_INVALIDINPUT - The event parameter is NULL.
+PDL_ESTATE - The sensor is not enabled.
+PDL_NOERROR - Success.
+</code>
+</pre>
+    </blockquote>
+    <p>
+      <strong>Note</strong>: In all cases where an error is returned, your app can call <code>PDL_GetError</code> to get a plain-text error description. This is usually more informative than the returned error code.
+    </p>
+    <p>
+      <strong>See also:</strong>
+    </p>
+    <ul>
+      <li>
+        <a href="/reference/pdk/pdl/pdl-enable-sensor.html"><code>PDL_EnableSensor</code></a>
+      </li>
+      <li>
+        <a href="/reference/pdk/pdl/pdl-poll-active-sensors.html"><code>PDL_PollActiveSensors</code></a>
+      </li>
+      <li>
+        <a href="/reference/pdk/pdl/pdl-sensor-exists.html"><code>PDL_SensorExists</code></a>
+      </li>
+    </ul>
+		</div>
+	</body>
+</html>

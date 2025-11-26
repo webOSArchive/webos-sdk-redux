@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="saving-data">
+      Saving Data
+    </h1>
+    <p>
+      Protecting the user's data is a key design driver for webOS. Follow these principles when designing your application to ensure a safe and reliable experience for the user:
+    </p>
+    <ul>
+      <li>
+        <p>
+          There should never be a &quot;Save&quot; function or button that the user explicitly selects to save their data. Instead, apps should automatically save data so that the user should never fear losing their work even as a result of unexpected app closures.
+        </p>
+      </li>
+      <li>
+        <p>
+          Users should be given sufficient warning for destructive actions that could erase data irreversibly.
+        </p>
+      </li>
+      <li>
+        <p>
+          If the user edits content in a form, then enters card view and swipes the card away, the changes should be automatically saved.
+        </p>
+      </li>
+      <li>
+        <p>
+          If a form or a task flow contains a button to confirm and save changes, it should be labeled &quot;Done&quot;, not &quot;Save&quot;.
+        </p>
+      </li>
+      <li>
+        <p>
+          When changing app preferences, changes are either applied immediately or when the exiting the preferences.
+        </p>
+      </li>
+      <li>
+        <p>
+          When tasking away from an app, the app should save state so that the user can carry on from where they left when they return to the card.
+        </p>
+      </li>
+    </ul><br>
+    <br>
+		</div>
+	</body>
+</html>

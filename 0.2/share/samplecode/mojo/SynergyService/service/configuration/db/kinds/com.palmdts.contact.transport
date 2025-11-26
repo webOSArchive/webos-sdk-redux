@@ -1,0 +1,8 @@
+{
+    "id": "com.palmdts.contact.transport:1",
+    "owner": "com.palmdts.testacct.contacts.service",
+    "indexes": [{ 
+       "name": "lastSync", 
+       "props": [{ "name": "lastSync"}]}
+	   ]
+}

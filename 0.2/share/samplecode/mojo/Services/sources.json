@@ -1,0 +1,55 @@
+[
+    {"source": "app/assistants/app-assistant.js"},
+    {"source": "app/assistants/stage-assistant.js"},
+    {"source": "app/assistants/main-assistant.js"},
+    {"source": "app/assistants/applicationManager/applicationManager/applicationManager-assistant.js"},
+    {"source": "app/assistants/applicationManager/camera/camera-assistant.js"},
+    {"source": "app/assistants/applicationManager/messaging/messaging-assistant.js"},
+    {"source": "app/assistants/applicationManager/messaging/chatwith-assistant.js"},
+    {"source": "app/assistants/applicationManager/phone/phone-assistant.js"},
+    {"source": "app/assistants/applicationManager/videoPlayer/videoPlayer-assistant.js"},
+    {"source": "app/assistants/device/accelerometer/accelerometer-assistant.js"},
+    {"source": "app/assistants/device/displayManager/displayManager-assistant.js"},
+    {"source": "app/assistants/device/powerManager/powerManager-assistant.js"},
+    {"source": "app/assistants/device/accounts/accounts-assistant.js"},
+    {"source": "app/assistants/device/alarms/alarms-assistant.js"},
+    {"source": "app/assistants/device/alarms/alarmAlert-assistant.js"},
+    {"source": "app/assistants/device/accounts/createaccount-assistant.js"},
+    {"source": "app/assistants/device/accounts/editaccount-assistant.js"},
+    {"source": "app/assistants/device/contacts/contacts-assistant.js"},
+    {"source": "app/assistants/device/calendar/calendar-assistant.js"},   
+    {"source": "app/assistants/applicationManager/email/email-assistant.js"},
+    {"source": "app/assistants/applicationManager/email/send-assistant.js"},
+    {"source": "app/assistants/applicationManager/audioPlayer/audioPlayer-assistant.js"},
+    {"source": "app/assistants/applicationManager/maps/maps-assistant.js"},
+    {"source": "app/assistants/applicationManager/browser/browser-assistant.js"},
+    {"source": "app/assistants/applicationManager/documentViewer/documentViewer-assistant.js"},
+    {"source": "app/assistants/applicationManager/photos/photos-assistant.js"},
+    {"source": "app/assistants/device/gps/gps-assistant.js"},
+    {"source": "app/assistants/device/keyEvents/keyEvents-assistant.js"},
+    {"source": "app/assistants/device/connectionManager/connectionManager-assistant.js"},
+    {"source": "app/assistants/device/downloadManager/downloadManager-assistant.js"},
+    {"source": "app/assistants/device/systemProperties/systemProperties-assistant.js"},
+    {"source": "app/assistants/device/systemSounds/systemSounds-assistant.js"},
+    {"source": "app/assistants/device/systemServices/systemServices-assistant.js"},
+    {
+        "scenes": "embedded",
+        "source": "app/assistants/applicationManager/videoPlayer/embedded-assistant.js"
+    },
+    {
+        "scenes": "displayManager",
+        "source": "app/assistants/displayManager-assistant.js"
+    },
+    {
+        "scenes": "powerManager",
+        "source": "app/assistants/powerManager-assistant.js"
+    },
+    {
+        "scenes": "keyEvents",
+        "source": "app/assistants/keyEvents-assistant.js"
+    },
+    {
+        "scenes": "videoPlayer",
+        "source": "app/assistants/videoPlayer-assistant.js"
+    }
+]

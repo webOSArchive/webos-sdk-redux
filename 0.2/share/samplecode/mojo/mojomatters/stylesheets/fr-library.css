@@ -1,0 +1,1261 @@
+.sliderdiv {
+	width: 200px;
+}
+
+.richtext-editor {
+	width: 300px;
+	min-height: 100px;
+}
+
+.wrapper div.row {
+	width: 300px;
+	text-align: center;
+}
+.thisSideUp {
+	border: 1px solid #999;
+	margin-left: 10px;
+	margin-bottom: 300px;
+	margin-top: 10px;
+}
+
+.touch-pad {
+	width: 280px;
+	height: 280px;
+	margin: 20px auto;
+	border: 1px solid #999;
+	background-color: red;
+	position: relative;
+}
+
+.gesture-report {
+	margin: 10px 0px;
+	text-align: center;
+}
+                    
+.palm-row .preview {     
+	margin-top: -10px;
+	padding: 0 15px 10px 15px;     
+}
+
+/**************************************************************************************************
+/* contact-list specifics
+ **************************************************************************************************/
+
+/* contact  specifics */
+
+.title.ellipsis							{
+										margin-left: 0px;
+										max-width: 190px;
+										overflow:hidden;
+										text-overflow:ellipsis;
+										white-space:nowrap;
+										}
+										
+.title.ellipsis.vip						{
+										margin-left: -10px;
+										max-width: 170px;
+										}
+										
+.title.single.ellipsis {
+	padding: 0px;
+	max-width: 215px;
+}													
+
+.palm-group.unlabeled.contacts			{
+										height: 58px;
+										}										
+
+.palm-group.unlabeled.vip				{
+										/*border-width: 18px 18px 18px 18px; THESE ARE THE REAL VALUES */
+										border-width: 19px 19px 19px 18px; /* THESE ARE THE KLUDGED VALUES */
+										-webkit-border-image: url(../images/palm-group-unlabeled.png) 18 18 18 18 stretch stretch;	
+										height: 58px;
+										}
+										
+.palm-group.vip							{
+										/*border-width: 40px 18px 18px 18px; THESE ARE THE REAL VALUES */
+										border-width: 41px 19px 19px 18px; /* THESE ARE THE KLUDGED VALUES */										
+										-webkit-border-image: url(../images/palm-group.png) 40 18 18 18 stretch stretch;
+										}										
+
+
+.palm-group.vip .palm-list .favorite			{
+												float:left;
+												width: 38px;
+												height: 53px;
+												margin: 0px 0 0 0;
+												background: url(../images/contacts-vip-star-unselected.png) center center no-repeat;
+												margin-top: -16px;
+												}
+
+.palm-group.vip .palm-list .favorite.starred	{
+												background: url(../images/contacts-vip-star-selected.png) center center no-repeat; 
+												}
+
+.palm-group .palm-list .messaging				{
+												width: 62px;
+												height: 53px;
+												background: url(../images/rounded-divider-row.png) no-repeat;
+												position: absolute; 
+												right: 28px; 
+												margin: -15px 0 0 0;
+												text-align: right; 
+												}
+
+.palm-group.vip .palm-list .messaging			{
+												background: url(../images/rounded-divider-row-vip.png) no-repeat;
+												}												
+
+.palm-group .palm-list .messaging.first			{
+												background: url(../images/rounded-divider-first.png) no-repeat;
+												}
+
+.palm-group.vip .palm-list .messaging.first		{
+												background: url(../images/rounded-divider-first-vip.png) no-repeat;
+												}																																																
+
+.palm-group .palm-list .messaging.last			{
+												background: url(../images/rounded-divider-last.png) no-repeat;
+												}
+
+.palm-group.vip .palm-list .messaging.last		{
+												background: url(../images/rounded-divider-last-vip.png) no-repeat;
+												}
+
+.palm-group .palm-list .messaging.single		{
+												background: url(../images/rounded-divider-single-row.png) no-repeat;
+												}
+
+.palm-group.vip .palm-list .messaging.single	{
+												background: url(../images/rounded-divider-single-row-vip.png) no-repeat;
+												}												
+
+
+.row > .title.address	{
+						height: auto;
+						width: 180px;
+						font-size: 16px;	
+						}
+
+.palm-group.vip * .title.address 			{	
+									 		margin-left: 28px;
+											}
+											
+.palm-group.unlabeled * .image-angie {
+  position: absolute;
+  height: 90px;
+  width: 100px;
+  right: 19px;
+  top: 20px;
+}
+
+.palm-group.unlabeled * .image-well {
+  position: absolute;
+  height: 90px;
+  width: 100px;
+  right: 31px;
+  top: 20px;
+}																																												
+
+/ ************************************************************************************************/
+
+
+
+.notify-message {
+  padding: 0px 20px;
+}
+
+
+
+
+/*
+ * Copyright 2008 Palm Inc. Confidential until public release.
+ */
+
+/**************************************************************************************************
+ * email folder-list specifics
+ **************************************************************************************************/
+
+.account-section-label					{
+										margin-bottom: 2px;
+										border-collapse: collapse;
+										}
+
+.account-section-label td				{ 
+										height: 20px;
+										white-space: nowrap;
+										}
+
+.account-section-label td.left			{ 
+										width: auto; 
+										white-space: nowrap;
+										background: url(../images/email-list-section-line.png) right no-repeat;
+										padding-left: 8px;
+										}
+
+.account-section-label td.label			{
+										font-size: 14px;
+										text-transform: uppercase;
+										color: rgba(82,82,76,0.7);
+										text-shadow: rgba(255,255,255,0.5) 0px 1px 0px;
+										font-weight: bold;
+										line-height: 20px;
+										white-space: nowrap;
+										padding: 0 7px;
+										}
+
+
+.account-section-label td.label.yahoo	{
+										background: url(../images/account-yahoo-small.png) left no-repeat;
+										padding-left: 38px;
+										}
+.account-section-label td.label.gmail	{
+										background: url(../images/account-gmail-small.png) left no-repeat;
+										padding-left: 38px;
+										}
+.account-section-label td.label.exchange	{
+										background: url(../images/account-exchange-small.png) left no-repeat;
+										padding-left: 38px;
+										}
+
+
+.account-section-label td.right			{ 
+										width: 80%; 
+										padding-right: 8px;
+										background: url(../images/email-list-section-line.png) left no-repeat;
+										}
+
+
+.account-section-label td.star-star		{ 
+										padding: 0 0 0 60px; 
+										height: 33px;
+										background: url(../images/account-section-star.png) top right no-repeat;
+										}
+
+.account-section-label td.star-folder	{ 
+										padding: 0 0 0 60px; 
+										height: 33px;
+										background: url(../images/account-section-folder.png) top right no-repeat;
+										}
+
+
+.account-section-label td.star-star:active		{ 
+										padding: 0 0 0 60px; 
+										height: 33px;
+										background: url(../images/account-section-star.png) bottom right no-repeat;
+										}
+
+.account-section-label td.star-folder:active		{ 
+										padding: 0 0 0 60px; 
+										height: 33px;
+										background: url(../images/account-section-folder.png) bottom right no-repeat;
+										}
+
+
+
+.account-section-label.right td.left	{ width: 80%; }
+.account-section-label.right td.right	{ width: auto; }
+
+
+
+.palm-list.email-folder-list .row {
+background:transparent none repeat scroll 0%;
+border-bottom:1px solid transparent;
+clear:both;
+margin:0pt;
+min-height:41px;
+padding:4px 0pt;
+vertical-align:middle;
+}	
+
+.palm-list.email-folder-list .row:active	{ border-bottom: 1px solid transparent; }
+
+.palm-list.email-folder-list .row .title	{ padding: 10px 0 10px 0; }
+
+.palm-list.email-folder-list .avatar	{
+										width: 40px;
+										height: 41px;
+										background: url(../images/default-avatar.png) top left no-repeat;
+										float: right;
+										margin-right: 15px;
+										}
+
+.palm-list.email-folder-list .folder-icon	{
+										width: 32px;
+										height: 32px;
+										float: left;
+										margin: 0 5px 0 10px;
+										background: url(../images/email-folder.png) top left no-repeat;
+										}
+
+
+
+.palm-list.email-folder-list .favorite {
+float:right;
+height:20px;
+margin:10px 20px 10px 10px;
+width:20px;
+}
+
+.palm-list.email-folder-list .favorite						{ background: url(../images/star-off.png) top left no-repeat; }
+.palm-list.email-folder-list .favorite.starred				{ background: url(../images/star-on.png) top left no-repeat; }
+
+/* folder-list unread */
+
+
+.folder-list-unread						{
+									/*	background: rgba(80,75,61,0.7);*/
+										color: white;
+										float: right;
+										font-size: 16px;
+										font-weight: bold;
+										padding: -10px -2px -10px -2px;
+										line-height: 20px;
+										height: 20px;
+										vertical-align: baseline;
+										-webkit-border-image: url(../images/unread-badge.png) 0 12 0 12 stretch stretch; 
+										border: 12px;
+										border-left: 9px;
+										border-right: 9px;
+										}
+
+
+
+/**************************************************************************************************
+/* email inbox-list specifics
+ **************************************************************************************************/
+
+/* email inbox-list specifics */
+
+.palm-list .datestamp					{
+										width: 100px;
+										height: 14px;
+										text-align: right;
+										float: right;
+										margin-right: 15px;
+										font-size: 14px;
+										text-transform: uppercase;
+										color: #6ca1b2;
+										text-shadow: #ffffff 0px 1px 0px;
+										padding-top: 3px;
+										opacity: 0.7;
+										}
+
+.palm-list .row:active .datestamp		{
+										}
+										
+.palm-list .row.unread .title,
+.palm-list .row.unread .subtitle		{
+										font-weight: bold;
+										}
+										
+.palm-list .row.high.subtitle			{
+										color: red;
+										}
+
+
+
+
+.palm-list .favorite					{
+										width: 20px;
+										height: 20px;
+										float: left;
+										margin-left: 10px;
+										margin-right: 5px; 
+										}
+
+
+.palm-list.multi-line .subtitle			{ opacity: 0.7;}
+
+.palm-list .status.replied				{ background: url(../images/replied.png) top left no-repeat; }
+.palm-list .status.forwarded			{ background: url(../images/forwarded.png) top left no-repeat; }
+.palm-list .status.unread				{ background: url(../images/unread.png) top left no-repeat; }
+.palm-list .status.invite				{ background: url(../images/cal_invite.png) top left no-repeat; }
+.palm-list .favorite					{ background: url(../images/star-off.png) top left no-repeat; }
+.palm-list .favorite.starred			{ background: url(../images/star-on.png) top left no-repeat; }
+
+
+
+/**************************************************************************************************
+ * email read-view specifics
+ **************************************************************************************************/
+
+.email-readview-from					{
+										height: 40px;
+										padding: 10px;
+										border-bottom: 1px solid rgba(255,255,255,0.5);
+										}
+
+
+a:link, a:visited						{
+										color: #018aa1;
+										padding: 1px;
+										}
+
+
+a:active								{
+										background: #018aa1;
+										color: white;
+										}
+
+.email-readview-from .from-name			{
+										font-size: 16px;
+										font-weight: bold;
+										color: black;
+										margin: auto 0;
+										margin-top: 3px;
+										margin-left: 20px;
+										}
+
+.email-readview-from .from-date			{
+										font-size: 14px;
+										color: black;
+										opacity: 0.5;
+										margin: auto 0;
+										margin-left: 20px;
+										}
+
+.email-readview-from .from-photo		{
+										float: left;
+										height: 40px;
+										width: 41px;
+										background: url(../images/default-avatar.png) no-repeat top left;
+										margin-right: 10px;
+										}
+
+.email-readview-content					{
+										background: white;
+										font-size: 16px;
+										margin: 0 -10px 0 0;
+										padding: 5px;
+										outline: none;
+										width: 290px;
+										border-width: 10px;
+										text-align: left;
+										-webkit-border-image: url(../images/email-readview-content.png) 10 10 10 10 stretch stretch;
+										min-height: 345px;
+										}
+
+
+.email-readview-subject					{
+										font-weight: bold;
+										color: white;
+										height: 33px;
+										line-height: 35px;
+										padding: 2px 10px 0px 5px;
+										font-size: 16px;
+										background: #92d33e url(../images/email-readview-subject.png) repeat-x top left;
+										text-shadow: #2e7914 0px 1px 1px;                               
+										}
+
+.email-readview-subject .favorite		{
+										width: 20px;
+										height: 20px;
+										float: right;
+										margin-top: 5px;
+										margin-right: 5px;
+										clear: both;
+										background: url(../images/star-off.png) top left no-repeat; 
+										}
+
+
+.email-readview-subject .favorite.starred { background: url(../images/star-on.png) top left no-repeat; }
+
+
+
+.email-readview-attachments				{
+										font-size: 16px;
+										padding: 10px 10px 10px 20px;
+										min-height: 10px;
+										border-width: 1px 0px 1px 0px;
+										border-color: rgba(255,255,255,0.5);
+										border-style: solid;
+										}
+
+.readview-attachment-icon				{
+										height: 22px;
+										width: 22px;
+										background: url(../images/attachment-icon.png) top left no-repeat; float: right;
+										}
+										
+.subject-text							{
+										margin-left: 6px;
+										}										
+
+
+.attachment-title-text					{
+										margin-left: 0px;
+										margin-right: 5px;
+										padding-top: 2px;
+										}
+
+.attachment-subtitle-text				{
+										font-size: 14px;
+										color: black;
+										opacity: 0.5;										
+										float: left;
+										margin-top: 1px;
+										margin-right: 5px;
+										}
+
+.email-readview-content p				{
+										padding: 0px;
+										}
+
+.email-readview-from .from-details		{
+										font-size: 14px;
+										color: #45621D;
+										font-weight: bold;
+										float: right;
+										margin-top: -10px;
+										}
+
+.email-readview-invitations .dial-pad	{
+										height: 40px;
+										width: 40px;
+										background: url(../images/email-invite-numpad.png) center center no-repeat;
+										position: absolute;
+										margin: 0px 0px 0px 10px;
+										}																				
+
+.invite-info							{
+										font-size: 16px;
+										margin: 8px 0px 0px 60px;
+										}
+										
+.invite-info .date						{
+										font-weight: bold;
+										}																			
+										
+.invite-buttons 						{
+										margin: 5px 2px 10px 6px;
+										}
+
+.palm-button.accept, .palm-button.accept:active				{
+															border: 2px solid #65AD15;
+															}
+
+.palm-button.tentative, .palm-button.tentative:active		{
+															border: 2px solid #686867;
+															}
+										
+.palm-button.decline, .palm-button.decline:active			{
+															border: 2px solid #680335;
+															}																								
+
+.email-readview-invitations * button 	{
+										width: 95px;
+										height: 36px;
+										margin: 0px 2px 0px 2px;
+										font-weight: bold;
+										font-size: 20px;
+										line-height: 10pt;
+										}																				
+
+/**************************************************************************************************
+ * email compose-view specifics
+ **************************************************************************************************/
+
+
+.email-composeview-from					{
+										font-size: 16px;
+										height: 18px;
+										padding: 15px 10px 15px 10px;
+										}
+
+.email-composeview-from-text			{
+										color: #3a9800;
+										-webkit-user-select: none;
+										text-transform: uppercase;
+										font-size: 14px; 
+										font-weight: normal;
+										padding: 0px 7px 0px 0px;
+										float: left;
+										margin: 0px 0px 0px 0px;
+										}
+
+.email-composeview-content					{
+										background: white;
+										font-size: 16px;
+										min-height: 340px;
+										margin: 0 -10px 0 0;
+										padding: 5px;
+										outline: none;
+										width: 290px;
+										border-width: 10px;
+										text-align: left;
+										-webkit-border-image: url(../images/email-compose-content.png) 10 10 10 10 stretch stretch;
+										}
+
+
+
+
+
+
+
+
+.palm-list.composeview .email-subject label						{	 	
+										right: 230px;
+										}
+
+
+
+
+
+
+.palm-list.composeview div.row input 			{ 
+												font-size: 16px;
+												padding-left: 45px;
+												width: 245px;
+												}
+
+.palm-list.composeview div.row.email-to input  { 
+												font-size: 16px;
+												padding-left: 52px;
+												width: 238px;
+												}
+
+												
+.palm-list.composeview div.row.email-cc {  display:none; }
+												
+.palm-list.composeview div.row.email-cc input 	{ 
+												font-size: 16px;
+												padding-left: 40px;
+												width: 250px;
+												}
+
+.palm-list.composeview div.row.email-bcc {  display:none; }
+												
+.palm-list.composeview div.row.email-bcc input 	{ 
+												font-size: 16px;
+												padding-left: 50px;
+												width: 240px;
+												display: none;
+												}
+												
+.palm-list.composeview div.row.email-subject input	{ 
+												font-size: 16px;
+												padding-left: 80px;
+												width: 210px;
+												}
+
+
+
+
+.palm-list.composeview label						{	 	
+										overflow: hidden; 
+										text-align: left;
+										margin-top: 3px;
+										position: absolute; 
+										left: 25px;
+										right: 260px;
+										color: #3a9800;
+										-webkit-user-select: none;re
+										text-transform: uppercase;
+										font-size: 14px; 
+										font-weight: normal;
+										
+										}
+
+.palm-list.composeview .email-subject label						{	 	
+										right: 230px;
+										}
+										
+
+
+/**************************
+ * notifications
+ * ***************************/
+
+.notify-message {
+  background-color: #000000;
+  color: #ffffff;
+  font-size: 16px;
+  height: 100%;
+}
+
+div.notify-message img {
+	vertical-align: middle;
+} 
+
+
+/* buddy-list specifics */
+
+.msg-transport-picker							{
+	                                            display: inline;
+	                                            position: absolute;
+	                                            right: 30px;
+												}
+
+.message-list									{ padding-bottom: 65px;}
+
+
+
+.their-chat										{ 
+												font-size: 18px;
+												color: #2f4e53;
+												background: transparent;
+												min-height: 40px;
+												margin: 10px;
+												padding: 0 0 0 0;
+												outline: none;
+												border-width: 10px;
+												-webkit-border-image: url(../images/chat-balloon-left.png) 10 10 10 10 stretch stretch; 
+												}
+
+.my-chat										{ 
+												font-size: 18px;
+												color: #39490d;
+												background: transparent;
+												min-height: 40px;
+												margin: 10px;
+												padding: 0 0 0 0;
+												outline: none;
+												border-width: 10px;
+												-webkit-border-image: url(../images/chat-balloon-right.png) 10 10 10 10 stretch stretch; 
+												}
+
+.their-chat .avatar								{
+												width: 40px;
+												height: 40px;
+												background: url(../images/their-avatar.png) top left no-repeat;
+												float: right;
+												margin-right: 0px;
+												margin: 0 -10px 0 10px;
+												}
+
+.my-chat .avatar								{
+												width: 40px;
+												height: 40px;
+												background: url(../images/my-avatar.png) top left no-repeat;
+												float: left;
+												margin: 0 10px 0 -10px;
+												}
+
+
+.buddy-list-unread								{
+												/*	background: rgba(80,75,61,0.7); */
+												color: white;
+												position: absolute;
+												right: 65px;
+												font-size: 16px;
+												font-weight: normal;
+												margin: -10px 0 0 0;
+												height: 16px;
+												line-height: 16px;
+												padding: 4px -8px 0px -4px;
+												vertical-align: baseline;
+												-webkit-border-image: url(../images/unread-badge.png) 0 10 0 10 stretch stretch; 
+												border-width: 10px;
+												}
+
+.text-entry-top, .text-entry-bottom				{
+												width: 320px;
+												}
+												
+.text-entry-top			{
+                        top: 50px;
+                        }
+
+.text-entry-top textarea						{
+												font-size: 18px;
+												resize: none;
+												overflow: hidden;
+												position: fixed;
+											/*	top: 0;*/
+												left: 0;
+												margin: 0;
+												padding: 8px 48px 4px 0;
+												outline: none;
+												height: 24px;
+												width: 252px;
+												text-align: left;
+												-webkit-border-image: url(../images/group-textfield-shadow-first.png) 10 10 10 10 stretch stretch 
+												}
+
+
+.text-entry-top .add-contact					{
+												width: 56px;
+												height: 52px;
+												background: url(../images/add-contact.png) center center no-repeat;
+												position: fixed;
+											/*	top: 0;*/
+												right: 0;
+												margin: 0;
+												z-index: 5000;
+												}
+
+.text-entry-bottom textarea							{
+												font-size: 18px;
+												resize: none;
+												overflow: hidden;
+												position: fixed;
+												bottom: 0;
+												left: 0;
+												margin: 0;
+												padding: 8px 48px 4px 0;
+												outline: none;
+												height: 24px;
+												width: 252px;
+												text-align: left;
+												-webkit-border-image: url(../images/group-textfield-shadow-last.png) 10 10 10 10 stretch stretch 
+												}
+
+
+.text-entry-bottom .send-message						{
+												width: 56px;
+												height: 52px;
+												background: url(../images/msg-send-airplane.png) center center no-repeat;
+												position: fixed;
+												bottom: 0;
+												right: 0;
+												margin: 0;
+												z-index: 5000;
+												}
+
+.text-entry-bottom .attach-file						{
+												width: 56px;
+												height: 52px;
+												background: url(../images/msg-attachment-paperclip.png) center center no-repeat;
+												position: fixed;
+												bottom: 0;
+												right: 0;
+												margin: 0;
+												z-index: 5000;
+												}
+
+
+
+/**************************************************************************************************
+ * List Section Labels, date stamp-style
+*/
+
+
+
+
+
+.date-stamp										{
+												font-size: 12px;
+												color: rgba(0,0,0,0.5);
+												line-height: 16px;
+												text-shadow: rgba(255,255,255,0.5) 0px 1px 0px;
+												margin-left: 10px;
+												}
+
+
+table.date-stamp-label							{
+												margin-bottom: 2px;
+												border-collapse: collapse;
+												}
+
+table.date-stamp-label td						{ 
+												height: 20px;
+												}
+
+table.date-stamp-label td.left					{ 
+												width: auto; 
+												white-space: nowrap;
+												background: url(../images/date-stamp-line.png) right no-repeat;
+												padding-left: 8px;
+												}
+
+table.date-stamp-label td.label					{
+												font-size: 12px;
+												text-transform: uppercase;
+												color: rgba(0,0,0,0.3);
+												text-shadow: rgba(255,255,255,1) 0px 1px 0px;
+												font-weight: bold;
+												line-height: 16px;
+												white-space: nowrap;
+												padding: 0 7px;
+												}
+
+table.date-stamp-label td.label.sms				{
+												padding-left: 30px; background: url(../images/sms-icon-tiny.png) left no-repeat;
+												}
+
+table.date-stamp-label td.label.yahoo			{
+												padding-left: 30px; background: url(../images/yahoo-icon-tiny.png) left no-repeat;
+												}
+
+
+
+table.date-stamp-label td.right					{ 
+												width: 80%; 
+												padding-right: 8px;
+												background: url(../images/date-stamp-line.png) left no-repeat;
+												}
+/* buddy-list specifics */
+
+.palm-list.buddy-list .row				{ padding: 8px 0 7px 0; margin: 0; clear: both; height: 43px; vertical-align: middle; }
+
+.palm-list.buddy-list .row.offline .title	{ padding: 9px 0 10px 0; opacity: 0.4; }
+.palm-list.buddy-list .row .title.unread	{ font-weight:bold; }
+.palm-list.buddy-list .row .title.single	{ padding: 9px 0 10px 0; }
+
+.palm-list.buddy-list .row .subtitle	{ width: 205px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left: 0;}
+
+.palm-list.buddy-list .avatar			{
+										width: 40px;
+										height: 41px;
+										background: url(../images/default-avatar.png) top left no-repeat;
+										float: right;
+										margin-top: 0;
+										}
+
+.palm-list.multi-line .subtitle			{ opacity: 0.7; }
+
+
+
+/* tall lozenge applied only to the buddy list */
+
+.palm-list.buddy-list .status			{
+										width: 6px;
+										height: 41px;
+										float: left;
+										margin: 0 12px 0 15px;
+										}
+
+.palm-list.buddy-list .status.busy				{ background: url(../images/msg-status-busy.png) top left no-repeat; }
+.palm-list.buddy-list .status.available			{ background: url(../images/msg-status-available.png) top left no-repeat; }
+.palm-list.buddy-list .status.idle				{ background: url(../images/msg-status-idle.png) top left no-repeat; }
+.palm-list.buddy-list .status.offline			{ background: url(../images/msg-status-offline.png) top left no-repeat; }
+
+
+/* Scrolling Header
+ * Used in Preferences, and maybe elsewhere.
+ */
+
+.palm-scrolling-header						{ 
+											display: block;
+											height: 60px;
+											vertical-align: middle;
+											background: url(../images/scrolling-header-divider.png) bottom left no-repeat;
+											padding: 0 15px;
+											margin: 0 0 15px 0;
+											}
+
+.palm-scrolling-header-title				{
+											line-height: 60px;
+											font-size: 24px;
+											font-weight: bold;
+											text-shadow: #ffffff 0px 1px 0px;
+											float: left;
+											}
+
+
+
+p.info-text									{	
+											text-align: center;
+											font-size: 14px;	
+											color: #666;
+											}
+											
+											
+
+
+/* Wifi signal strength indicators */
+
+.signal-strength							{
+											width: 32px;
+											height: 23px;
+											display: block;
+											float: right;
+											margin-right: 10px;
+											}
+
+.signal-strength.zero						{
+											background: url(../images/wifi-0.png) top left no-repeat;
+											}
+											
+.signal-strength.one						{
+											background: url(../images/wifi-1.png) top left no-repeat;
+											}
+											
+.signal-strength.two						{
+											background: url(../images/wifi-2.png) top left no-repeat;
+											}
+											
+.signal-strength.three						{
+											background: url(../images/wifi-3.png) top left no-repeat;
+											}											
+
+.locked-network								{
+											width: 20px;
+											height: 23px;
+											display: block;
+											float: right;
+											margin-right: 10px;
+											background: url(../images/lock.png) top left no-repeat;
+											}
+
+.palm-menu-icon.chatbuddylist	{ background-image: url(../images/menu-icon-chatbuddylist.png); }
+.palm-menu-icon.chathistory		{ background-image: url(../images/menu-icon-chathistory.png); }
+.palm-menu-icon.newchat			{ background-image: url(../images/menu-icon-newchat.png); }
+
+
+/* to file */
+
+.palm-group						{
+								clear: both; 
+								}
+								
+/*span.list-highlight				{ 
+								background-color: rgba(245,246,94,0.7); 
+								color: #393f18;
+								padding: 3px 1px;
+								border: none; 
+								background: -webkit-gradient(linear, left top, left bottom, from(rgba(245,246,94,0.7)), to(rgba(205,206,54,0.7))); 
+								-webkit-border-radius: 8px;
+								}
+*/
+.profiles-unclip					{
+									float:right;
+									width:50px;
+									height:40px;
+									background: url(../images/profiles-unclip.png) center center no-repeat;
+									}
+
+.profiles-clip						{
+									float:right;
+									width:56px;
+									height:40px;
+									background: url(../images/profiles-clip.png) center center no-repeat;
+									}				
+
+.profiles-contact-add						{
+									float:right;
+									width:56px;
+									height:40px;
+									background: url(../images/profiles-contact-add.png) center center no-repeat;
+									}				
+
+.profiles-contact-remove						{
+									float:right;
+									width:56px;
+									height:40px;
+									background: url(../images/profiles-contact-remove.png) center center no-repeat;
+									}									
+
+											
+
+
+.palm-popup-icon.gtalk				{
+										width: 40px; 
+										height: 50px; 
+										background: url(../images/popup-item-gmail.png) center center no-repeat;
+									}				
+
+.palm-popup-icon.aim				{
+										width: 40px; 
+										height: 50px; 
+										background: url(../images/popup-item-aim.png) center center no-repeat;
+									}              
+
+.palm-popup-icon.color-chip-green	{
+										width: 30px; 
+										height: 30px; 
+										margin: 12px 0 0 12px;
+										background-color: #7c7;
+									}
+
+
+                                    
+
+/*
+	Special 'selected' style so we don't have item highlight in some lists.
+*/
+.palm-list div.row.no-highlight.selected {
+	color:black;
+	background: url(../images/list-separator-2.png) bottom left repeat-x;
+}
+
+.testtextfield textarea {
+		font-size: 20px;
+		background: transparent;
+		margin: -3px -15px 0 -15px;
+		padding: 4px 0px 0 5px;
+		vertical-align: middle;
+		border: none;
+		outline: none;
+		min-height: 25px;
+		border-width: 15px;
+		height: 100px;
+		width: 200px;
+		background-color: red;
+		-webkit-border-image: url(../images/textfield-noshadow.png) 17 15 15 15 stretch stretch
+}
+
+.testtextfield textarea:focus {
+		background: white;
+		margin: -3px -15px 0 -15px;
+		padding: 4px 0px 0 5px;
+		outline: none;
+		min-height: 25px;
+		border-width: 15px;
+		-webkit-border-image: url(../images/textfield-shadow.png) 17 15 15 15 stretch stretch
+}
+
+/*Example of E-mail sync animation*/
+
+.bare-sync-activity-animation {
+  width: 24px;
+  height: 26px;
+  background: url(../images/sample-sync-pill-1character.png) no-repeat;
+}
+
+
+.sync-activity-animation {
+  float: right;
+  margin: 15px 26px 0 0;
+  width: 56px;
+  height: 26px;
+  background: url(../images/sync-activity-animation-1character.png) no-repeat;
+}
+
+.sync-activity-animation.count2 {
+  background: url(../images/sync-activity-animation-2characters.png) no-repeat;
+}
+
+.sync-activity-animation.count3 {
+  background: url(../images/sync-activity-animation-3characters.png) no-repeat;
+}
+
+.sync-activity-animation.frame1 {background-position:0px -26px;}
+.sync-activity-animation.frame2 {background-position:0px -52px;}
+.sync-activity-animation.frame3 {background-position:0px -78px;}
+.sync-activity-animation.frame4 {background-position:0px -104px;}
+.sync-activity-animation.frame5 {background-position:0px -130px;}
+.sync-activity-animation.frame6 {background-position:0px -156px;}
+.sync-activity-animation.frame7 {background-position:0px -182px;}
+.sync-activity-animation.frame8 {background-position:0px -208px;}
+.sync-activity-animation.frame9 {background-position:0px -234px;}
+.sync-activity-animation.frame10 {background-position:0px -260px;}
+.sync-activity-animation.frame11 {background-position:0px -286px;}
+.sync-activity-animation.frame12 {background-position:0px -312px;}
+.sync-activity-animation.frame13 {background-position:0px -338px;}
+.sync-activity-animation.frame14 {background-position:0px -364px;}
+.sync-activity-animation.frame15 {background-position:0px -390px;}
+.sync-activity-animation.frame16 {background-position:0px -416px;}
+.sync-activity-animation.frame17 {background-position:0px -442px;}
+.sync-activity-animation.frame18 {background-position:0px -468px;}
+.sync-activity-animation.frame19 {background-position:0px -494px;}
+.sync-activity-animation.frame20 {background-position:0px -520px;}
+.sync-activity-animation.frame21 {background-position:0px -546px;}
+.sync-activity-animation.frame22 {background-position:0px -572px;}
+.sync-activity-animation.frame23 {background-position:0px -598px;}
+.sync-activity-animation.frame24 {background-position:0px -624px;}
+
+/** progress sample icon change **/
+
+.inline-progress-bar .progress-content .action-icon-red {
+	width: 48px;
+	height: 48px;
+	background: url(../images/mini-player-icon-cancel.png) center center no-repeat;	
+	float: right;
+	border: 1px solid red;
+}
+
+/* scroller sample */
+
+#two_dogs {
+	width: 300px;
+	height: 200px;
+	position: relative;
+	-webkit-user-drag: none;
+}
+
+#dog_spacer {
+	height: 30px;
+}
+
+#scroll_mode_group {
+	margin: 20px;
+}
+
+.dog_title {
+	font-size: 18px;
+	text-align: center;
+}
+
+#modeSelector {
+}
+
+.scroll-big-number {
+	text-align: center;
+	font-size: 300%;
+}
+
+#going-native {
+	width: 300px;
+	height: 200px;
+	margin: 0px auto;
+	border: 1px solid #999;
+}
+
+.scroll-example-left {
+	background-color: red;
+	position: absolute;
+	height: 200px;
+	z-index: 999;
+	width: 8px;
+	left: 0px;
+}
+
+.scroll-example-right {
+	background-color: green;
+	position: absolute;
+	height: 200px;
+	z-index: 999;
+	width: 8px;
+	right: 0px;
+}
+
+.scroll-example-top {
+	background-color: blue;
+	position: absolute;
+	height: 8px;
+	z-index: 999;
+	width: 300px;
+	top: -0;
+}
+
+.scroll-example-bottom {
+	background-color: yellow;
+	position: absolute;
+	width: 300px;
+	z-index: 999;
+	height: 8px;
+	bottom: 0;
+}
+
+#scrollerContainer {
+	margin: 0px auto;
+	position: relative;
+	width: 300px;
+	height: 200px;
+	border: 1px solid #999;
+}
+
+.select-example-element {
+	border: 1px solid #999;
+	margin: 3px 3px;
+	padding: 20px;
+	text-align: center;
+}
+
+.select-example-element.selected {
+	background-color: red;
+	color: white;
+}
+
+.editable {
+	-webkit-user-select: text;
+		-webkit-user-modify: read-write;
+		cursor:text;
+	
+}
+
+.editable-one-line {
+	white-space: nowrap;
+}

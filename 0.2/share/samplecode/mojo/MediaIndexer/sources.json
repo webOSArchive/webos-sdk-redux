@@ -1,0 +1,31 @@
+[
+    {"source": "app/assistants/stage-assistant.js"},
+    {
+        "scenes": "main",
+        "source": "app/assistants/main-assistant.js"
+    },
+    {
+        "scenes": "videofiles",
+        "source": "app/assistants/videofiles-assistant.js"
+    },
+    {
+        "scenes": "album",
+        "source": "app/assistants/album-assistant.js"
+    },
+    {
+        "scenes": "artists",
+        "source": "app/assistants/artists-assistant.js"
+    },
+    {
+        "scenes": "audio",
+        "source": "app/assistants/audio-assistant.js"
+    },
+    {
+        "scenes": "genres",
+        "source": "app/assistants/genres-assistant.js"
+    },
+    {
+        "scenes": "playlists",
+        "source": "app/assistants/playlists-assistant.js"
+    }
+]

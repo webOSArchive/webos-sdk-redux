@@ -1,0 +1,145 @@
+/*    News CSS
+
+    Copyright 2009 Palm, Inc.  All rights reserved.
+    
+    App overrides of palm scene and widget styles.
+*/
+
+/* Contrains storyView content to width of scene */
+img    {
+    max-width:280px;
+}
+
+
+/* Header Styles  */
+.icon.news-mini-icon {
+    background: url(../images/header-icon-news.png) no-repeat;
+    margin-top: 13px;
+    margin-left: 17px;
+}
+
+
+/* FeedList Header styles for feature drawer and selection */
+
+.featureFeed-close {
+    float:right;
+    margin: 8px -12px 0px 0px;
+    height:35px;
+    width: 35px;
+    background: url(../images/details-open-arrow.png) center center no-repeat;    
+}
+
+.featureFeed-open {
+    float:right;
+    margin: 8px -12px 0px 0px;
+    height:35px;
+    width: 35px;
+    background: url(../images/details-closed-arrow.png) center center no-repeat;    
+}
+
+.palm-drawer-container {        
+    border-width: 20px 1px 20px 1px;
+    -webkit-border-image: url(../images/palm-drawer-background-2.png) 20 1 20 1 repeat repeat; 
+    -webkit-box-sizing: border-box;           
+    overflow: visible;                                                                       
+}    
+
+
+/* Feature Feed styles */
+.featureScroller {
+    height: 100px;
+    width: 280px;
+    margin-left: 20px;
+}
+  
+
+/* feedList styles */
+.palm-row-wrapper.textfield-group {
+    margin-top: 5px;
+}
+
+.feedlist-title {
+    line-height: 2.0em;
+}
+
+.feedlist-url {
+    font-size: 14px;
+    color: gray;
+    margin-top: -20px;
+    margin-bottom: -20px;
+    line-height: 16px;
+}
+
+.feedlist-info {
+    background: url(../images/info-icon.png) center center no-repeat;
+}
+
+.feedlist-icon-container {
+    height: 54px;
+    margin-top: 5px;
+}
+
+.feedlist-icon {
+    background: url(../images/list-icon-rssfeed.png) center no-repeat;
+}
+
+.feedlist-newitem   {
+    line-height: 20px;
+    height: 26px;
+    min-width: 26px;
+    -webkit-border-image: url(../images/feedlist-newitem.png) 4 10 4 10 stretch stretch;
+    -webkit-box-sizing: border-box;
+    border-width: 4px 10px 4px 10px;
+}
+
+.unReadCount {
+    color: white;
+}
+
+
+/* Story List styles */
+.news-subtitle {
+        padding: 0px 14px 0px 14px;
+        font-size: 14px;
+        margin-top: -10px;
+        line-height: 16px;
+}
+
+.palm-row-wrapper > .unReadStyle    {
+    font-weight: bold;
+}
+.storyList-filter .filter-field-container {
+    top: 48px;
+    left: 0px;
+    position: fixed;
+    width: 100%;
+    height: 48px;
+    border-width: 26px 23px 20px 23px;
+    -webkit-border-image: url(../images/filter-search-light-bg.png) 26 23 20 23 repeat repeat;
+    -webkit-box-sizing: border-box;
+    z-index: 11002;
+}
+
+/* Update dialog (at first launch) styles  */
+.update-image    {
+    background: url(../images/news-icon.png) center center no-repeat;
+    float: left;
+    height: 58px;
+    width: 58px;
+    margin-left: -3px;
+}
+
+.update-scroller {
+    height: 150px;
+    width: 280px;
+}
+
+.update-bullets {
+    margin-left: -20px;
+}
+
+/* dashboard styles */
+
+.dashboard-icon-news {
+    background: url(../images/dashboard-icon-news.png);
+}

@@ -1,0 +1,36 @@
+{
+    "id": "com.plaxo.newcontacts.service",
+    "description": "Plaxo Contact Sync",
+    "engine": "node",
+    "services": [{
+    	"name": "com.plaxo.newcontacts.service",
+    	"description": "Plaxo Contact Sync",
+      "globalized": false,    	
+    	"assistant": "ServiceAssistant",
+    	"commands": [{
+    		"name": "checkCredentials",
+    		"assistant": "CheckCredentialsAssistant",
+			"public": false
+    	}, {
+    		"name": "onCreate",
+    		"assistant": "OnCreate",
+			"public": false
+    	}, {
+    		"name": "onEnabled",
+    		"assistant": "OnEnabled",
+			"public": false
+    	}, {
+    		"name": "onDelete",
+    		"assistant": "OnDelete",
+			"public": false
+    	}, {
+    		"name": "sync",
+    		"assistant": "SyncAssistant",
+			"public": false
+    	}, {
+    		"name": "resources",
+    		"assistant": "Resources",
+			"public": false
+    	}]
+    }]
+}

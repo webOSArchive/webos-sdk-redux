@@ -1,0 +1,9 @@
+﻿enyo.depends(
+	"Box.js",
+	"BasicDrawer.js",
+	"Drawer.js",
+	"Pane.js",
+	"PaneLayout.js",
+	"Transitions.js",
+	"FloatingHeader.js"
+);

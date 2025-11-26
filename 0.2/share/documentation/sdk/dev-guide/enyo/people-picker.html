@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="people-picker">
+      People Picker
+    </h1>
+    <p>
+      In Enyo, a <code>PeoplePicker</code> is a <code>Popup</code> control used to select one or more contacts and return data for the people represented.
+    </p>
+    <p>
+      To use a People Picker control in an application, add the following line to the app's <code>depends.js</code> file:
+    </p>
+    <blockquote>
+      <pre>
+<code>&quot;$enyo-lib/contactsui/&quot;
+</code>
+</pre>
+    </blockquote>
+    <p>
+      In your application code, declare a <code>PeoplePicker</code> as follows:
+    </p>
+    <blockquote>
+      <pre>
+<code>{name: &quot;preferredName&quot;,
+  kind: &quot;PeoplePicker&quot;,
+  onContactClick: &quot;contactClickHandlerFunctionName&quot;,
+  onCancelClick: &quot;cancelClickHandlerFunctionName&quot;}
+</code>
+</pre>
+    </blockquote>
+    <p>
+      Open the <code>PeoplePicker</code> by calling its <code>pickPerson</code> method, which takes no arguments.
+    </p>
+    <h2 id="published-properties">
+      Published Properties
+    </h2>
+    <table border="1">
+      <tr>
+        <th>
+          Name
+        </th>
+        <th>
+          Default
+        </th>
+        <th>
+          Description
+        </th>
+      </tr>
+      <tr>
+        <td>
+          cropWidth
+        </td>
+        <td>
+          undefined
+        </td>
+        <td>
+          (Optional) int to set the width of the crop window
+        </td>
+      </tr>
+      <tr>
+        <td>
+          cropHeight
+        </td>
+        <td>
+          undefined
+        </td>
+        <td>
+          (Optional) int to set the height of the crop window
+        </td>
+      </tr>
+      <tr>
+        <td>
+          exclusions
+        </td>
+        <td>
+          []
+        </td>
+        <td>
+          (Optional) array of ids of persons to exclude
+        </td>
+      </tr>
+      <tr>
+        <td>
+          mode
+        </td>
+        <td>
+          &quot;noFilter&quot;
+        </td>
+        <td>
+          (Optional) mode. Possible values are &quot;noFilter&quot; (all), &quot;favoritesOnly&quot;, and &quot;noFavoritesOnly&quot;.
+        </td>
+      </tr>
+      <tr>
+        <td>
+          showSearchBar
+        </td>
+        <td>
+          true
+        </td>
+        <td>
+          (Optional) boolean. If <code>true</code>, the search bar is shown.
+        </td>
+      </tr>
+      <tr>
+        <td>
+          showIMStatuses
+        </td>
+        <td>
+          false
+        </td>
+        <td>
+          (Optional) boolean. If <code>true</code>, IM statuses are shown.
+        </td>
+      </tr>
+      <tr>
+        <td>
+          showFavStars
+        </td>
+        <td>
+          true
+        </td>
+        <td>
+          (Optional) boolean. If <code>true</code>, a star is shown next to favorited persons.
+        </td>
+      </tr>
+      <tr>
+        <td>
+          enableGAL
+        </td>
+        <td>
+          false
+        </td>
+        <td>
+          (Optional) boolean. If <code>true</code>, GAL search is enabled.
+        </td>
+      </tr>
+    </table>
+    <h2 id="published-events">
+      Published Events
+    </h2>
+    <p>
+      You may specify handlers for any or all of the events listed below. Data is returned in the form:
+    </p>
+    <blockquote>
+      <pre>
+<code>{event: &quot;&lt;eventName&gt;&quot; , value: &quot;&lt;value&gt;&quot;}
+</code>
+</pre>
+    </blockquote>
+    <p>
+      Note that the <code>value</code> field will be equal to &quot;&quot; for all events other than <code>onContactClick</code>. In the case of <code>onContactClick</code>, the value will be a raw JSON person object from the db.
+    </p>
+    <h3 id="oncontactclick">
+      onContactClick
+    </h3>
+    <p>
+      Fires when a person is clicked. Person data is sent with this event.
+    </p>
+    <h3 id="oncancelclick">
+      onCancelClick
+    </h3>
+    <p>
+      Fires when the Cancel button is clicked. The dialog closes and dispatches this event.
+    </p>
+    <h3 id="onlistupdated">
+      onListUpdated
+    </h3>
+    <p>
+      Fires when the persons db is updated; the visible area of the list may or may not change.
+    </p>
+    <h3 id="onsearchcriteriaupdated">
+      onSearchCriteriaUpdated
+    </h3>
+    <p>
+      Fires when the Search field is updated (but not cleared).
+    </p>
+    <h3 id="onsearchcriteriacleared">
+      onSearchCriteriaCleared
+    </h3>
+    <p>
+      Fires when the Search field is cleared.
+    </p>
+		</div>
+	</body>
+</html>

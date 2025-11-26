@@ -1,0 +1,13 @@
+{
+  "id": "com.palmdts.synergy",
+  "package_format_version": 2,
+  "loc_name": "DTS Calendar Demo",
+  "version": "1.0.0",
+  "icon": "icon.png",
+  "miniicon": "icon.png",
+  "vendor": "Palm",
+  "vendorurl": "www.palmdts.com",
+  "app": "com.palmdts.synergy",
+  "services": ["com.palmdts.synergy.service"],
+  "accounts": ["com.palmdts.synergy.account"] 
+}

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ZeroConfServer" default="help" basedir=".">
+    <description>Builds, tests, and runs the project HotAppsProcessor.</description>
+    
+    
+    <target name="help">
+        <echo>build to assemble the final single click jar</echo>
+    </target>
+    
+    <target name="init">
+        <property name="out.dir" value="onejar"/>
+    </target>
+    
+    <target name="clean" depends="init">
+        <delete dir="${out.dir}"/>
+        <delete file="javaserver_complete.jar"/>
+    </target>
+    
+    <target name="build" depends="compile, extract, combine"/>
+    
+    <target name="compile" depends="init">
+        <mkdir dir="${out.dir}"/>
+        <javac srcdir="src" destdir="${out.dir}">
+            <classpath>
+                <fileset dir="lib">
+                </fileset>
+                </classpath>
+        </javac>
+    </target>
+    
+    <target name="extract" depends="init">
+        <mkdir dir="${out.dir}"/>
+        <unjar src="lib/jetty-http-7.1.6.v20100715.jar" dest="${out.dir}"/>
+        <unjar src="lib/jetty-io-7.1.6.v20100715.jar" dest="${out.dir}"/>
+        <unjar src="lib/jetty-server-7.1.6.v20100715.jar" dest="${out.dir}"/>
+        <unjar src="lib/jetty-util-7.1.6.v20100715.jar" dest="${out.dir}"/>
+        <unjar src="lib/jetty-continuation-7.1.6.v20100715.jar" dest="${out.dir}"/>
+        <unjar src="lib/jmdns.jar" dest="${out.dir}"/>
+        <unjar src="lib/servlet-api-2.5.jar" dest="${out.dir}"/>
+        <unjar src="lib/XMLLib.jar" dest="${out.dir}"/>
+        <!--
+        <unjar src="out/artifacts/javaserver/javaserver.jar" dest="${out.dir}"/>
+        -->
+        
+        <delete dir="${out.dir}/META-INF"/>
+        <delete dir="${out.dir}/.idea"/>
+        <delete dir="${out.dir}">
+            <include name="*.xml"/> 
+            <include name="*.html"/> 
+            <include name="*.iml"/> 
+            <include name="*.properties"/>
+        </delete>
+        
+    </target>
+    <target name="combine" depends="init">
+        <jar basedir="${out.dir}" destfile="javaserver_complete.jar"
+            compress="true"
+            >
+            <manifest>
+              <attribute name="Built-By" value="josh.marinacci@palm.com"/>
+              <!-- details -->
+              <attribute name="Main-Class" value="com.palmdts.zeroconf.JavaServer"/>
+            </manifest> 
+        </jar>
+    </target>
+</project>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="gesture-framework">
+      Gesture Framework
+    </h1>
+    <p>
+      The capacitive display on the HP TouchPad is a powerful sensor for capturing interactions made with the user's fingers. HP webOS provides support for the direct manipulation of UI elements on the screen using the user's fingers through its gesture framework.
+    </p>
+    <p>
+      <img src="/images/design/gesture-framework.png" alt="Gesture Framework"><br>
+      <br>
+    </p>
+    <h2 id="touch-events-and-gesture-support">
+      Touch Events and Gesture Support
+    </h2>
+    <p>
+      Any UI element on the screen can detect the following touch events:
+    </p>
+    <ul>
+      <li>A finger(s) is placed on the element
+      </li>
+      <li>A finger(s) is dragged along the element
+      </li>
+      <li>A finger(s) is removed from the element
+      </li>
+    </ul>
+    <p>
+      For any given event, the system can detect all the fingers currently on the screen, which of these are on the current UI element, and which fingers were involved in the touch event. For example, if a finger was placed on a UI element and a second finger was then placed on the same element, the TouchPad detects that two fingers are now placed on the UI element.
+    </p>The touch events support provides a rich enough feature set to enable virtually any type of touch-based interaction, including multi-touch gestures, such as pinch-zoom, two finger drag, and rotation. The table of <a href="/design/enyo/guidelines/system-features/standard-gestures.html">Standard Gestures</a> shows the gestures commonly used within webOS apps, and the typical actions associated with the gestures. Use these as a reference when designing touch-based interactions in your app, but remember that the gesture framework provides support for a broader range of gestures.<br>
+    <br>
+    <br>
+		</div>
+	</body>
+</html>

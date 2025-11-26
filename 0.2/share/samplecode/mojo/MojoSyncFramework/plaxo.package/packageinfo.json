@@ -1,0 +1,13 @@
+{
+  "id": "com.plaxo.newcontacts",
+  "package_format_version": 2,
+  "loc_name": "Plaxo Contact Sync",
+  "version": "1.0.1",
+  "icon": "icon.png",
+  "miniicon": "icon.png",
+  "vendor": "Palm",
+  "vendorurl": "www.plaxo.com",
+  "app": "com.plaxo.newcontacts",
+  "services": ["com.plaxo.newcontacts.service"],
+  "accounts": ["com.plaxo.newcontacts.account"]
+}

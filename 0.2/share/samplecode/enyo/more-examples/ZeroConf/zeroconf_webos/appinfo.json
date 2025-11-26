@@ -1,0 +1,9 @@
+{
+    "id": "com.palmdts.zeroconf",
+    "version": "1.0.0",
+    "vendor": "HP",
+    "type": "web",
+    "main": "index.html",
+    "title": "Zero Conf",
+    "uiRevision": 2
+}

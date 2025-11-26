@@ -1,0 +1,10 @@
+{
+	"id": "com.palmdts.synergy.account:1",
+	"sync": true,
+	"indexes": [{
+		"name": "accountId",
+		"props": [{
+			"name": "accountId"
+		}]
+	}]
+}

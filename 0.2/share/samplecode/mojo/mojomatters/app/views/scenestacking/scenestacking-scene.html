@@ -1,0 +1,37 @@
+
+<!--
+	Note that nothing in here specifies IDs, since this scene is instantiated multiple times.
+	Duplicate IDs are not allowed in HTML, so we avoid this by searching for 'name' instead, 
+	specifically underneath the scene's div.  
+-->
+
+<div class="palm-hasheader" >
+	
+	<!-- Label for the scene's nesting level. -->
+	<div name="nestingLevel" class="info-text">
+	</div>
+	<div class="info-text" id='scene-stacking-info-text'>
+		<span x-mojo-loc="">Watch the console log to see the how setup/cleanup/activate/deactivate are called as scenes are pushed and popped!</span>
+	</div>
+		
+	<div class="palm-button" x-mojo-scenestacking-handler="pushScene" x-mojo-tap-highlight="momentary">
+		<span x-mojo-loc="">Push another scene!</span>
+	</div>
+	
+	<div class="palm-button" x-mojo-scenestacking-handler="basicPopScene" x-mojo-tap-highlight="momentary">
+		<span x-mojo-loc="">Pop this scene off</span>
+	</div>
+	
+	<div class="palm-button" x-mojo-scenestacking-handler="popTwoBack" x-mojo-tap-highlight="momentary">
+		<span x-mojo-loc="">Pop two scenes at once</span>
+	</div>
+	
+	<div class="palm-button" x-mojo-scenestacking-handler="popToID" x-mojo-tap-highlight="momentary">
+		<span x-mojo-loc="">Pop to Level 2</span>
+	</div>
+	
+	<div class="palm-button" x-mojo-scenestacking-handler="popToList" x-mojo-tap-highlight="momentary">
+		<span x-mojo-loc="">Back to list</span>
+	</div>
+	
+</div>

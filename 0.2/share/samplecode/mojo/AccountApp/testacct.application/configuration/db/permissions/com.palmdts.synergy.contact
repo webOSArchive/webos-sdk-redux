@@ -1,0 +1,11 @@
+[{
+    "type": "db.kind",
+    "object": "com.palmdts.synergy.contact:1",
+    "caller": "com.palmdts.synergy",
+    "operations": {
+        "read": "allow",
+        "create": "allow",
+        "delete": "allow",
+        "update": "allow"
+        }
+}]

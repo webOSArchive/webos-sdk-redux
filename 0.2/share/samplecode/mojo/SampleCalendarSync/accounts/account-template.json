@@ -1,0 +1,27 @@
+
+{
+	"templateId": "com.palmdts.synergy.account",
+	"loc_name": "DTS Calendar",
+	"icon": {
+		"loc_32x32": "images/icon32x32.png",
+		"loc_48x48": "images/icon48x48.png"
+	},
+	"validator": "palm://com.palmdts.synergy.service/checkCredentials",
+	"readPermissions": ["com.palmdts.synergy.service"],
+	"writePermissions": ["com.palmdts.synergy.service"],
+    "loc_usernameLabel": "email address",
+	"capabilityProviders": [{
+		"capability": "CALENDAR",
+		"id": "com.palmdts.synergy.calendar",
+		"loc_name": "palmdts Calendar - NEW",
+		"implementation": "palm://com.palmdts.synergy.service/",
+		"onCreate": "palm://com.palmdts.synergy.service/onCreate",
+		"onEnabled": "palm://com.palmdts.synergy.service/onEnabled",
+		"onDelete": "palm://com.palmdts.synergy.service/onDelete",
+		"sync": "palm://com.palmdts.synergy.service/sync",
+        "dbkinds": {
+			"calendar": "com.palmdts.synergy.calendar:1",
+			"calendarevent": "com.palmdts.synergy.calendarevent:1"
+		}
+	}]
+}

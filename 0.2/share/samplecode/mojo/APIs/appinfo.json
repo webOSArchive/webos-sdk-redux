@@ -1,0 +1,10 @@
+{
+	"title": "APIs",
+	"type": "web",
+	"main": "index.html",
+	"icon": "icon.png",
+	"id": "com.palmdts.apis",
+	"version": "1.0.0",
+	"vendor": "organizationName",
+	"removable": "true"
+}

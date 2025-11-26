@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="notifications">
+      Notifications
+    </h1>
+    <h2 id="what-they-are">
+      What They Are
+    </h2>
+    <p>
+      Notifications are subtle, non-modal elements that are used to inform the user of events. When a notification is received, it does not prevent the user from interacting with the rest of the interface. An app can publish a notification to the user if the app is running in the background or even if the app's card has been dismissed altogether by the user from the card view. Three types of notification can be published by an app:
+    </p>
+    <ul>
+      <li>
+        <p>
+          Banner only--When received, a banner containing text animates into view in the view's status bar. The banner animates out of view after a time-out.
+        </p>
+      </li>
+      <li>
+        <p>
+          Banner notification--Same as a banner-only notification, but after the banner text has been displayed, an icon from the app remains in the Icon Summary area in the status bar.
+        </p>
+      </li>
+      <li>
+        <p>
+          Notification icon--When received, an icon appears in the Icon Summary area in the view's status bar without showing any banner.
+        </p>
+      </li>
+    </ul>
+    <p>
+      <img src="/images/design/notifications-banner.png" alt="Banner"><br>
+      Banner<br>
+      <br>
+      <img src="/images/design/notifications-dashboard.png" alt="Dashboard"><br>
+      Dashboard<br>
+      <br>
+      1. Status bar<br>
+      2. Banner text<br>
+      3. Icon Summary area<br>
+      4. Dashboard<br>
+      5. App icon<br>
+      6. Grouped notification<br>
+    </p>
+    <p>
+      If icons are displayed in the Icon Summary area, a user can tap on the area at any time to launch a Dashboard component, which shows a listing of all active notifications received on the device. When the dashboard is opened, the user can either dismiss notifications by swiping them away, or tap on a notification to trigger an action associated with the notification.
+    </p>
+    <p>
+      When a notification is received, the app can specify whether a sound is played by the device, or whether the device vibration is activated, or both. The app can customize the sound that is played by the device.
+    </p>
+    <p>
+      If several notifications are received by the same app, the notifications can be shown grouped together in the dashboard as one item. An indicator shows the number of notifications received from the app.
+    </p>
+    <h2 id="when-to-use">
+      When To Use
+    </h2>Use notifications to inform the user of an event or multiple events in a discreet and non-disruptive way.<br>
+    <br>
+    <br>
+		</div>
+	</body>
+</html>

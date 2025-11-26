@@ -1,0 +1,3 @@
+#!/bin/sh
+palm-install -r com.palmdts.activitymanager
+ 

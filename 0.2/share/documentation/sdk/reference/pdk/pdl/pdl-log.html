@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="pdl_log">
+      PDL_Log
+    </h1>
+    <h2 id="description">
+      Description
+    </h2>
+    <p>
+      Logs to the file <code>/media/internal/tracking.txt</code> under the category &quot;pdl_log&quot;. Writes output according to a specified format, similar to the Linux command <code>vsnprintf</code>.
+    </p>
+    <p>
+      <strong>Note</strong>: This API has been available since webOS 3.0.2 (PDK version 303).
+    </p>
+    <h2 id="syntax">
+      Syntax
+    </h2>
+    <blockquote>
+      <pre>
+<code>void PDL_Log(const char *format, ...);
+</code>
+</pre>
+    </blockquote>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Argument
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            format
+          </td>
+          <td>
+            Output format.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            output
+          </td>
+          <td>
+            Arguments to print.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h2 id="returns">
+      Returns
+    </h2>
+    <p>
+      None.
+    </p>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="device-bus-monitor">
+      Device Bus Monitor
+    </h1>
+    <p>
+      The HP webOS SDK, beginning with 2.0, comes with a tool - <code>ls-monitor</code> (luna service monitor) - that lets you see traffic going over the webOS service bus, similar to a network sniffer that lets you observe HTTP traffic.
+    </p>
+    <p>
+      You can run this tool from a <a href="/dev-guide/tools/device-shell.html">device shell</a>.
+    </p>
+    <p>
+      See <a href="/reference/services.html">webOS Service APIs</a> for a list of services available to 3rd party apps.
+    </p>
+    <p>
+      Another useful tool for testing services is <a href="/dev-guide/tools/luna-send.html"><code>luna-send</code></a>, which lets you access services at a device command-line.
+    </p>
+    <h2 id="usage">
+      Usage
+    </h2>
+    <pre>
+ls-monitor [OPTION...] 
+</pre>
+    <h2 id="options">
+      Options
+    </h2>
+    <pre>
+Help Options:
+  -?, --help                    Show help options
+
+Application Options:
+  -f, --filter=com.palm.foo     Filter by service name (or unique name)
+  -l, --list                    List all entities (apps) connected to the hub
+  -d, --debug                   Print extra output for debugging monitor but with UNBOUNDED MEMORY GROWTH
+</pre><br>
+    <h2 id="usage-notes">
+      Usage Notes
+    </h2>
+    <p>
+      With no switch, <code>ls-monitor</code> runs in monitor mode and outputs requests and responses to and from services.
+    </p>
+    <p>
+      The <code>-l</code> option returns a list of apps connected to the bus.
+    </p>
+    <p>
+      There are two system buses:
+    </p>
+    <ol style="list-style-type: decimal">
+      <li>
+        <p>
+          Public bus - Used for all 3rd party apps.
+        </p>
+      </li>
+      <li>
+        <p>
+          Private bus - Lists more services than the public bus, services that have access to sensitive systems.
+        </p>
+      </li>
+    </ol>
+    <p>
+      Though the list shows service names and processes, not all of them actually accept incoming connections. Connecting to the bus is a two-way interface, so this also shows apps that just have an active subscription.
+    </p>
+    <p>
+      The <code>-f</code> option allows you to filter on requests to and from a particular service. Alternatively, you could pipe the output through tools like <code>grep</code> to do more sophisticated searches.
+    </p>
+    <h2 id="example">
+      Example
+    </h2>
+    <p>
+      A typical output line from <code>ls-monitor</code> might look like this:
+    </p>
+    <pre>
+6663.549    [PRV]   return  41     com.palm.hidd (/var/run/ls2/VDVKHT)     (/var/run/ls2/GnoMz4)  {"returnValue":true}
+</pre><br>
+    <ul>
+      <li>
+        <p>
+          <code>6663.549</code> = Time message was sent in seconds since the device was booted.
+        </p>
+      </li>
+      <li>
+        <p>
+          <code>[PRV]</code> = Private bus.
+        </p>
+      </li>
+      <li>
+        <p>
+          <code>return</code> = The message was sent in response to a request.
+        </p>
+      </li>
+      <li>
+        <p>
+          <code>41</code> = Serial number. The serial number is used to match a call with its response. The numbers are assigned sequentially for each caller.
+        </p>
+      </li>
+      <li>
+        <p>
+          <code>com.palm.hidd</code> = Message sender (our system service that talks to the raw user interface devices). The destination is unnamed.
+        </p>
+      </li>
+      <li>
+        <p>
+          Paths in parenthesis = Locations of raw UNIX domain sockets used to implement the IPC.
+        </p>
+      </li>
+      <li>
+        <p>
+          <code>{&quot;returnValue&quot;:true}</code> = The actual message.
+        </p>
+      </li>
+    </ul><br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+		</div>
+	</body>
+</html>

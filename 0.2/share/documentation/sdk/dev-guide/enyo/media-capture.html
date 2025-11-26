@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="media-capture">
+      Media Capture
+    </h1>
+    <p>
+      <code>enyo.MediaCapture</code> is a non-control component that's used to manage the capturing of media in webOS. It is found under <code>framework/lib/mediacapture</code> in the Enyo source tree. To use the Media Capture API in an application, add the following line to the app's <code>depend.js</code> file:
+    </p>
+    <blockquote>
+      <pre>
+<code>&quot;$enyo-lib/mediacapture/&quot;
+</code>
+</pre>
+    </blockquote>
+    <h2 id="published-properties">
+      Published Properties
+    </h2>
+    <table border="1">
+      <tr>
+        <th>
+          Name
+        </th>
+        <th>
+          Default
+        </th>
+        <th>
+          Description
+        </th>
+      </tr>
+      <tr>
+        <td>
+          lastImagePath
+        </td>
+        <td>
+          &quot;&quot;
+        </td>
+        <td>
+          Path of the last captured image
+        </td>
+      </tr>
+      <tr>
+        <td>
+          lastVideoPath
+        </td>
+        <td>
+          &quot;&quot;
+        </td>
+        <td>
+          Path of the last captured video
+        </td>
+      </tr>
+      <tr>
+        <td>
+          lastAudioPath
+        </td>
+        <td>
+          &quot;&quot;
+        </td>
+        <td>
+          Path of the last captured audio
+        </td>
+      </tr>
+    </table>
+    <h2 id="public-events">
+      Public Events
+    </h2>
+    <p>
+      The following events are sent back to the client to signal the start or completion of an action, or some other change in state.
+    </p>
+    <ul>
+      <li>onAudioCaptureComplete
+      </li>
+      <li>onAudioCaptureStart
+      </li>
+      <li>onAutoFocusComplete
+      </li>
+      <li>onDuration
+      </li>
+      <li>onDurationChange
+      </li>
+      <li>onElapsedTime
+      </li>
+      <li>onError
+      </li>
+      <li>onImageCaptureComplete
+      </li>
+      <li>onImageCaptureStart
+      </li>
+      <li>onInitialized
+      </li>
+      <li>onLoaded
+      </li>
+      <li>onVideoCaptureComplete
+      </li>
+      <li>onVideoCaptureStart
+      </li>
+      <li>onVuData
+      </li>
+    </ul>
+    <h2 id="public-methods">
+      Public Methods
+    </h2>
+    <h3 id="initializevideoobjectfromclient">
+      initialize(videoObjectFromClient)
+    </h3>
+    <p>
+      Fires the call to initialize an instance of <code>MediaServer</code>.
+    </p>
+    <p>
+      <code>videoObjectFromClient</code> is an optional HTML5 video object used as the preview for the byte stream from the media server.
+    </p>
+    <h3 id="loadmode-format">
+      load(mode, format)
+    </h3>
+    <p>
+      Loads the media capture device.
+    </p>
+    <ul>
+      <li>
+        <p>
+          <code>mode</code> is the desired capture mode.
+        </p>
+      </li>
+      <li>
+        <p>
+          <code>format</code> is the format desired for the specified capture mode.
+        </p>
+      </li>
+    </ul>
+    <p>
+      Both <code>mode</code> and <code>format</code> come from the (required) property bag.
+    </p>
+    <h3 id="startimagecapturefilepath-imagecaptureoptions">
+      startImageCapture(filePath, imageCaptureOptions)
+    </h3>
+    <p>
+      Starts an image capture.
+    </p>
+    <ul>
+      <li>
+        <p>
+          <code>filePath</code> is the name of the captured file, or an empty string by default.
+        </p>
+      </li>
+      <li>
+        <p>
+          <code>imageCaptureOptions</code> is a JSON-formatted object containing the desired image capture format settings, e.g.,
+        </p>
+        <blockquote>
+          <pre>
+<code>{
+  &quot;bitrate&quot;: 0,
+  &quot;samplerate&quot;: 0,
+  &quot;width&quot;: 2032,
+  &quot;height&quot;: 1520,
+  &quot;mimetype&quot;: &quot;image/jpeg&quot;,
+  &quot;codecs&quot;:&quot;jpeg&quot;
+}
+</code>
+</pre>
+        </blockquote>
+      </li>
+    </ul>
+    <h3 id="startaudiocapturefilepath-audiocaptureoptions">
+      startAudioCapture(filePath, audioCaptureOptions)
+    </h3>
+    <p>
+      Starts an audio capture.
+    </p>
+    <ul>
+      <li>
+        <p>
+          <code>filePath</code> is the name of the captured file, or an empty string by default.
+        </p>
+      </li>
+      <li>
+        <p>
+          <code>audioCaptureOptions</code> is a JSON-formatted object containing the desired audio capture format settings, e.g.,
+        </p>
+        <blockquote>
+          <pre>
+<code>{
+  &quot;bitrate&quot;:128000,
+  &quot;samplerate&quot;:8000,
+  &quot;width&quot;:0,
+  &quot;height&quot;:0,
+  &quot;mimetype&quot;:&quot;audio/vnd.wave&quot;,
+  &quot;codecs&quot;:&quot;1&quot;
+}
+</code>
+</pre>
+        </blockquote>
+      </li>
+    </ul>
+    <h3 id="stopaudiocapture">
+      stopAudioCapture()
+    </h3>
+    <p>
+      Stops the current audio capture.
+    </p>
+    <h3 id="startvideocapturefilepath-videocaptureoptions">
+      startVideoCapture(filePath, videoCaptureOptions)
+    </h3>
+    <p>
+      Starts a video capture.
+    </p>
+    <ul>
+      <li>
+        <p>
+          <code>filePath</code> is the name of the captured file, or an empty string by default.
+        </p>
+      </li>
+      <li>
+        <p>
+          <code>videoCaptureOptions</code> is a JSON-formatted object containing the desired video capture format settings, e.g.,
+        </p>
+        <blockquote>
+          <pre>
+<code>{
+  &quot;bitrate&quot;: 1100000,
+  &quot;samplerate&quot;: 44100,
+  &quot;width&quot;: 1280,
+  &quot;height&quot;: 720,
+  &quot;mimetype&quot;: &quot;video/mp4&quot;,
+  &quot;codecs&quot;: &quot;mp4v.20,mp4a.40&quot;
+}
+</code>
+</pre>
+        </blockquote>
+      </li>
+    </ul>
+    <h3 id="stopvideocapture">
+      stopVideoCapture()
+    </h3>
+    <p>
+      Stops the current video capture.
+    </p>
+    <h3 id="unload">
+      unload()
+    </h3>
+    <p>
+      Unloads the currently-loaded device.
+    </p>
+    <h3 id="updateautofocusautofocussettings">
+      updateAutoFocus(autoFocusSettings)
+    </h3>
+    <p>
+      Resets the current auto focus with the settings specified in the passed-in object.
+    </p>
+    <p>
+      <code>autoFocusSettings</code> is a JSON-formatted object with the following fields:
+    </p>
+    <ul>
+      <li>centerX
+      </li>
+      <li>centerY
+      </li>
+      <li>width
+      </li>
+      <li>height
+      </li>
+      <li>virtualWidth
+      </li>
+      <li>virtualHeight
+      </li>
+      <li>flash
+      </li>
+      <li>type
+      </li>
+    </ul>
+		</div>
+	</body>
+</html>

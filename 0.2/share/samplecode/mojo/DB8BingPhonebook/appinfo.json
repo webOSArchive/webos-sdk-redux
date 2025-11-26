@@ -1,0 +1,31 @@
+{
+	"id": "com.palmdts.app.bingphonebook",
+	"version": "1.0.0",
+	"vendor": "Suresh Inc",
+	"type": "web",
+	"main": "index.html",
+	"title": "Bing-Phonebook",
+	"icon": "icon.png",
+	"splashicon": "icon-256.png",
+	"noWindow":true,
+	"universalSearch":{
+				"search":{ 
+							"displayName": "Bing Phone Book",
+							"url":"com.suresh.app.bingphonebook",
+							"launchParam":"query"
+							},
+				"action":{ 
+							"displayName": "New Phone Entry",
+							"url":"com.suresh.app.bingphonebook",
+							"launchParam":"newEntry"
+						},
+				"dbsearch":{
+							"displayName":"Bing PhoneBook",
+							"url":"com.suresh.app.bingphonebook",
+							"launchParam":"phoneBookId",
+							"launchParamDbField":"_id",
+							"displayFields":["Title", "City"],
+							"dbQuery":{"from":"com.suresh.bingphonebook:1", "where":[{"prop":"searchText","op":"?","val":"", "collate":"primary"}],"limit":20} 
+							}
+				}
+}

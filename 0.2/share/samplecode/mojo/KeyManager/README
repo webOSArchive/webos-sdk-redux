@@ -1,0 +1,11 @@
+The Key Manager (KM) provides JavaScript applications with key management and cryptographic functionality. 
+It makes this available on the device's public bus via a number of API calls. The Key Manager implements a key store , 
+allowing apps a place to safely keep keys where they are readily available for cryptographic operations.
+
+To use:
+1. Enter a key name
+2. Tap on generate
+3. For key details use any of the buttons on the first scene.
+4. To use the key for encryption tap on the crypt command menu button to bring up the second scene
+5. Enter some text and tap the encrypt button
+6. Tap the decrypt button to decrypt the text previous encrypted.

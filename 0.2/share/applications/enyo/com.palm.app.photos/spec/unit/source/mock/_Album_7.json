@@ -1,0 +1,31 @@
+{
+   "returnValue": true,
+   "results": [
+        { "_id": "_bogus_7",
+          "_kind": "com.palm.media.image.file:1",
+          "_rev": 3936,
+          "albumId": "_Album_7",
+          "albumPath": "mock/images/_Album_7",
+          "appGridThumbnail": {
+              "cached": true,
+              "path": "mock/images/_Album_7/appGridThumb-bogus.jpg",
+              "width": 133,
+              "height": 100
+          },
+          "appStripThumbnail": {
+              "cached": true,
+              "path": "mock/images/_Album_7/appStripThumb-bogus.jpg"
+          },
+          "appScreenNail": {
+              "cached": true,
+              "path": "mock/images/_Album_7/bogus.jpg"
+          },
+          "appCacheComplete": true,
+          "createdTime": 1289644753,
+          "path": "mock/images/_Album_7/bogus.jpg",
+          "thumbnails": [ ],
+          "type": "local",
+          "mediaType": "image"
+        }
+   ]
+}

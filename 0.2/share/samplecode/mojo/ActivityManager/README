@@ -1,0 +1,12 @@
+This sample has 2 parts
+1. A regular SDK application
+2. JS service
+
+To install the complete package simply run the build script, the commands contained in the script are
+palm-package activitymanager.application activitymanager.srv activitymanager.package 
+palm-install -r com.palmdts.activitymanager
+palm-install com.palmdts.activitymanager_1.0.0_all.ipk
+
+Once installed, the webos app can call the service by using the call
+
+this.controller.serviceRequest('palm://com.palmdts.activitymanager.sample.service', {})

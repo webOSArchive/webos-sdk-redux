@@ -1,0 +1,13 @@
+.gridSize {
+	width: 300px;
+}
+
+.gridText {
+	line-height: 50px;
+	vertical-align: middle;
+}
+
+.instructions {
+	padding: 6px;
+	text-align: center;
+}

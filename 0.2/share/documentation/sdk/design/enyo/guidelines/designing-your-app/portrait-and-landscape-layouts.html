@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="portrait-and-landscape-layouts">
+      Portrait and Landscape Layouts
+    </h1>
+    <p>
+      The device accelerometer can capture orientation events to detect whether the device is being held in a portrait or landscape orientation. Your app has the choice to constrain itself to a particular orientation, or to readjust its layout to match the device orientation. It is generally recommended, however, that apps provide both a portrait and a landscape layout. As mentioned earlier, users hold tablets in a variety of ways and orientations, and your application should give users this flexibility.
+    </p>
+    <p>
+      Panes automatically resize to fit the available width in the view unless the panes are fixed in width. Consider how your app content appears within the view's panes in both orientations and rearrange the layout of the content if necessary to maximize the amount of content displayed in the available space.
+    </p>
+    <p>
+      Note that header and footers adjust to fit the full width of the pane in which they are located. The items that appear in the header and footer areas should remain the same even if the available space changes between orientations. Switching between orientations should not introduce new content or functionality.
+    </p>
+    <h2 id="single-pane-layouts">
+      Single-Pane Layouts
+    </h2>
+    <h3 id="grid">
+      Grid
+    </h3>
+    <p>
+      <img src="/images/design/portrait-and-landscape-layouts.png"><br>
+      <br>
+      Grid-based layouts scale well between portrait and landscape. A grid-based layout should reorder itself to fit as many grid items as possible within the horizontal space within the pane.
+    </p>
+    <h3 id="single-column">
+      Single-Column
+    </h3>
+    <p>
+      <img src="/images/design/portrait-and-landscape-layouts-2.png"><br>
+      <br>
+      A single-column layout does not scale well between portrait and landscape. This layout should be avoided if possible. When a single-column layout is unavoidable, do not scale the column to full width in landscape.
+    </p>
+    <p>
+      The overall width of the column should remain the same between landscape and portrait orientations.
+    </p>
+    <h2 id="split-view">
+      Split View
+    </h2>
+    <p>
+      <img src="/images/design/portrait-and-landscape-layouts-3.png"><br>
+      <br>
+      A split view contains a fixed pane on the left and a free pane on the right.
+    </p>
+    <p>
+      The fixed pane remains the same width regardless of orientation and the free pane fits the available space.
+    </p>
+    <p>
+      The content in the free pane should reflow to fill the available space when the orientation changes.
+    </p>
+    <p>
+      Users typically change to a landscape orientation to see more content in this layout. Try to fulfill the user's expectations by ensuring that the amount of content displayed in landscape is maximized.
+    </p>
+    <h2 id="sliding-panes">
+      Sliding Panes
+    </h2>
+    <p>
+      <img src="/images/design/portrait-and-landscape-layouts-4.png"><br>
+      <br>
+      <img src="/images/design/portrait-and-landscape-layouts-5.png"><br>
+      <br>
+      Panes within the Sliding Panes layout are generally fixed in width, except for the detail pane, which adjusts to fit the available space.
+    </p>The content in the free pane reflows to fill the available space when the orientation changes, provided that the width of the pane is at least 320 px.<br>
+    <br>
+    <br>
+		</div>
+	</body>
+</html>

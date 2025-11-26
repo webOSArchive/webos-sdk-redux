@@ -1,0 +1,9 @@
+{
+	"id": "com.palmdts.app.keymanager",
+	"version": "2.0.0",
+	"vendor": "Palm, inc",
+	"type": "web",
+	"main": "index.html",
+	"title": "KeyManager",
+	"icon": "icon.png"
+}

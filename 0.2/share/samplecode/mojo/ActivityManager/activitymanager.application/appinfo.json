@@ -1,0 +1,9 @@
+{
+	"id": "com.palmdts.activitymanager",
+	"version": "1.0.0",
+	"vendor": "Palm DTS",
+	"type": "web",
+	"main": "index.html",
+	"title": "ActivityManager",
+	"icon": "icon.png"
+}

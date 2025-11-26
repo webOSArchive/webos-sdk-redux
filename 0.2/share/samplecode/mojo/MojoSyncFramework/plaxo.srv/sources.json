@@ -1,0 +1,45 @@
+[{
+	"library": {
+		"name": "foundations",
+		"version": "1.0"
+	}
+}, {
+	"library": {
+		"name": "foundations.json",
+		"version": "1.0"
+	}
+}, {
+	"library": {
+		"name": "mojoservice.transport",
+		"version": "1.0"
+	}
+}, {
+	"library": {
+		"name": "mojoservice.transport.sync",
+		"version": "1.0"
+	}
+}, {
+	"library": {
+		"name": "contacts",
+		"version": "1.0"
+	}
+}, {
+	"library": {
+		"name": "globalization",
+		"version": "1.0"
+	}
+}, {
+	 "source": "javascript/prologue.js"
+}, {
+    "source": "javascript/kinds.js"
+}, {
+    "source": "javascript/utils/base64.js"
+}, {
+    "source": "javascript/utils/keymanager.js"
+}, {
+	 "source": "javascript/assistants/checkcredentialsassistant.js"
+}, {
+    "source": "javascript/assistants/syncassistant.js"
+}, {
+	 "source": "javascript/assistants/serviceassistant.js"
+}]

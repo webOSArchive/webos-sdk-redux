@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="file-transfer">
+      File Transfer
+    </h1>
+    <p>
+      The SDK comes with utilites — <code>pscp</code> or <code>scp</code> — to transfer files to the device or <a href="/dev-guide/tools/emulator.html">Emulator</a>.
+    </p>
+    <h3 id="windows">
+      Windows
+    </h3>
+    <p>
+      On Windows, you can use the <code>pscp</code> (PuTTY Secure Copy) utility that comes with the SDK to transfer files from the host PC to a folder on the device using an SSH connection. You would use pscp at the command line.
+    </p>
+    <p>
+      Syntax:
+    </p>
+    <blockquote>
+      <pre>
+<code>pscp -scp -P 10022 -pw &quot;&quot; &lt;source-file&gt; root@localhost:/&lt;path&gt;/&lt;to&gt;/&lt;folder&gt;        
+</code>
+</pre>
+    </blockquote>
+    <p>
+      Example:
+    </p>
+    <blockquote>
+      <pre>
+<code>pscp -scp -P 10022 -pw &quot;&quot; simple root@localhost:/media/internal        
+</code>
+</pre>
+    </blockquote>
+    <p>
+      The above example transfers the simple executable (sample application) to the <code>/media/internal</code> folder on the device. The port (<code>-P</code>) is 10022 and an empty string (<code>&quot;&quot;</code>) is entered for the password (<code>-pw</code>).
+    </p>
+    <h3 id="mac">
+      Mac
+    </h3>
+    <p>
+      On the Mac, use <code>scp</code> to transfer files. Launch the Terminal application, then, at the command line, type the command <code>scp</code>. It is used in the same way as Windows except without <code>'pscp'</code> and without the <code>'-pw'</code> option. After entering the command, you are prompted for the password. Press <code>ENTER</code> and the file is transferred.
+    </p>
+		</div>
+	</body>
+</html>

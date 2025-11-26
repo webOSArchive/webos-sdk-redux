@@ -1,0 +1,273 @@
+[
+  {
+    "source": "app/assistants/app-assistant.js"
+  },
+  {
+    "source": "app/assistants/stage-assistant.js"
+  },
+  {
+    "source": "app/assistants/list-assistant.js"
+  },
+  {
+    "scenes": "edit",
+    "source": "app/assistants/edit-assistant.js"
+  },
+  {
+    "scenes": "listvisibility",
+    "source": "app/assistants/listvisibility-assistant.js"
+  },
+  {
+    "scenes": "editablelist",
+    "source": "app/assistants/editablelist-assistant.js"
+  },
+  {
+    "scenes": "eventwatcher",
+    "source": "app/assistants/eventwatcher-assistant.js"
+  },
+  {
+    "scenes": "dialogs",
+    "source": "app/assistants/dialogs-assistant.js"
+  },
+  {
+    "scenes": "dashboard",
+    "source": "app/assistants/dashboard-assistant.js"
+  },
+  {
+    "scenes": "datetime",
+    "source": "app/assistants/datetime-assistant.js"
+  },
+  {
+    "scenes": "notify",
+    "source": "app/assistants/notify-assistant.js"
+  },
+  {
+    "scenes": "service-error",
+    "source": "app/assistants/service-error-assistant.js"
+  },
+  {
+    "scenes": "popupmenu",
+    "source": "app/assistants/popupmenu-assistant.js"
+  },
+  {
+    "scenes": "scenestacking",
+    "source": "app/assistants/scenestacking-assistant.js"
+  },
+  {
+    "scenes": "listselector",
+    "source": "app/assistants/listselector-assistant.js"
+  },
+  {
+    "scenes": "recursivelist",
+    "source": "app/assistants/recursivelist-assistant.js"
+  },
+  {
+    "scenes": "subwidgets",
+    "source": "app/assistants/subwidgets-assistant.js"
+  },
+  {
+    "scenes": "spinner",
+    "source": "app/assistants/spinner-assistant.js"
+  },
+  {
+    "scenes": "togglebutton",
+    "source": "app/assistants/togglebutton-assistant.js"
+  },
+  {
+    "scenes": "checkbox",
+    "source": "app/assistants/checkbox-assistant.js"
+  },
+  {
+    "scenes": "radiobutton",
+    "source": "app/assistants/radiobutton-assistant.js"
+  },
+  {
+    "scenes": "imageviewcrop",
+    "source": "app/assistants/imageviewcrop-assistant.js"
+  },
+  {
+    "scenes": "formatterdemo",
+    "source": "app/assistants/formatterdemo-assistant.js"
+  },
+  {
+    "scenes": "menudemo",
+    "source": "app/assistants/menudemo-assistant.js"
+  },
+  {
+    "scenes": "filterfield",
+    "source": "app/assistants/filterfield-assistant.js"
+  },
+  {
+    "scenes": "bigfilterlist",
+    "source": "app/assistants/bigfilterlist-assistant.js"
+  },
+  {
+    "scenes": "scrolling",
+    "source": "app/assistants/scrolling-assistant.js"
+  },
+  {
+    "scenes": "lazylist",
+    "source": "app/assistants/lazylist-assistant.js"
+  },
+  {
+    "scenes": "touch",
+    "source": "app/assistants/touch-assistant.js"
+  },
+  {
+    "scenes": "gesture",
+    "source": "app/assistants/gesture-assistant.js"
+  },
+  {
+    "scenes": "richtext",
+    "source": "app/assistants/richtext-assistant.js"
+  },
+  {
+    "scenes": "drawer",
+    "source": "app/assistants/drawer-assistant.js"
+  },
+  {
+    "scenes": "photoanimation",
+    "source": "app/assistants/photoanimation-assistant.js"
+  },
+  {
+    "scenes": "popup-alert",
+    "source": "app/assistants/popup-alert-assistant.js"
+  },
+  {
+    "scenes": "dividerlist",
+    "source": "app/assistants/dividerlist-assistant.js"
+  },
+  {
+    "scenes": "persistentlist",
+    "source": "app/assistants/persistentlist-assistant.js"
+  },
+  {
+    "scenes": "cross-app",
+    "source": "app/assistants/cross-app-assistant.js"
+  },
+  {
+    "scenes": "webview",
+    "source": "app/assistants/webview-assistant.js"
+  },
+  {
+    "source": "app/assistants/empty-assistant.js"
+  },
+  {
+    "scenes": "passwordfield",
+    "source": "app/assistants/passwordfield-assistant.js"
+  },
+  {
+    "scenes": "filepicker",
+    "source": "app/assistants/filepicker-assistant.js"
+  },
+  {
+    "scenes": "charselector",
+    "source": "app/assistants/charselector-assistant.js"
+  },
+  {
+    "scenes": "filterlist",
+    "source": "app/assistants/filterlist-assistant.js"
+  },
+  {
+    "scenes": "slider",
+    "source": "app/assistants/slider-assistant.js"
+  },
+  {
+    "scenes": "progresspill",
+    "source": "app/assistants/progresspill-assistant.js"
+  },
+  {
+    "scenes": "progressbar",
+    "source": "app/assistants/progressbar-assistant.js"
+  },
+  {
+    "scenes": "button",
+    "source": "app/assistants/button-assistant.js"
+  },
+  {
+    "scenes": "progressslider",
+    "source": "app/assistants/progressslider-assistant.js"
+  },
+  {
+    "scenes": "progress",
+    "source": "app/assistants/progress-assistant.js"
+  },
+  {
+    "scenes": "locale",
+    "source": "app/assistants/locale-assistant.js"
+  },
+  {
+    "scenes": "orientation",
+    "source": "app/assistants/orientation-assistant.js"
+  },
+  {
+    "scenes": "sceneevents",
+    "source": "app/assistants/sceneevents-assistant.js"
+  },
+  {
+    "scenes": "noderef",
+    "source": "app/assistants/noderef-assistant.js"
+  },
+  {
+    "scenes": "fwdbck",
+    "source": "app/assistants/fwdbck-assistant.js"
+  },
+  {
+    "scenes": "throb",
+    "source": "app/assistants/throb-assistant.js"
+  },
+  {
+    "scenes": "nestedscroller",
+    "source": "app/assistants/nestedscroller-assistant.js"
+  },
+  {
+    "scenes": "scrollerpushtest",
+    "source": "app/assistants/scrollerpushtest-assistant.js"
+  },
+  {
+    "scenes": "layout",
+    "source": "app/assistants/layout-assistant.js"
+  },
+  {
+    "scenes": "imageview",
+    "source": "app/assistants/imageview-assistant.js"
+  },
+  {
+    "scenes": "highlight",
+    "source": "app/assistants/highlight-assistant.js"
+  },
+  {
+    "scenes": "resize",
+    "source": "app/assistants/resize-assistant.js"
+  },
+  {
+    "scenes": "form",
+    "source": "app/assistants/form-assistant.js"
+  },
+  {
+    "scenes": "datadiv",
+    "source": "app/assistants/datadiv-assistant.js"
+  },
+  {
+    "scenes": "tapfeedback",
+    "source": "app/assistants/tapfeedback-assistant.js"
+  },
+  {
+    "scenes": "lazylistlazywidgets",
+    "source": "app/assistants/lazylistlazywidgets-assistant.js"
+  },
+  {
+    "source": "app/assistants/activity-assistant.js"
+  },
+  {
+    "source": "app/assistants/colorlist-assistant.js"
+  },
+  {
+    "source": "app/assistants/curve-assistant.js"
+  },
+  {
+    "source": "app/assistants/windowedscroll-assistant.js"
+  },
+  {
+    "source": "javascripts/lorem.js"
+  }
+]

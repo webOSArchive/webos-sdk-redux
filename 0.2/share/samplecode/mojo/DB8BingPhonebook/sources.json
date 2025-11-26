@@ -1,0 +1,17 @@
+[
+    {
+        "source": "app/assistants/stage-assistant.js"
+    },
+    {
+        "source": "app/assistants/main-assistant.js"
+    },
+    {
+        "source": "app/assistants/new-assistant.js"
+    },
+    {
+        "source": "app/assistants/detail-assistant.js"
+    },
+    {
+        "source": "app/models/dbstore.js"
+    }
+]

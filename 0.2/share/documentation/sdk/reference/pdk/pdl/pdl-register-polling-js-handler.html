@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="pdl_registerpollingjshandler">
+      PDL_RegisterPollingJSHandler
+    </h1>
+    <h2 id="description">
+      Description
+    </h2>
+    <p>
+      Same as <code>PDL_RegisterJSHandler</code>, but instead of the JS handler being called immediately, the request is put in a queue, and an event is posted to SDL to alert you. You must call <code>PDL_HandleJSCalls</code> to have the actual handlers be called. This approach ensures that the handlers are called in your thread (as opposed to <code>PDL_RegisterJSHandler</code>, which calls them immediately from an internal PDK thread).
+    </p>
+    <p>
+      The event your app gets is <code>SDL_USEREVENT</code>, and the event's <code>user.code</code> value is <code>PDL_PENDING_JS</code>.
+    </p>
+    <p>
+      Note that your app does not get an event for each JS call. It gets one event notifying it that there are queued calls. It does not get another such event until it calls <code>PDL_HandleJSCalls</code> and there is another downstream call.
+    </p>
+    <p>
+      <strong>Note</strong>: This API has been available since webOS 3.0.2 (PDK version 303).
+    </p>
+    <h2 id="syntax">
+      Syntax
+    </h2>
+    <blockquote>
+      <pre>
+<code>PDL_Err PDL_RegisterPollingJSHandler(const char *functionName, PDL_JSHandlerFunc function);
+</code>
+</pre>
+    </blockquote>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Argument
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            functionName
+          </td>
+          <td>
+            The name the JavaScript application can use to reference the Plug-in handler function.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            function
+          </td>
+          <td>
+            The Plug-in application function.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h2 id="returns">
+      Returns
+    </h2>
+    <pre>
+PDL_NOERROR - Success.
+PDL_ESTATE - You can not register new JS handlers after calling PDL_JSRegistrationComplete.
+</pre>
+    <p>
+      <strong>See also:</strong>
+    </p>
+    <ul>
+      <li>
+        <a href="/reference/pdk/plug-in-api-summary.html#plug-ins">APIs for Calling Plug-in Functions</a>
+      </li>
+    </ul>
+		</div>
+	</body>
+</html>

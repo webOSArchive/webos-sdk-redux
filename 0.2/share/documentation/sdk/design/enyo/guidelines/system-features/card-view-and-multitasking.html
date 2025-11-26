@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="card-view-and-multitasking">
+      Card View and Multitasking
+    </h1>
+    <h2 id="card-view">
+      Card View
+    </h2>
+    <p>
+      The card view is the first view that the user sees after booting the device and can be accessed at any time by pressing the device Center button, or by swiping up from the bottom of any app view.
+    </p>
+    <p>
+      HP webOS provides a powerful multi-tasking framework that allows users to switch between concurrent activities using the device's card view. Each activity--for example, a browser window--is represented in the card view as a card. In the card view, the user can switch to another activity simply by scrolling to and tapping the card representing the activity.
+    </p>
+    <p>
+      Cards appear as scaled-down versions of the full-sized apps. Cards will continue to update in card view to reflect the latest state of the activity in the app. If a user navigates away from a card and returns to it later, it should remain in the latest state so that the user can continue where they left off.
+    </p>
+    <h2 id="cards-are-activities-not-apps">
+      Cards Are Activities, Not Apps
+    </h2>
+    <p>
+      Cards are not the same as apps. An app can create several card instances in the card view. Each of these cards can represent a concurrent activity within the app. For example, the email app creates a new card for each instance of an email composer. All the cards created by an app are associated with each other automatically. Associated cards are shown grouped in the card view in card stacks.
+    </p>
+    <p>
+      <img src="/images/design/card-view.jpg" alt="Card View"><br>
+      <br>
+      1. Card Stack<br>
+      2. App Card<br>
+    </p>
+    <p>
+      When planning your app structure and workflow, consider carefully whether to open a new view within a new card or whether to keep the interaction within a single card. Creating multiple cards can complicate the user experience of your app. However, if there is good reason to open a new card and it purposefully supports the user's workflow, then do so. There should be a genuine user benefit in running the different activities in your app concurrently.
+    </p>
+    <h2 id="user-arrangement">
+      User Arrangement
+    </h2>
+    <p>
+      Ultimately, the user has control over how the cards in the card view are organized. By pressing and holding on a card, the user can drag and drop the cards to change the order in which they appear. Users can also rearrange cards within a stack, or pull a card from a stack and show it individually. Conversely, the user can also group any cards together into stacks.
+    </p>
+    <p>
+      Users can also dismiss cards by swiping them up off the screen. If any data was being entered or edited in the card--e.g., in a form or an email--it should automatically be saved when the card is dismissed.
+    </p>
+    <h2 id="app-launcher-and-just-type">
+      App Launcher and Just Type
+    </h2>
+    <p>
+      The card view is also used as a springboard to other system features. Just Type (see <a href="/design/enyo/guidelines/system-features/integrate-your-app-with-just-type.html">Integrate Your App With Just Type</a>) is accessed by tapping on the search field at the top of the display and apps can be launched by tapping on the app shortcuts in the Quick Launch bar. The user can also access the App Launcher by tapping the App Launcher icon in the Quick Launch bar.
+    </p><img src="/images/design/card-view-2.jpg" alt="Card View 2"><br>
+    <br>
+    1. Just Type Search Field<br>
+    2. Quick Launch Bar<br>
+    3. App Launcher icon<br>
+    <br>
+    <br>
+		</div>
+	</body>
+</html>

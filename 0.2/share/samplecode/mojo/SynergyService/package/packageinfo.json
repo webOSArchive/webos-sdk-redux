@@ -1,0 +1,11 @@
+{
+  "id": "com.palmdts.testacct",
+  "package_format_version": 2,
+  "loc_name": "Palm Synergy Contact Demo",
+  "version": "1.0.0",
+  "vendor": "Palm",
+  "vendorurl": "www.palm.com",
+  "app": "com.palmdts.testacct",
+  "services": ["com.palmdts.testacct.contacts.service"],
+  "accounts": ["com.palmdts.testacct.contact"]
+}

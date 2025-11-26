@@ -1,0 +1,36 @@
+<div id="feedListScene">
+    
+    <!--    Search Field                                          -->        
+    <div id="searchFieldContainer">
+        <div x-mojo-element="FilterList" id="startSearchField"></div>
+    </div>
+                
+    <div id="feedListMain">
+
+        <!--    Rotating Feature Story                            -->
+        <div id="feedList_view_header" class="palm-header left">
+            Últimas noticias
+            <div id="featureDrawer" class="featureFeed-close"></div>
+        </div>
+        <div class="palm-header-spacer"></div>
+        <div x-mojo-element="Drawer" id="featureFeedDrawer">
+            <div x-mojo-element="Scroller" id="featureScroller" >
+                <div id="featureStoryDiv" class="featureScroller">
+                    <div id="splashScreen" class="splashScreen">
+                        <div class="splashImage"></div>
+                        <div class="splashText">Noticias v0.8<span>#{version}</span>
+                            <div class="splashBody">Copyright 2009, Palm®</div>
+                        </div>
+                    </div>
+                    <div id="featureStoryTitle" class="palm-body-title">#{title}</div>
+                    <div id="featureStory" class="palm-body-text">#{-text}</div>    
+                </div>
+            </div>
+        </div>
+    
+        <!--    Feed List                                         -->                    
+        <div class="palm-list">
+            <div x-mojo-element="List" id="feedListWgt"></div>
+        </div>
+    </div>
+</div>

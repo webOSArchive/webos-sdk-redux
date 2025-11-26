@@ -1,0 +1,6 @@
+#!/bin/sh
+palm-package activitymanager.application activitymanager.srv activitymanager.package 
+palm-install -r com.palmdts.activitymanager
+palm-install com.palmdts.activitymanager_1.0.0_all.ipk
+#palm-launch com.palmdts.activitymanager.app
+ 

@@ -1,0 +1,9 @@
+{
+	"title": "MojoMatters1",
+	"type": "web",
+	"main": "index.html",
+	"version": "1.0.0",
+	"id": "com.palm.app.mojomatters",
+	"miniicon": "miniicon.png",
+	"vendor": "Palm"
+}

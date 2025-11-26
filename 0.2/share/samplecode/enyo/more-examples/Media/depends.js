@@ -1,0 +1,10 @@
+﻿enyo.depends(
+	"source/Media.js",
+	"source/HeaderView.js",
+	"source/AudioView.js",
+	"source/AudioObjectView.js",
+	"source/VideoView.js",
+	"source/VideoObjectView.js",
+	"source/ViewItem.js",
+	"css/style.css"
+);

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="resource-monitor">
+      Resource Monitor
+    </h1>
+    <p>
+      The webOS Resource Monitor is a tool that graphs your application's DOM node count and open service handles, helping you determine your app's memory footprint and if it is leaking memory.
+    </p>
+    <p>
+      If your app leaves DOM nodes open after the app or scene is closed, then it is leaking memory. Typically, event handlers that remain open after a scene or app is closed are the cause.
+    </p>
+    <p>
+      <img src="/images/palm/resourcemonitor.png" alt="image"><br>
+    </p>
+    <h2 id="using-the-webos-resource-monitor">
+      Using the webOS Resource Monitor
+    </h2>
+    <p>
+      To start the webOS Resource Monitor, run it from the command line, specifying the app id:
+    </p>
+    <blockquote>
+      <pre>
+<code>palm-worm com.mystuff.hello 
+</code>
+</pre>
+    </blockquote>
+    <p>
+      You can then open your app in the Emulator, and watch as its data is graphed. You should test intensive app operation, checking for memory leaks.
+    </p>
+    <ul>
+      <li>
+        <p>
+          When the app is closed, memory should return to zero.
+        </p>
+      </li>
+      <li>
+        <p>
+          When dismissing a notification in a headless app, memory should return to the baseline level the app uses in the background. This baseline should remain constant.
+        </p>
+      </li>
+    </ul>
+		</div>
+	</body>
+</html>

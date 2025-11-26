@@ -1,0 +1,9 @@
+{
+	"id": "com.palmdts.synergy",
+	"version": "1.0.1",
+	"vendor": "HP Palm",
+	"type": "web",
+	"main": "index.html",
+	"title": "Account Test",
+	"icon": "icon.png"
+}

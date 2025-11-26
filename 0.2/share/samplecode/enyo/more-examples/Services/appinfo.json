@@ -1,0 +1,10 @@
+{
+	"id": "com.palmdts.services",
+	"version": "1.0.0",
+	"vendor": "PalmDTS",
+	"type": "web",
+	"main": "index.html",
+	"title": "Services",
+	"icon": "icon.png",
+	"uiRevision":2
+}

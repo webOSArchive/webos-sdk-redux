@@ -1,0 +1,2416 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="db8">
+      db8
+    </h1>
+    <p>
+      db8 is a device service - <code>com.palm.db</code> - that interfaces to an embedded JSON database. db8 allows apps to store persistent data (data is backed up to the cloud). JavaScript applications can access this service using the following calls. Note that services and applications also have the option to access db8 using Foundations (a loadable framework of utility JavaScript APIs).
+    </p>
+    <p>
+      <strong>See also:</strong>
+    </p>
+    <ul>
+      <li>
+        <a href="/dev-guide/mojo/db8.html">db8 Overview</a>
+      </li>
+      <li>
+        <a href="/reference/data-types/db8.html">db8 Data Types</a>
+      </li>
+      <li>
+        <a href="/dev-guide/mojo/db8-luna-send-examples.html">db8 <code>luna-send</code> Examples</a>
+      </li>
+    </ul>
+    <hr>
+    <h2 id="methods">
+      Methods
+    </h2>
+    <ul>
+      <li>
+        <p>
+          <a href="#batch">batch</a> - Execute put, get, del, find (without a watch) and merge operations in one service request. All other database operations are not allowed. Atomicity is NOT guaranteed across batched operations.
+        </p>
+      </li>
+      <li>
+        <p>
+          <a href="#del">del</a> - Deletes objects from the database. Objects can be specified using a query or array of object IDs.
+        </p>
+      </li>
+      <li>
+        <p>
+          <a href="#delKind">delKind</a> - Deletes a JSON kind object from the database. All objects of that kind are also deleted.
+        </p>
+      </li>
+      <li>
+        <p>
+          <a href="#find">find</a> - Finds objects matching a query.
+        </p>
+      </li>
+      <li>
+        <p>
+          <a href="#get">get</a> - Gets objects by ID. Returns array of complete objects. Fastest way to get data from database storage.
+        </p>
+      </li>
+      <li>
+        <p>
+          <a href="#merge">merge</a> - Updates properties in existing objects. Similar to SQL UPDATE. Objects can be specified using a query or array of object IDs.
+        </p>
+      </li>
+      <li>
+        <p>
+          <a href="#put">put</a> - Writes JSON data objects to db8 storage.
+        </p>
+      </li>
+      <li>
+        <p>
+          <a href="#putKind">putKind</a> - Puts a JSON kind object into the database. A kind object must be created before objects <em>of that kind</em> are stored.
+        </p>
+      </li>
+      <li>
+        <p>
+          <a href="#putPerm">putPermissions</a> - Give permission for another app to access your data.
+        </p>
+      </li>
+      <li>
+        <p>
+          <a href="#reserveIds">reserveIds</a> - Reserves a block of object IDs.
+        </p>
+      </li>
+      <li>
+        <p>
+          <a href="#search">search</a> - Searches for objects matching a query. Supports the &quot;?&quot; operator, which you can use for full-text searching.
+        </p>
+      </li>
+      <li>
+        <p>
+          <a href="#watch">watch</a> - Watch for updates to database that would change the results of a query.
+        </p>
+      </li>
+    </ul><a name="batch" id="batch"></a>
+    <hr>
+    <h2 id="batch">
+      batch
+    </h2>
+    <p>
+      Execute put, get, del, find (without a watch) and merge operations in one service request. All other database operations are not allowed. Atomicity is NOT guaranteed across batched operations.
+    </p>
+    <h3 id="syntax">
+      Syntax
+    </h3>
+    <pre>
+{
+    "operations" : <a href="/reference/data-types/db8.html#BatchOperation">BatchOperation</a> array           
+}
+</pre>
+    <h3 id="parameters">
+      Parameters
+    </h3>
+    <table border="1" cellpadding="5" cellspacing="5">
+      <thead>
+        <tr bgcolor="lightgrey">
+          <th>
+            Argument
+          </th>
+          <th>
+            Required
+          </th>
+          <th>
+            Type
+          </th>
+          <th width="500">
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            operations
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            <a href="/reference/data-types/db8.html#BatchOperation">BatchOperation</a> array
+          </td>
+          <td>
+            Array of operations to perform in the batch.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="returns">
+      Returns
+    </h3>
+    <table border="1" cellpadding="5" cellspacing="5">
+      <tr>
+        <td width="100">
+          Response
+        </td>
+        <td>
+          Succcess: <a href="/reference/data-types/db8.html#BatchResponse">BatchResponse</a><br>
+          Failure: <a href="/reference/data-types/db8.html#ErrResponse">ErrResponse</a>
+        </td>
+      </tr>
+    </table>
+    <h3 id="examples">
+      Examples
+    </h3>
+    <p>
+      <strong>Enyo</strong>
+    </p>
+    <p>
+      Batch with put, del, and find operations.
+    </p>
+    <pre>
+enyo.kind({
+    name: "enyo.Canon.DbAPI",
+    kind: enyo.VFlexBox,
+    components: [
+        {kind: "DbService", dbKind: "enyo.bffs:1", onFailure: "dbFailure", components: [
+            {name: "batchOp", method: "batch", onSuccess: "batchSuccess"}              
+        ]},
+        {kind: "PageHeader", content: "db8 Code Samples"},
+        {kind: "VFlexBox", align: "center", components: [
+            {kind: "Button", caption: "Batch", onclick: "batchClick"}
+        ]}
+    ],
+    batchClick: function() {
+       var operations = 
+          [{"method": "put",
+            "params": { 
+            "objects": [{ "_kind": "enyo.bffs:1", "lastname": "Fields", 
+                          "firstname": "Chester", "state" : "CA", 
+                          "nickname":"Smokey",
+                          "emails":[{"value":"cfields@gmail.com", "type":"home"},
+                                    {"value": "chester.fields@palm.com", "type":"work"}]}]}},       
+            {"method": "del",  
+                "params":{"query":{"from":"enyo.bffs:1", "where":[{"prop":"state","op":"=","val":"OH"}]}}},
+            {"method": "find", 
+                "params":{"query":{"from":"enyo.bffs:1", "where":[{"prop":"state","op":"=","val":"CA"}]}}}
+          ];      
+        this.$.batchOp.call({operations:operations});
+    },  
+    batchSuccess: function(inSender, inResponse) {
+        this.log("Batch success, results=" + enyo.json.stringify(inResponse));
+    },                          
+    // Log errors to the console for debugging
+    dbFailure: function(inSender, inError, inRequest) {
+        this.log(enyo.json.stringify(inError));
+    }
+});
+</pre>
+    <p>
+      <strong>Mojo</strong>
+    </p>
+    <p>
+      Batch with put, del, and find operations.
+    </p>
+    <pre>
+var operations = 
+    [{"method" : "put",
+      "params" :{ 
+       "objects": [{ "_kind": "com.palm.sample:1", "displayName": "Chester Fields", "state" : "CA", 
+                     "name": [{"familyName":"Fields", "givenName":"Chester"}], "nickname": "Smokey",
+                     "emails":[{"value":"cfields@gmail.com", "type":"home"},
+                               {"value": "chester.fields@palm.com", "type":"work"}]}]
+                            },
+                   },
+     {"method": "del", "params":{"ids":["116d"]}},
+     {"method": "find","params":{"query":{"from":"com.palm.sample:1",
+                                 "where":[{"prop":"state","op":"=","val":"OR"}]}}}];
+
+this.controller.serviceRequest("palm://com.palm.db/", {
+    method: "batch",
+    parameters: { "operations": operations },
+    onSuccess: function(e) { Mojo.Log.info("Batch success! results=" + JSON.stringify(e));},
+    onFailure: function(e) { Mojo.Log.info("Batch failure! Err = " + JSON.stringify(e));}
+});
+</pre>
+    <p>
+      <strong>Success</strong>
+    </p>
+    <pre>
+Batch success! results={
+       "returnValue":true,
+       "responses":[
+          {
+             "returnValue":true,
+             "results":[
+                {
+                   "id":"++HEHBh2FRWQsiSM",
+                   "rev":4810
+                }
+             ]
+          },
+          {
+             "returnValue":true,
+             "results":[]
+          },
+          {
+             "returnValue":true,
+             "results":[
+                {
+                   "_id":"++HEDfsxCncIyLO8",
+                   "_kind":"com.palm.sample:1",
+                   "_rev":4456,
+                   "displayName":"Helen Wheels",
+                   "emails":[
+                      {
+                         "_id":"1169",
+                         "type":"home",
+                         "value":"hwheels@gmail.com"
+                      },
+                      {
+                         "_id":"116a",
+                         "type":"work",
+                         "value":"helen.wheels@palm.com"
+                      }
+                   ],
+                   "name":[
+                      {
+                         "_id":"116b",
+                         "familyName":"Wheels",
+                         "givenName":"Helen"
+                      }
+                   ],
+                   "nickname":"Speedy",
+                   "state":"OR"
+                }
+             ]
+          }
+       ]
+    }
+</pre><a name="del" id="del"></a>
+    <hr>
+    <h2 id="del">
+      del
+    </h2>
+    <p>
+      Deletes JSON data objects from the database.
+    </p>
+    <p>
+      Objects can be specified as a set of IDs (returns PutResponse) or as a db8 Query (returns CountResponse).
+    </p>
+    <h3 id="syntax-1">
+      Syntax
+    </h3>
+    <pre>
+{
+   "ids"   : string array,
+   "query" : <a href="/reference/data-types/db8.html#Query">Query</a>,
+   "purge" : boolean            
+}
+</pre>
+    <h3 id="parameters-1">
+      Parameters
+    </h3>
+    <table border="1" cellpadding="5" cellspacing="5">
+      <thead>
+        <tr bgcolor="lightgrey">
+          <th>
+            Argument
+          </th>
+          <th>
+            Required
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            ids
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            string array
+          </td>
+          <td>
+            Array of JSON data object IDs to delete. This or &quot;query&quot; must be specified.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            query
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            <a href="/reference/data-types/db8.html#Query">Query</a>
+          </td>
+          <td>
+            Query specifying set of objects to delete. This or &quot;ids&quot; must be specified.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            purge
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            boolean
+          </td>
+          <td>
+            Purge immediately flag. If not purged, target objects are marked as deleted and not completely removed until an administrative purge operation is run. Objects marked as deleted can still be retrieved. Default is false.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="returns-1">
+      Returns
+    </h3>
+    <table border="1" cellpadding="5" cellspacing="5">
+      <tr>
+        <td width="100">
+          Response
+        </td>
+        <td>
+          Succcess: <a href="/reference/data-types/db8.html#PutResponse">PutResponse</a> (IDs) or <a href="/reference/data-types/db8.html#CountResponse">CountResponse</a> (query)<br>
+          Failure: <a href="/reference/data-types/db8.html#ErrResponse">ErrResponse</a>
+        </td>
+      </tr>
+    </table>
+    <h3 id="examples-1">
+      Examples
+    </h3>
+    <p>
+      <strong>Enyo - example delete using ID</strong>
+    </p>
+    <pre>
+enyo.kind({
+    name: "enyo.Canon.DbAPI",
+    kind: enyo.VFlexBox,
+    components: [
+        {kind: "DbService", dbKind: "enyo.bffs:1", onFailure: "dbFailure", components: [
+            {name: "delBffs", method: "del", onSuccess: "delBffsSuccess"}           
+        ]},
+        {kind: "PageHeader", content: "db8 Code Samples"},
+        {kind: "HFlexBox", align: "center", components: [
+            {kind: "Button", caption: "Delete bff objects", onclick: "delBffsClick"}
+        ]}
+    ],
+    delBffsClick: function() {
+        this.$.delBffs.call({ids:["++HbZI9gNnKkbiTz"]});
+    },
+    delBffsSuccess: function(inSender, inResponse) {
+        this.log("Delete success, results=" + enyo.json.stringify(inResponse));
+    },  
+    // Log errors to the console for debugging
+    dbFailure: function(inSender, inError, inRequest) {
+        this.log(enyo.json.stringify(inError));
+    }
+});
+</pre>
+    <p>
+      <strong>Enyo - example delete using query</strong>
+    </p>
+    <pre>
+enyo.kind({
+    name: "enyo.Canon.DbAPI",
+    kind: enyo.VFlexBox,
+    components: [
+        {kind: "DbService", dbKind: "enyo.bffs:1", onFailure: "dbFailure", components: [
+            {name: "delBffsQuery", method: "del", onSuccess: "delBffsQuerySuccess"}            
+        ]},
+        {kind: "PageHeader", content: "db8 Code Samples"},
+        {kind: "HFlexBox", align: "center", components: [
+            {kind: "Button", caption: "Delete using Query", onclick: "delBffsQueryClick"}
+        ]}
+    ],
+    delBffsQueryClick: function() {
+        var q = { "from":"enyo.bffs:1", "where":[{"prop":"state","op":"=","val":"OR"}] };   
+        this.$.delBffsQuery.call({query:q});
+    },
+    delBffsQuerySuccess: function(inSender, inResponse) {
+        this.log("Query delete success, results=" + enyo.json.stringify(inResponse));
+    },      
+    // Log errors to the console for debugging
+    dbFailure: function(inSender, inError, inRequest) {
+        this.log(enyo.json.stringify(inError));
+    }
+});
+</pre>
+    <p>
+      <strong>Mojo - example delete using ID</strong>
+    </p>
+    <pre>
+var id1 = "++HE8X59Y00hoKrF";
+var ids = [id1];
+this.controller.serviceRequest("palm://com.palm.db/", {
+    method: "del",
+    parameters: { "ids": ids },
+    onSuccess: function(e) 
+    { 
+        Mojo.Log.info("del success!");
+        Mojo.Log.info("del #1, id="+ e.results[0].id+", rev="+e.results[0].rev);                    
+    },
+    onFailure: function(e) { Mojo.Log.info("del failure! Err = " + JSON.stringify(e));}
+});    
+</pre>
+    <p>
+      <strong>Mojo - example delete using query</strong>
+    </p>
+    <pre>
+var q = { "from":"com.palm.sample:1", "where":[{"prop":"state","op":"=","val":"OR"}] };
+this.controller.serviceRequest("palm://com.palm.db/", {
+    method: "del",
+    parameters: { "query": q },
+    onSuccess: function(e) { Mojo.Log.info("del success!, count="+e.count);},
+    onFailure: function(e) { Mojo.Log.info("del failure! Err = " + JSON.stringify(e));}
+});
+</pre>
+    <p>
+      <strong>Success (IDs)</strong>
+    </p>
+    <pre>
+Delete success, results={
+   "returnValue":true,
+   "results":[
+      {
+         "id":"++HbZI9gNnKkbiTz",
+         "rev":1339
+      }
+   ]
+}
+</pre><strong>Success (query)</strong>
+    <pre>
+Delete success, results={
+   "returnValue":true,
+   "count":1
+}
+</pre><a name="delKind" id="delKind"></a>
+    <hr>
+    <h2 id="delkind">
+      delKind
+    </h2>
+    <p>
+      Deletes a kind object from the database. Deleting a kind deletes <strong>ALL</strong> data objects of that kind.
+    </p>
+    <h3 id="syntax-2">
+      Syntax
+    </h3>
+    <pre>
+{
+   "id" : string
+}
+</pre>
+    <h3 id="parameters-2">
+      Parameters
+    </h3>
+    <table border="1" cellpadding="5" cellspacing="5">
+      <thead>
+        <tr bgcolor="lightgrey">
+          <th>
+            Argument
+          </th>
+          <th>
+            Required
+          </th>
+          <th>
+            Type
+          </th>
+          <th width="500">
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            id
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            ID of kind to delete.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="returns-2">
+      Returns
+    </h3>
+    <pre>
+{
+   "returnValue" : boolean,
+   "errorCode"   : int,
+   "errorText"   : string
+}
+</pre>
+    <table border="1" cellpadding="5" cellspacing="5">
+      <thead>
+        <tr bgcolor="lightgrey">
+          <th>
+            Element
+          </th>
+          <th>
+            Required
+          </th>
+          <th>
+            Type
+          </th>
+          <th width="500">
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            returnValue
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            boolean
+          </td>
+          <td>
+            true (success) or false (failure)
+          </td>
+        </tr>
+        <tr>
+          <td>
+            errorCode
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            int
+          </td>
+          <td>
+            Error code returned on failure
+          </td>
+        </tr>
+        <tr>
+          <td>
+            errorText
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Error message returned on failure
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="examples-2">
+      Examples
+    </h3>
+    <p>
+      <strong>luna-send</strong>
+    </p>
+    <pre>
+luna-send -n 1 -a com.palmdts.enyo.db-api luna://com.palm.db/delKind '{"id":"enyo.fruits:1"}'
+{"returnValue":true}
+</pre>
+    <p>
+      <strong>Enyo</strong>
+    </p>
+    <pre>
+enyo.kind({
+    name: "enyo.Canon.DbAPI",
+    kind: enyo.VFlexBox,
+    components: [
+        {kind: "DbService", dbKind: "enyo.bffs:1", onFailure: "dbFailure", components: [
+            {name: "deleteBffsDbKind", method: "delKind", onSuccess: "deleteBffsDbKindSuccess"}                 
+        ]},
+        {kind: "PageHeader", content: "db8 Code Samples"},
+        {kind: "HFlexBox", align: "center", components: [
+            {kind: "Button", caption: "Delete bffs Kind", onclick: "deleteBffsDbKindClick"}
+        ]}
+    ],
+    deleteBffsDbKindClick: function() {
+        this.$.deleteBffsDbKind.call(); // Delete kind
+    },
+    deleteBffsDbKindSuccess: function() {
+        this.log();
+    },  
+    // Log errors to the console for debugging
+    dbFailure: function(inSender, inError, inRequest) {
+        this.log(enyo.json.stringify(inError));
+    }
+});
+</pre>
+    <p>
+      <strong>Mojo</strong>
+    </p>
+    <pre>
+var id = "com.palm.sample:1"; // kind + version number
+this.controller.serviceRequest("palm://com.palm.db/", {
+    method: "delKind",
+    parameters: { "id": id },
+    onSuccess: function(e) { Mojo.Log.info("delKind success!");},
+    onFailure: function(e) { Mojo.Log.info("delKind failure! Err = " + JSON.stringify(e));}
+}); 
+</pre><a name="find" id="find"></a>
+    <hr>
+    <h2 id="find">
+      find
+    </h2>
+    <p>
+      Returns a set of objects matching a <a href="/reference/data-types/db8.html#Query">query</a>.
+    </p>
+    <p>
+      If your query is limited to a specified number of results, you can set a flag (&quot;count&quot;) to get the number that would have been returned without a limit. You can also set a flag (&quot;watch&quot;) to request notification if any of the returned results from the query changes in the future.
+    </p>
+    <h3 id="syntax-3">
+      Syntax
+    </h3>
+    <pre>
+{
+   "query" : <a href="/reference/data-types/db8.html#Query">Query</a>,
+   "count" : boolean,
+   "watch" : boolean
+}
+</pre>
+    <h3 id="parameters-3">
+      Parameters
+    </h3>
+    <table border="1" cellpadding="5" cellspacing="5">
+      <thead>
+        <tr bgcolor="lightgrey">
+          <th>
+            Argument
+          </th>
+          <th>
+            Required
+          </th>
+          <th>
+            Type
+          </th>
+          <th width="500">
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            query
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            <a href="/reference/data-types/db8.html#Query">Query</a>
+          </td>
+          <td>
+            db8 query for retrieving results.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            count
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            boolean
+          </td>
+          <td>
+            Return number of objects that would have been returned without the limit specified in the query flag. Default is false.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            watch
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            boolean
+          </td>
+          <td>
+            Notify if change flag. Default is false.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="returns-3">
+      Returns
+    </h3>
+    <table border="1" cellpadding="5" cellspacing="5">
+      <tbody>
+        <tr>
+          <td width="100">
+            Response
+          </td>
+          <td>
+            Succcess: <a href="/reference/data-types/db8.html#FindResponse">FindResponse</a> or <a href="/reference/data-types/db8.html#NotificationResponse">NotificationResponse</a><br>
+            (watch == true)<br>
+            Failure: <a href="/reference/data-types/db8.html#ErrResponse">ErrResponse</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="examples-3">
+      Examples
+    </h3>
+    <p>
+      <strong>Enyo - simple find</strong>
+    </p>
+    <pre>
+enyo.kind({
+    name: "enyo.Canon.DbAPI",
+    kind: enyo.VFlexBox,
+    components: [
+        {kind: "DbService", dbKind: "enyo.bffs:1", onFailure: "dbFailure", components: [
+            {name: "simpleFind", method: "find", onSuccess: "simpleFindSuccess"}                           
+        ]},
+        {kind: "PageHeader", content: "db8 Code Samples"},
+        {kind: "VFlexBox", align: "center", components: [
+            {kind: "Button", caption: "Simple find", onclick: "simpleFindClick"}
+        ]}
+    ],
+    simpleFindClick: function() {       
+        this.$.simpleFind.call({query:{"from":"enyo.bffs:1"}});
+    },
+    simpleFindSuccess: function(inSender, inResponse) {
+        this.log("Simple find success, results=" + enyo.json.stringify(inResponse));
+    },          
+    // Log errors to the console for debugging
+    dbFailure: function(inSender, inError, inRequest) {
+        this.log(enyo.json.stringify(inError));
+    }
+});
+</pre>
+    <p>
+      <strong>Enyo - using where, select, order by, and desc in a query</strong>
+    </p>
+    <p>
+      This sample demonstrates creating a kind, storing objects of that kind, and executing a query against those objects using the &quot;find&quot; method.
+    </p>
+    <pre>
+enyo.kind({
+    name: "enyo.Canon.DbAPI",
+    kind: enyo.VFlexBox,
+    components: [
+        {kind: "DbService", dbKind: "enyo.bffs:1", onFailure: "dbFailure", components: [
+            {name: "makeBffsDbKind", method: "putKind", onSuccess: "putDbKindSuccess"},
+            {name: "putBffs", method: "put", onSuccess: "putBffsSuccess"},
+            {name: "notSimpleFind", method: "find", onSuccess: "notSimpleFindSuccess"}                 
+        ]},
+        {kind: "PageHeader", content: "db8 Code Samples"},
+        {kind: "VFlexBox", align: "center", components: [
+            {kind: "Button", caption: "Create bffs kind", onclick: "makeBffsDbKindClick"},
+            {kind: "Button", caption: "Put bff objects", onclick: "putBffsClick"},
+            {kind: "Button", caption: "Not simple find", onclick: "notSimpleFindClick"}
+        ]}
+    ],
+    makeBffsDbKindClick: function() {
+        var indexes = [{"name":"stateLastidx", props:[{"name": "state"}, {"name": "lastname"}]}];
+        this.$.makeBffsDbKind.call({owner: enyo.fetchAppId(), indexes:indexes}); // Create db8 kind
+    },
+    putDbKindSuccess: function() {
+        this.log();
+    },
+    putBffsClick: function() {
+         var  bff1 = { _kind: "enyo.bffs:1", lastname: "Syrup", firstname: "Mabel", 
+                       nickname: "Sticky", state: "CA",
+                       emails:[{"value":"msyrup@gmail.com", "type":"home"},
+                               {"value": "mabel.syrup@palm.com", "type":"work"}]};
+         var  bff2 = { _kind: "enyo.bffs:1", lastname: "Wheels", firstname: "Helen", 
+                       nickname: "Psycho", state: "CA",
+                       emails:[{"value":"hwheels@gmail.com", "type":"home"},
+                                {"value": "helen.wheels@palm.com", "type":"work"}]};    
+         var  bff3 = { _kind: "enyo.bffs:1", lastname: "Manilla", firstname: "Sal", 
+                       nickname: "Weasel", state: "CA",
+                       emails:[{"value":"smanilla@gmail.com", "type":"home"},
+                               {"value": "sal.manilla@palm.com", "type":"work"}]};
+         var  bff4 = { _kind: "enyo.bffs:1", lastname: "Kroger", firstname: "Larry", 
+                        nickname: "Pinto", state: "OH",
+                        emails:[{"value":"lkroger@gmail.com", "type":"home"},
+                                {"value": "larry.kroger@palm.com", "type":"work"}]};
+         var objs = [bff1, bff2, bff3, bff4];
+         this.$.putBffs.call({objects: objs});
+    },
+    putBffsSuccess: function(inSender, inResponse) {
+        this.log("Put success, results=" + enyo.json.stringify(inResponse));
+    },
+    notSimpleFindClick: function() {
+        var fquery = { "select": ["lastname", "firstname", "nickname"],
+                       "from":"enyo.bffs:1",
+                       "where":[{"prop":"state","op":"=","val":"CA"}], 
+                       "orderBy" : "lastname", "desc":true };
+        this.$.notSimpleFind.call({query:fquery});
+    },
+    notSimpleFindSuccess: function(inSender, inResponse) {
+        this.log("Not simple find success, results=" + enyo.json.stringify(inResponse));
+    },
+    // Log errors to the console for debugging
+    dbFailure: function(inSender, inError, inRequest) {
+        this.log(enyo.json.stringify(inError));
+    }
+});
+</pre>
+    <p>
+      <strong>Mojo - simple find</strong>
+    </p>
+    <p>
+      This query returns all data objects. No notification and no count is requested.
+    </p>
+    <pre>
+var fquery = {"from":"com.palm.sample:1"};
+
+this.controller.serviceRequest("palm://com.palm.db/", {
+    method: "find",
+    parameters: { "query": fquery },
+    onSuccess: function(e) { Mojo.Log.info("find success!, results="+JSON.stringify(e.results));},
+    onFailure: function(e) { Mojo.Log.info("find failure! Err = " + JSON.stringify(e));}
+});
+</pre>
+    <p>
+      <strong>Mojo - using where, select, order by, and desc in a query</strong>
+    </p>
+    <p>
+      This query searches for contacts who live in California (state == 'CA'. The displayName and state fields are returned for each match. Returned objects are sorted on the displayName field in descending order. No notification is requested.
+    </p>
+    <pre>
+//
+// Note: A dual index for the kind was created, allowing this call to work:
+//         var indexes = [{"name":"dNameState", props:[{"name": "state"}, {"name":"displayName"}]} ];
+//
+// The query below will not work if 'displayName' is declared as the first 'props' entry and 'state' the second.
+// Results can only be returned for contiguously ordered index entries. If you have the 
+// entries ["CA", "John Doe"], ["CA","Mabel Syrup"], etc., then, all of the entries with the same state
+// are consecutive and only secondarily ordered by display name. Therefore, the index can answer the query.
+// If the index entries were ordered in ["displayName", "state"] order, the entries for the same state 
+// are not consecutive and could not be used to answer the query (the query would fail with
+// a "no index for query" message).
+
+var fquery = {
+   "select": ["displayName", "state"],
+   "from":"com.mystuff.contacts:1",
+   "where":[{"prop":"state","op":"=","val":"CA"}], 
+   "orderBy":"displayName",
+   "desc":true };
+
+this.controller.serviceRequest("palm://com.palm.db/", {
+    method: "find",
+    parameters: { "query": fquery },
+    onSuccess: function(e)
+    { 
+        var results = e.results;
+        for (i=0; results[i] != null; i++)
+         Mojo.Log.info("find #"+i+"  state ="+ results[i].state+", displayName="+results[i].displayName);
+    },
+    onFailure: function(e) { Mojo.Log.info("find failure! Err = " + JSON.stringify(e));}
+}); 
+</pre>
+    <p>
+      <strong>Example 3: Query with change notification</strong>
+    </p>
+    <p>
+      This example shows how change notiification for a find works. The &quot;onSuccess&quot; code is called again if results for the initial query have changed. The &quot;fired&quot; flag is true if this is a notification response.
+    </p>
+    <pre>
+var fquery = {"select": ["displayName", "state"],"from":"com.palm.sample:1"};
+
+this.controller.serviceRequest("palm://com.palm.db/", {
+    method: "find",
+    parameters: { "query": fquery, "watch": true },
+    onSuccess: function(e) { 
+        if (!e.fired)
+           Mojo.Log.info("find initial response success, e= " + JSON.stringify(e));
+        else {
+           Mojo.Log.info("find results changed");
+           //
+           // Do something, i.e., reissue find
+           //
+         }  
+    },
+    onFailure: function(e) { Mojo.Log.info("find failure! Err = " + JSON.stringify(e));}
+}); 
+</pre><a name="get" id="get"></a>
+    <hr>
+    <h2 id="get">
+      get
+    </h2>
+    <p>
+      Gets JSON data objects by IDs. This is the fastest way to retrieve data.
+    </p>
+    <h3 id="syntax-4">
+      Syntax
+    </h3>
+    <pre>
+{
+   "ids" : string array
+}
+</pre>
+    <h3 id="parameters-4">
+      Parameters
+    </h3>
+    <table border="1" cellpadding="5" cellspacing="5">
+      <thead>
+        <tr bgcolor="lightgrey">
+          <th>
+            Argument
+          </th>
+          <th>
+            Required
+          </th>
+          <th>
+            Type
+          </th>
+          <th width="500">
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            ids
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            string array
+          </td>
+          <td>
+            Array of JSON data object IDs.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="returns-4">
+      Returns
+    </h3>
+    <table border="1" cellpadding="5" cellspacing="5">
+      <tr>
+        <td width="100">
+          Response
+        </td>
+        <td>
+          Success: <a href="/reference/data-types/db8.html#GetResponse">GetResponse</a><br>
+          Failure: <a href="/reference/data-types/db8.html#ErrResponse">ErrResponse</a>
+        </td>
+      </tr>
+    </table>
+    <h3 id="examples-4">
+      Examples
+    </h3>
+    <p>
+      <strong>luna-send</strong>
+    </p>
+    <pre>
+luna-send -n 1 -a com.palmdts.enyo.db-api luna://com.palm.db/get '{"ids":["++HbZI9gNnKkbiTz", "++HbZI9gONsPzkuB"]}'
+</pre>
+    <p>
+      <strong>Enyo</strong>
+    </p>
+    <pre>
+enyo.kind({
+    name: "enyo.Canon.DbAPI",
+    kind: enyo.VFlexBox,
+    components: [
+        {kind: "DbService", dbKind: "enyo.bffs:1", onFailure: "dbFailure", components: [
+            {name: "getBffs", method: "get", onSuccess: "getBffsSuccess"}               
+        ]},
+        {kind: "PageHeader", content: "db8 Code Samples"},
+        {kind: "HFlexBox", align: "center", components: [
+            {kind: "Button", caption: "Get bff objects", onclick: "getBffsClick"}
+        ]}
+    ]
+    getBffsClick: function() {
+        this.$.getBffs.call({ids:["++HbZI9gNnKkbiTz", "++HbZI9gONsPzkuB"]});
+    },
+    getBffsSuccess: function(inSender, inResponse) {
+        this.log("Get success, results=" + enyo.json.stringify(inResponse));
+    },  
+    // Log errors to the console for debugging
+    dbFailure: function(inSender, inError, inRequest) {
+        this.log(enyo.json.stringify(inError));
+    }
+});
+</pre>
+    <p>
+      <strong>Mojo</strong>
+    </p>
+    <pre>
+var id1 = "++HE8X59Y00hoKrF";
+var id2 = "++HE8X59ZZCfac68";
+var ids = [id1, id2];
+this.controller.serviceRequest("palm://com.palm.db/", {
+    method: "get",
+    parameters: { "ids": ids },
+    onSuccess: function(e) { 
+        Mojo.Log.info("get success!, e=" + JSON.stringify(e));
+        var rs = e.results;
+        for (i=0; rs[i] != null; i++)
+            Mojo.Log.info("get #"+ (i+1) +", id="+ rs[i]._id+", displayName="+rs[i].displayName+", 
+                           nickname="+rs[i].nickname+", familyName="+rs[i].name[0].familyName);
+    },
+    onFailure: function(e) { Mojo.Log.info("get failure! Err = " + JSON.stringify(e));}
+});
+</pre><a name="merge" id="merge"></a>
+    <hr>
+    <h2 id="merge">
+      merge
+    </h2>
+    <p>
+      Updates properties in existing objects. Objects can be specified using a query (returns CountResponse) or array of IDs (returns PutResponse).
+    </p>
+    <h3 id="syntax-5">
+      Syntax
+    </h3>
+    <pre>
+{
+   "objects" : any object array,                     
+   "query"   : <a href="/reference/data-types/db8.html#Query">Query</a>,
+   "props"   : any object
+}
+</pre>
+    <h3 id="parameters-5">
+      Parameters
+    </h3>
+    <table border="1" cellpadding="5" cellspacing="5">
+      <thead>
+        <tr bgcolor="lightgrey">
+          <th>
+            Argument
+          </th>
+          <th>
+            Required
+          </th>
+          <th>
+            Type
+          </th>
+          <th width="500">
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            objects
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            any object array
+          </td>
+          <td>
+            Array of IDs and properties to update. Either this or &quot;query&quot; is required.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            query
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            <a href="/reference/data-types/db8.html#Query">Query</a>
+          </td>
+          <td>
+            Query specifying set of objects to merge properties into. Either this or &quot;objects&quot; is required.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            props
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            any object
+          </td>
+          <td>
+            Requires &quot;query&quot;. Set of properties to merge into existing object(s) from query.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="returns-5">
+      Returns
+    </h3>
+    <table border="1" cellpadding="5" cellspacing="5">
+      <tr>
+        <td width="100">
+          Response
+        </td>
+        <td>
+          Succcess: <a href="/reference/data-types/db8.html#PutResponse">PutResponse</a> (IDs) or <a href="/reference/data-types/db8.html#CountResponse">CountResponse</a> (query)<br>
+          Failure: <a href="/reference/data-types/db8.html#ErrResponse">ErrResponse</a>
+        </td>
+      </tr>
+    </table>
+    <h3 id="examples-5">
+      Examples
+    </h3>
+    <p>
+      <strong>Enyo - example using IDs</strong>
+    </p>
+    <pre>
+enyo.kind({
+    name: "enyo.Canon.DbAPI",
+    kind: enyo.VFlexBox,
+    components: [
+        {kind: "DbService", dbKind: "enyo.bffs:1", onFailure: "dbFailure", components: [
+            {name: "mergeIDs", method: "merge", onSuccess: "mergeIDsSuccess"}        
+        ]},
+        {kind: "PageHeader", content: "db8 Code Samples"},
+        {kind: "HFlexBox", align: "center", components: [
+            {kind: "Button", caption: "Merge using IDs", onclick: "mergeIDsClick"}
+        ]}
+    ],
+    mergeIDsClick: function() {
+        var m1 = {  "_id": "++Hb_NvTW+3X5oXv", "nickname": "Sugar" };
+        var m2 = {  "_id": "++Hb_NvTWYVGPH6N", "nickname": "Swifty" };    
+        this.$.mergeIDs.call({"objects": [m1, m2]});
+    },
+    mergeIDsSuccess: function(inSender, inResponse) {
+        this.log("merge success, results=" + enyo.json.stringify(inResponse));
+    },      
+    // Log errors to the console for debugging
+    dbFailure: function(inSender, inError, inRequest) {
+        this.log(enyo.json.stringify(inError));
+    }
+});
+</pre>
+    <p>
+      <strong>Enyo - example using query</strong>
+    </p>
+    <pre>
+enyo.kind({
+    name: "enyo.Canon.DbAPI",
+    kind: enyo.VFlexBox,
+    components: [
+        {kind: "DbService", dbKind: "enyo.bffs:1", onFailure: "dbFailure", components: [ 
+            {name: "mergeQuery", method: "merge", onSuccess: "mergeQuerySuccess"}                  
+        ]},
+        {kind: "PageHeader", content: "db8 Code Samples"},
+        {kind: "HFlexBox", align: "center", components: [
+            {kind: "Button", caption: "Merge using Query", onclick: "mergeQueryClick"}
+        ]}
+    ],
+    mergeQueryClick: function() {
+        var mprops = { "nickname":"Spud"};
+        var mquery = { "from":"enyo.bffs:1","where":[{"prop":"state","op":"=","val":"CA"}] };   
+        this.$.mergeQuery.call({"query": mquery, "props": mprops});
+    },
+    mergeQuerySuccess: function(inSender, inResponse) { 
+        this.log("merge success, results=" + enyo.json.stringify(inResponse));
+    },      
+    // Log errors to the console for debugging
+    dbFailure: function(inSender, inError, inRequest) {
+        this.log(enyo.json.stringify(inError));
+    }
+});
+</pre>
+    <p>
+      <strong>Mojo - example using IDs</strong>
+    </p>
+    <pre>
+// Create objects to update nickname field
+var m1 = {  "_id": "++HECGnRNNF_7TdA", "nickname": "Sugar" };
+var m2 = {  "_id": "++HECGnRLstE6iwP", "nickname": "Swifty" };
+var mobjs = [m1, m2];
+
+this.controller.serviceRequest("palm://com.palm.db/", {
+    method: "merge",
+    parameters: { "objects": mobjs },
+    onSuccess: function(e) { 
+        var results = e.results;
+        for (i=0; results[i] != null; i++)
+            Mojo.Log.info("merge #"+i+"  id ="+ results[i].id+", rev="+results[i].rev);                       
+    },
+    onFailure: function(e) { Mojo.Log.info("merge failure! Err = " + JSON.stringify(e));}
+}); 
+</pre>
+    <p>
+      <strong>Mojo - example using query</strong>
+    </p>
+    <pre>
+// Assign a property to update, and create the query
+// Note that indexes must exist for the fields you are querying on
+
+var mprops = { "nickname":"Spud"};
+var mquery = { "from":"com.palm.sample:1","where":[{"prop":"state","op":"%","val":"C"}] };
+
+this.controller.serviceRequest("palm://com.palm.db/", {
+    method: "merge",
+    parameters: { "query": mquery, "props": mprops},
+    onSuccess: function(e) { Mojo.Log.info("merge success!, count= " +e.count);},
+    onFailure: function(e) { Mojo.Log.info("merge failure! Err = " + JSON.stringify(e));}
+});
+</pre><a name="put" id="put"></a>
+    <hr>
+    <h2 id="put">
+      put
+    </h2>
+    <p>
+      Puts JSON data objects of a particular <em>kind</em> into the database. Assigns &quot;id&quot; field if not set. Returns &quot;id&quot; and &quot;rev&quot; for each object stored.
+    </p>
+    <h3 id="syntax-6">
+      Syntax
+    </h3>
+    <pre>
+{
+   "objects" : any object array
+}
+</pre>
+    <h3 id="parameters-6">
+      Parameters
+    </h3>
+    <table border="1" cellpadding="5" cellspacing="5">
+      <thead>
+        <tr bgcolor="lightgrey">
+          <th>
+            Argument
+          </th>
+          <th>
+            Required
+          </th>
+          <th>
+            Type
+          </th>
+          <th width="500">
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            objects
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            any object array
+          </td>
+          <td>
+            Array of JSON data objects of a particular kind to store.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="returns-6">
+      Returns
+    </h3>
+    <table border="1" cellpadding="5" cellspacing="5">
+      <tr>
+        <td width="100">
+          Response
+        </td>
+        <td>
+          Succcess: <a href="/reference/data-types/db8.html#PutResponse">PutResponse</a><br>
+          Failure: <a href="/reference/data-types/db8.html#ErrResponse">ErrResponse</a>
+        </td>
+      </tr>
+    </table>
+    <h3 id="examples-6">
+      Examples
+    </h3>
+    <p>
+      <strong>Enyo</strong>
+    </p>
+    <pre>
+enyo.kind({
+    name: "enyo.Canon.DbAPI",
+    kind: enyo.VFlexBox,
+    components: [
+        {kind: "DbService", dbKind: "enyo.bffs:1", onFailure: "dbFailure", components: [
+            {name: "putBffs", method: "put", onSuccess: "putBffsSuccess"}
+        ]},
+        {kind: "PageHeader", content: "db8 Code Samples"},
+        {kind: "HFlexBox", align: "center", components: [
+            {kind: "Button", caption: "Put bff objects", onclick: "putBffsClick"}
+        ]}
+    ],
+    putBffsClick: function() {
+         var  bff1 = { _kind: "enyo.bffs:1", lastname: "Syrup", firstname: "Mabel",
+                       nickname: "Sticky", state: "CA",
+                       emails:[{"value":"msyrup@gmail.com", "type":"home"},
+                               {"value": "mabel.syrup@palm.com", "type":"work"}]};
+         var  bff2 = { _kind: "enyo.bffs:1", lastname: "Wheels", firstname: "Helen", 
+                       nickname: "Psycho", state: "OR",
+                       emails:[{"value":"hwheels@gmail.com", "type":"home"},
+                                {"value": "helen.wheels@palm.com", "type":"work"}]};
+        var objs = [bff1, bff2];
+        this.$.putBffs.call({objects: objs});
+    },
+    putBffsSuccess: function(inSender, inResponse) {
+        this.log("Put success, results=" + enyo.json.stringify(inResponse));
+    },
+    // Log errors to the console for debugging
+    dbFailure: function(inSender, inError, inRequest) {
+        this.log(enyo.json.stringify(inError));
+    }
+});
+</pre>
+    <p>
+      <strong>Mojo</strong>
+    </p>
+    <pre>
+// Create new JSON data objects    
+var  contact1 = 
+     { _kind: "com.palm.sample:1", displayName: "Mabel Syrup", state : "CA",
+       name: [{"familyName":"Syrup", "givenName":"Mabel"}], nickname: "Sticky",
+       emails:[{"value":"msyrup@gmail.com", "type":"home"},
+               {"value": "mabel.syrup@palm.com", "type":"work"}]};
+
+var  contact2 = 
+     { _kind: "com.palm.sample:1", displayName: "Helen Wheels", state : "OR",
+       name: [{"familyName":"Wheels", "givenName":"Helen"}], nickname: "Speedy",
+       emails:[{"value":"hwheels@gmail.com", "type":"home"},
+               {"value": "helen.wheels@palm.com", "type":"work"}]};    
+
+var objs = [contact1, contact2]; // Create object array
+
+this.controller.serviceRequest("palm://com.palm.db/", {
+    method: "put",
+    parameters: { "objects": objs },
+    onSuccess: function(r) { 
+        Mojo.Log.info("Put success, results=" + JSON.stringify(r));
+        var results = r.results;
+        for (i=0; results[i] != null; i++)
+            Mojo.Log.info("put #"+i+"  id ="+ results[i].id+", rev="+results[i].rev);                 
+    },
+    onFailure: function(e) { Mojo.Log.info("put failure! Err = " + JSON.stringify(e));}
+});
+</pre>
+    <p>
+      <strong>Success</strong>
+    </p>
+    <pre>
+Put success, results=
+{
+   "returnValue":true,
+   "results":[
+      {
+         "id":"++HbZI9gNnKkbiTz",
+         "rev":1321
+      },
+      {
+         "id":"++HbZI9gONsPzkuB",
+         "rev":1324
+      }
+   ]
+}
+</pre><a name="putKind" id="putKind"></a>
+    <hr>
+    <h2 id="putkind">
+      putKind
+    </h2>
+    <p>
+      Registers a <em>kind</em> JSON object with the database.
+    </p>
+    <p>
+      Kind objects define the owner and indexes for a JSON data object.
+    </p>
+    <p>
+      Indexes can be composed of single or multiple fields. When you create your index, be aware that queries can only return results that are indexed and are contiguously ordered. See <a href="/dev-guide/mojo/db8.html#fastQueries">All Queries Must be on Indexed Fields</a> for more information.
+    </p>
+    <p>
+      If your app or service wants to be notified only when a subset of an object's properties are updated, then you can use <em>revision sets</em>. See <a href="/dev-guide/mojo/db8.html#UsingRevSets">Using Revision Sets</a> for more information.
+    </p>
+    <p>
+      If your app or service creates objects that other apps or services need to access, then see <a href="#putPerm"><code>putPermissions</code></a> for more information.
+    </p>
+    <h3 id="syntax-7">
+      Syntax
+    </h3>
+    <pre>
+{
+   "id"      : string,
+   "owner"   : string,
+   "Syntax"  : <a href="http://json-Syntax.org/Syntax">Syntax</a>,
+   "sync"    : boolean,
+   "extends" : string array,
+   "indexes" : <a href="/reference/data-types/db8.html#IndexClause">IndexClause</a> array,
+   "revSets" : <a href="/reference/data-types/db8.html#RevSetClause">RevSetClause</a> array, 
+}
+</pre>
+    <h3 id="parameters-7">
+      Parameters
+    </h3>
+    <table border="1" cellpadding="5" cellspacing="5">
+      <thead>
+        <tr bgcolor="lightgrey">
+          <th>
+            Argument
+          </th>
+          <th>
+            Required
+          </th>
+          <th>
+            Type
+          </th>
+          <th width="500">
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            id
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Kind identifier.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            owner
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Kind owner - service's bus address or app's app ID. Only the owner has permission to modify the kind.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Syntax
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            <a href="http://json-Syntax.org/Syntax">Syntax</a>
+          </td>
+          <td>
+            JSON Syntax for data objects <em>of this kind</em>. If set, this kind's data objects are validated before being stored.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            sync
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            boolean
+          </td>
+          <td>
+            Backup and restore objects of this kind flag. Objects are backed up to Palm's servers on a daily basis. If the user moves to another device, saved app data can be restored. Default is <code>false</code>.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            extends
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            string array
+          </td>
+          <td>
+            IDs of kind parents.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            indexes
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            <a href="/reference/data-types/db8.html#IndexClause">IndexClause</a> array
+          </td>
+          <td>
+            Kind indexes.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            revSets
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            <a href="/reference/data-types/db8.html#RevSetClause">RevSetClause</a> array
+          </td>
+          <td>
+            Array of revision sets. See <a href="/dev-guide/mojo/db8.html#UsingRevSets">Using Revision Sets</a> for more information.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="returns-7">
+      Returns
+    </h3>
+    <pre>
+{
+   "returnValue" : boolean,
+   "errorCode"   : int,
+   "errorText"   : string
+}
+</pre>
+    <table border="1" cellpadding="5" cellspacing="5">
+      <thead>
+        <tr bgcolor="lightgrey">
+          <th>
+            Element
+          </th>
+          <th>
+            Required
+          </th>
+          <th>
+            Type
+          </th>
+          <th width="500">
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            returnValue
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            boolean
+          </td>
+          <td>
+            true (success) or false (failure)
+          </td>
+        </tr>
+        <tr>
+          <td>
+            errorCode
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            int
+          </td>
+          <td>
+            Error code returned on failure
+          </td>
+        </tr>
+        <tr>
+          <td>
+            errorText
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Error message returned on failure
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="examples-7">
+      Examples
+    </h3>
+    <p>
+      <strong>luna-send</strong>
+    </p>
+    <pre>
+luna-send -n 1 -a com.palmdts.enyo.db-api luna://com.palm.db/putKind '{"id":"enyo.fruits:1","owner":"com.palmdts.enyo.db-api"}'
+{"returnValue":true}
+</pre>
+    <p>
+      <strong>Enyo</strong>
+    </p>
+    <pre>
+enyo.kind({
+    name: "enyo.Canon.DbAPI",
+    kind: enyo.VFlexBox,
+    components: [
+        {kind: "DbService", dbKind: "enyo.bffs:1", onFailure: "dbFailure", components: [
+            {name: "makeBffsDbKind", method: "putKind", onSuccess: "putDbKindSuccess"}         
+        ]},
+        {kind: "PageHeader", content: "db8 Code Samples"},
+        {kind: "HFlexBox", align: "center", components: [
+            {kind: "Button", caption: "Create bffs kind", onclick: "makeBffsDbKindClick"}
+        ]}
+    ],
+    makeBffsDbKindClick: function() {
+        var indexes = [{"name":"lastname", props:[{"name": "lastname"}]},
+                       {"name":"state", props:[{"name": "state"}]}];
+        this.$.makeBffsDbKind.call({owner: enyo.fetchAppId(), indexes:indexes}); // Create db8 kind
+    },
+    putDbKindSuccess: function() {
+        this.log();
+    },
+    // Log errors to the console for debugging
+    dbFailure: function(inSender, inError, inRequest) {
+        this.log(enyo.json.stringify(inError));
+    }
+});
+</pre>
+    <p>
+      <strong>Mojo</strong>
+    </p>
+    <pre>
+var indexes = [{"name":"dNameState", props:[{"name": "state"}, {"name":"displayName"}]} ];
+this.controller.serviceRequest("palm://com.palm.db/", {
+    method: "putKind",
+    parameters: { "id":"com.palm.sample:1", 
+                  "owner":"com.palm.dbtest",
+                  "indexes": indexes
+    },
+    onSuccess: function() { Mojo.Log.info("putKind success!");},
+    onFailure: function(e) { Mojo.Log.info("putKind failure! Err = " + JSON.stringify(e));}
+});
+</pre><a name="putPerm" id="putPerm"></a>
+    <hr>
+    <h2 id="putpermissions">
+      putPermissions
+    </h2>
+    <p>
+      Allow other apps or services to access your stored db8 data. Permissions are given to access data objects of a particular kind.
+    </p>
+    <p>
+      <strong>Just Type</strong>
+    </p>
+    <p>
+      For Just Type, you need to grant read permissions to &quot;com.palm.launcher&quot;. This allows Just Type to scan your db8 data storage for entries matching the user-entered text.
+    </p>
+    <h3 id="syntax-8">
+      Syntax
+    </h3>
+    <pre>
+[
+  {
+      "type"    : string,
+      "object"  : string,
+      "caller"  : string,
+      "operations": {
+          "create" : string,
+          "read"   : string,
+          "update" : string,
+          "delete" : string
+      }
+   }
+]
+</pre>
+    <h3 id="parameters-8">
+      Parameters
+    </h3>
+    <table border="1" cellpadding="5" cellspacing="5">
+      <thead>
+        <tr bgcolor="lightgrey">
+          <th>
+            Argument
+          </th>
+          <th>
+            Required
+          </th>
+          <th>
+            Type
+          </th>
+          <th width="500">
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            type
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Must be &quot;db.kind&quot;
+          </td>
+        </tr>
+        <tr>
+          <td>
+            object
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            db8 kind
+          </td>
+        </tr>
+        <tr>
+          <td>
+            caller
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            ID of App or service being granted permissions.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            operations
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            object
+          </td>
+          <td>
+            Operations you are allowing.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            create
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Set to &quot;allow&quot; to grant create permissions.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            read
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Set to &quot;allow&quot; to grant read permissions.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            update
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Set to &quot;allow&quot; to grant update permissions.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            delete
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Set to &quot;allow&quot; to grant delete permissions.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="returns-8">
+      Returns
+    </h3>
+    <pre>
+{
+   "returnValue" : boolean,
+   "errorCode"   : int,
+   "errorText"   : string
+}
+</pre>
+    <table border="1" cellpadding="5" cellspacing="5">
+      <thead>
+        <tr bgcolor="lightgrey">
+          <th>
+            Element
+          </th>
+          <th>
+            Required
+          </th>
+          <th>
+            Type
+          </th>
+          <th width="500">
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            returnValue
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            boolean
+          </td>
+          <td>
+            true (success) or false (failure)
+          </td>
+        </tr>
+        <tr>
+          <td>
+            errorCode
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            int
+          </td>
+          <td>
+            Error code returned on failure
+          </td>
+        </tr>
+        <tr>
+          <td>
+            errorText
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Error message returned on failure
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="examples-8">
+      Examples
+    </h3>
+    <p>
+      <strong>Enyo</strong>
+    </p>
+    <pre>
+enyo.kind({
+    name: "enyo.Canon.DbAPI",
+    kind: enyo.VFlexBox,
+    components: [
+        {kind: "DbService", dbKind: "enyo.bffs:1", onFailure: "dbFailure", components: [
+            {name: "putPerm", method: "putPermissions", onSuccess: "permSuccess"}   
+        ]},
+        {kind: "PageHeader", content: "db8 Code Samples"},
+        {kind: "VFlexBox", align: "center", components: [
+            {kind: "Button", caption: "Put Permissions", onclick: "permClick"}
+        ]}
+    ],
+    permClick: function() {
+        var permObj =[{"type":"db.kind","object":'enyo.bffs:1', 
+               "caller":"com.palm.launcher", "operations":{"read":"allow"}}];    
+        this.$.putPerm.call({permissions:permObj});
+    },  
+    permSuccess: function(inSender, inResponse) {
+        this.log("putPermissions success, results=" + enyo.json.stringify(inResponse));
+    },                          
+    // Log errors to the console for debugging
+    dbFailure: function(inSender, inError, inRequest) {
+        this.log(enyo.json.stringify(inError));
+    }
+});
+</pre>
+    <p>
+      <strong>Mojo</strong>
+    </p>
+    <pre>
+var permObj =[{"type":"db.kind","object":'com.palm.sample:1', 
+               "caller":"com.palm.launcher", "operations":{"read":"allow"}}];
+
+this.controller.serviceRequest("palm://com.palm.db/", {
+        method: "putPermissions",
+        parameters: {"permissions":permObj},
+        onSuccess: function() { Mojo.Log.info("DB permission granted successfully!");},
+        onFailure: function() { Mojo.Log.error("DB failed to grant permissions!");}
+ });
+</pre><a name="reserveIds" id="reserveIds"></a>
+    <hr>
+    <h2 id="reserveids">
+      reserveIds
+    </h2>
+    <p>
+      Reserves a block of object ids.
+    </p>
+    <h3 id="syntax-9">
+      Syntax
+    </h3>
+    <pre>
+{
+   "count" : int        
+}
+</pre>
+    <h3 id="parameters-9">
+      Parameters
+    </h3>
+    <table border="1" cellpadding="5" cellspacing="5">
+      <thead>
+        <tr bgcolor="lightgrey">
+          <th>
+            Argument
+          </th>
+          <th>
+            Required
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            count
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            int
+          </td>
+          <td>
+            Number of Ids to reserve.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="returns-9">
+      Returns
+    </h3>
+    <table border="1" cellpadding="5" cellspacing="5">
+      <tr>
+        <td width="100">
+          Response
+        </td>
+        <td>
+          Success: <a href="/reference/data-types/db8.html#ReserveIdsResponse">ReserveIdsResponse</a><br>
+          Failure: <a href="/reference/data-types/db8.html#ErrResponse">ErrResponse</a>
+        </td>
+      </tr>
+    </table>
+    <h3 id="examples-9">
+      Examples
+    </h3>
+    <p>
+      <strong>luna-send</strong>
+    </p>
+    <pre>
+luna-send -n 1 -a com.palmdts.enyo.db-api luna://com.palm.db/reserveIds '{"count":5}'
+{"returnValue":true,"ids":["++Hb_JCsc0lw_uMm","++Hb_JCsc1sBIOG2","++Hb_JCsc2NE0ff+","++Hb_JCsc2oYG2Et","++Hb_JCsc3FrSXwy"]}
+</pre>
+    <p>
+      <strong>Enyo</strong>
+    </p>
+    <pre>
+enyo.kind({
+    name: "enyo.Canon.DbAPI",
+    kind: enyo.VFlexBox,
+    components: [
+        {kind: "DbService", dbKind: "enyo.bffs:1", onFailure: "dbFailure", components: [
+            {name: "getIDs", method: "reserveIds", onSuccess: "getIDsSuccess"}          
+        ]},
+        {kind: "PageHeader", content: "db8 Code Samples"},
+        {kind: "HFlexBox", align: "center", components: [
+            {kind: "Button", caption: "Get IDs", onclick: "getIDsClick"}
+        ]}
+    ],
+    getIDsClick: function() {
+        this.$.getIDs.call({count:5});
+    },
+    getIDsSuccess: function(inSender, inResponse) {
+        this.log("reserveIds success, results=" + enyo.json.stringify(inResponse));
+    },  
+    // Log errors to the console for debugging
+    dbFailure: function(inSender, inError, inRequest) {
+        this.log(enyo.json.stringify(inError));
+    }
+});
+</pre>
+    <p>
+      <strong>Mojo</strong>
+    </p>
+    <pre>
+
+// Get block of 5 IDs
+
+this.controller.serviceRequest("palm://com.palm.db/", {
+    method: "reserveIds",
+    parameters: { "count": 5  },
+    onSuccess: function(e) { 
+       Mojo.Log.info("reserveIds success!");
+       var ids = e.ids;
+       for (i=0; i &lt; count; i++)
+           Mojo.Log.info("reserveIds ID #"+(i+1)+" ="+ids[i]);
+    },
+    onFailure: function(e) { Mojo.Log.info("reserveIds failure! Err = " + JSON.stringify(e));}
+}); 
+</pre>
+    <p>
+      <strong>Success</strong>
+    </p>
+    <pre>
+reserveIds success, results=
+{
+   "returnValue":true,
+   "ids":[
+      "++Hb_I11uq4NU7r0",
+      "++Hb_I11ur43Up_a",
+      "++Hb_I11urN1L_Hb",
+      "++Hb_I11urhaPlpJ",
+      "++Hb_I11us00VoIx"
+   ]
+}
+</pre><a name="search" id="search"></a>
+    <hr>
+    <h2 id="search">
+      search
+    </h2>
+    <p>
+      Unlike <a href="#find">find</a>, this call supports the '?' operator, which can be used for full-text searching. Also, ordering by any property is supported. However, this call is significantly slower and should only be used for full-text type-down search; never for retrieving results that are going to be scrolled in a list.
+    </p>
+    <p>
+      This call has some limitations:
+    </p>
+    <ul>
+      <li>There must be an index for the field you are searching on.
+      </li>
+      <li>The search operation looks for words beginning with the search string
+      </li>
+    </ul>
+    <h3 id="syntax-10">
+      Syntax
+    </h3>
+    <pre>
+{
+   "query" : <a href="/reference/data-types/db8.html#Query">Query</a>,
+   "watch" : boolean          
+}
+</pre>
+    <h3 id="parameters-10">
+      Parameters
+    </h3>
+    <table border="1" cellpadding="5" cellspacing="5">
+      <thead>
+        <tr bgcolor="lightgrey">
+          <th>
+            Argument
+          </th>
+          <th>
+            Required
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            query
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            <a href="/reference/data-types/db8.html#Query">Query</a>
+          </td>
+          <td>
+            Query for search.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            watch
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            boolean
+          </td>
+          <td>
+            Notify if change flag. Default is false.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="returns-10">
+      Returns
+    </h3>
+    <table border="1" cellpadding="5" cellspacing="5">
+      <tbody>
+        <tr>
+          <td width="100">
+            Response
+          </td>
+          <td>
+            Succcess: <a href="/reference/data-types/db8.html#FindResponse">FindResponse</a> or <a href="/reference/data-types/db8.html#NotificationResponse">NotificationResponse</a><br>
+            (watch == true)<br>
+            Failure: <a href="/reference/data-types/db8.html#ErrResponse">ErrResponse</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="examples-10">
+      Examples
+    </h3>
+    <p>
+      <strong>Enyo</strong>
+    </p>
+    <pre>
+enyo.kind({
+    name: "enyo.Canon.DbAPI",
+    kind: enyo.VFlexBox,
+    components: [
+        {kind: "DbService", dbKind: "enyo.bffs:1", onFailure: "dbFailure", components: [
+            {name: "makeBffsDbKind", method: "putKind", onSuccess: "putDbKindSuccess"},
+            {name: "putBffs", method: "put", onSuccess: "putBffsSuccess"},
+            {name: "searchOp", method: "search", onSuccess: "searchSuccess"}           
+        ]},
+        {kind: "PageHeader", content: "db8 Code Samples"},
+        {kind: "VFlexBox", align: "center", components: [
+            {kind: "Button", caption: "Create bffs kind", onclick: "makeBffsDbKindClick"},
+            {kind: "Button", caption: "Put bff objects", onclick: "putBffsClick"},
+            {kind: "Button", caption: "Search", onclick: "searchClick"}
+        ]}
+    ],
+    makeBffsDbKindClick: function() {
+        var indexes = [{"name":"stateLastidx", props:[{"name": "state"}, {"name": "lastname"}]},
+                       {"name":"lastidx", props:[{"name": "lastname"}]}
+        ];
+        this.$.makeBffsDbKind.call({owner: enyo.fetchAppId(), indexes:indexes}); // Create db8 kind
+    },
+    putDbKindSuccess: function() {
+        this.log();
+    },
+    putBffsClick: function() {
+         var  bff1 = { _kind: "enyo.bffs:1", lastname: "Syrup", firstname: "Mabel", 
+                       nickname: "Sticky", state: "CA",
+                       emails:[{"value":"msyrup@gmail.com", "type":"home"},
+                               {"value": "mabel.syrup@palm.com", "type":"work"}]};
+         var  bff2 = { _kind: "enyo.bffs:1", lastname: "Wheels", firstname: "Helen", 
+                        nickname: "Psycho", state: "CA",
+                        emails:[{"value":"hwheels@gmail.com", "type":"home"},
+                                {"value": "helen.wheels@palm.com", "type":"work"}]};
+         var  bff3 = { _kind: "enyo.bffs:1", lastname: "Manilla", firstname: "Sal", 
+                       nickname: "Weasel", state: "CA",
+                       emails:[{"value":"smanilla@gmail.com", "type":"home"},
+                               {"value": "sal.manilla@palm.com", "type":"work"}]};
+         var  bff4 = { _kind: "enyo.bffs:1", lastname: "Kroger", firstname: "Larry", 
+                        nickname: "Pinto", state: "OH",
+                        emails:[{"value":"lkroger@gmail.com", "type":"home"},
+                                {"value": "larry.kroger@palm.com", "type":"work"}]};
+        var objs = [bff1, bff2, bff3, bff4];
+        this.$.putBffs.call({objects: objs});
+    },
+    putBffsSuccess: function(inSender, inResponse) {
+        this.log("Put success, results=" + enyo.json.stringify(inResponse));
+    },
+    searchClick: function() {
+        var squery = { "from" : "enyo.bffs:1",
+                       "select": ["lastname", "firstname", "nickname"],
+                       "where":[{"prop":"lastname","op":"?","val":"Man"}] };    
+        this.$.searchOp.call({query:squery});
+    },  
+    searchSuccess: function(inSender, inResponse) {
+        this.log("Search success, results=" + enyo.json.stringify(inResponse));
+    },                              
+    // Log errors to the console for debugging
+    dbFailure: function(inSender, inError, inRequest) {
+        this.log(enyo.json.stringify(inError));
+    }
+});
+</pre>
+    <p>
+      <strong>Mojo</strong>
+    </p>
+    <pre>
+var fquery = {"from":"com.palm.searchtest:1",
+              "orderBy":"foo",
+              "where":[{"prop":"foo","op":"?","val":"fo","collate":"primary"}]};
+
+this.controller.serviceRequest("palm://com.palm.db/", {
+    method: "search",
+    parameters: { "query": fquery},
+    onSuccess: function(e) { Mojo.Log.info("Search success, results= " + JSON.stringify(e));},
+    onFailure: function(e) { Mojo.Log.info("Search failure! Err = " + JSON.stringify(e));}
+}); 
+</pre><a name="watch" id="watch"></a>
+    <hr>
+    <h2 id="watch">
+      watch
+    </h2>
+    <p>
+      Watch for updates to database that would change the results of a query.
+    </p>
+    <h3 id="syntax-11">
+      Syntax
+    </h3>
+    <pre>
+{
+   "query" : <a href="/reference/data-types/db8.html#Query">Query</a>        
+}
+</pre>
+    <h3 id="parameters-11">
+      Parameters
+    </h3>
+    <table border="1" cellpadding="5" cellspacing="5">
+      <thead>
+        <tr bgcolor="lightgrey">
+          <th>
+            Argument
+          </th>
+          <th>
+            Required
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            query
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            <a href="/reference/data-types/db8.html#Query">Query</a>
+          </td>
+          <td>
+            Query whose results should be watched.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="returns-11">
+      Returns
+    </h3>
+    <table border="1" cellpadding="5" cellspacing="5">
+      <tr>
+        <td width="100">
+          Response
+        </td>
+        <td>
+          Succcess: <a href="/reference/data-types/db8.html#SuccessResponse">SuccessResponse</a> or<br>
+          <a href="/reference/data-types/db8.html#NotificationResponse">NotificationResponse</a><br>
+          Failure: <a href="/reference/data-types/db8.html#ErrResponse">ErrResponse</a>
+        </td>
+      </tr>
+    </table>
+    <h3 id="example">
+      Example
+    </h3>
+    <p>
+      <strong>Mojo</strong>
+    </p>
+    <pre>
+// Query on a revision set field. See <a href="/dev-guide/mojo/db8.html#using-revision-sets">Using Revision Sets</a> for more information.
+
+var fquery = {"from":"com.palm.sample:1", "where":[{"prop":"stateRev","op":"&gt;","val":4881}]};
+
+this.controller.serviceRequest("palm://com.palm.db/", {
+    method: "watch",
+    parameters: { "query": fquery},
+    onSuccess: function(e) { 
+        if (!e.fired)
+            Mojo.Log.info("RevSet watch initial response success, results= " + JSON.stringify(e));
+        else
+            Mojo.Log.info("RevSet watch results changed");
+    },
+    onFailure: function(e) { Mojo.Log.info("RevSet watch failure! Err = " + JSON.stringify(e));}
+});
+</pre>
+		</div>
+	</body>
+</html>

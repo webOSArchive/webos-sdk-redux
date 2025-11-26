@@ -1,0 +1,27 @@
+Bluetooth Serial Port Profile (SPP) Demo Application
+
+The enclosed application is a sample of how to interface with the Palm Bluetooth SPP service.  This example uses a BT 335 GPS 
+data logger to collect GPS data and display this information within a webOS scene.  Other NMEA compatible should work with this sample
+although none beyond the BT-335 device has been tested.
+
+
+To use this example, the following steps are required.
+    1. Power-on and Pair the BT-335 to the webOS device.  The password for this device is 0000
+    2. Make sure the Green GPS light is blinking.  This indicates GPS data acquisition.
+    3. Install this sample and run.  Within a few seconds GPS data should appear.  
+    4. The standard NMEA data rate is slow and accordingly the refresh rate is set to 2.5s.
+    
+Application Flow:
+    1.  Acquire the address of the device.  This is NOT the "name" value shown when pairing, use the gettrusteddevices method 
+        to retrieve the BT address using the paired name.  In our case below, the functions activate and getDevicesSuccess
+        handle the address lookup.  Here we search for any paired device with a name containing 'GPS' or 'gps'.
+    2.  Setup notification message handling using sppNotify.
+    3.  Open SPP connection.
+    4.  Read SPP port data (this needs to be called recursively to collect NMEA data)
+    5.  On timeout(set by:this.serialPortPollRate), read SPP again.
+    6.  On close, close port and shutdown services.    
+
+
+More info on NMEA 0183:
+   http://en.wikipedia.org/wiki/NMEA_0183
+   http://www.nmea.org/content/nmea_standards/nmea_083_v_400.asp

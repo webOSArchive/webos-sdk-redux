@@ -1,0 +1,10 @@
+<div id="main" class="palm-hasheader">
+	<div class="palm-header left" id="main-hdr">
+	  Launch video player
+	</div>
+</div>
+<div id="OpenVideoButton" x-mojo-element="Button"></div>
+<div id="OpenSceneButton" x-mojo-element="Button"></div>
+<div id="LaunchVideoButton" x-mojo-element="Button"></div>
+<div id="EmbeddedButton" x-mojo-element="Button"></div>
+<div id="area-to-update"></div>

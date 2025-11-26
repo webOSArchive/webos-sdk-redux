@@ -1,0 +1,60 @@
+
+<div>
+	<!--
+		<div class="info-text">
+		Modify these parameters to change the curve:
+		</div>
+	-->
+	
+	<button id="linearButton"><span x-mojo-loc="">Linear</span></button>
+	<button id="zenoButton"><span x-mojo-loc="">Zeno</span></button>
+	<button id="bezierButton"><span x-mojo-loc="">Bezier</span></button>
+
+	<button id="animateButton"><span x-mojo-loc="">Animate</span></button>
+
+	
+	
+	<!--
+		<button id="plotButton">Plot</button>
+	-->
+	
+	<div id="bezierProperties">
+	  Duration:<input id='bezDurationInput' type='text' style='width:40px;' value="0.5"></input>
+
+	  <button id="easeButton"><span x-mojo-loc="">Ease</span></button>
+	  <button id="easeInButton"><span x-mojo-loc="">EaseIn</span></button>
+	  <button id="easeOutButton"><span x-mojo-loc="">EaseOut</span></button>
+	  <button id="easeIOButton"><span x-mojo-loc="">EaseIO</span></button>
+	  <button id="overEasyButton"><span x-mojo-loc="">OverEasy</span></button>
+
+	  X1:<input id='x1arg' type='text' style='width:100px;'></input>
+	  X2:<input id='x2arg' type='text' style='width:100px;'></input> 
+	  <br/>
+	  Y1:<input id='y1arg' type='text' style='width:100px;'></input>
+	  Y2:<input id='y2arg' type='text' style='width:100px;'></input> 
+	  <br/>
+	  <div id='plotDiv' style="background-color:#FFC; height:200px; width:200px;">
+	  </div>
+	</div>
+
+	<div id="linearProperties">
+	  Duration:<input id='linDurationInput' type='text' style='width:40px;' value="0.5"></input>
+	</div>
+
+	<div id="zenoProperties">
+	  Coefficient:<input id='coefInput' type='text' style='width:40px;' value="0.5"></input>
+	</div>
+	
+	
+	<!--
+		UseX:<input id='useX' type="checkbox"></input>
+		UseNM:<input id='useNM' type="checkbox"></input>
+	-->
+	
+
+	
+	<div id='animBG' style="background-color:#FFC; height:200px; width:100px; position:fixed; right:0px; bottom:30px;">
+		<div id='animDiv' style="background-color:#090; height:10px; width:90px; margin-left:5px; position:relative;"></div>
+	</div>
+
+</div>

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="firewall">
+      Firewall
+    </h1>
+    <p>
+      The Firewall service (<code>com.palm.firewall</code>) has one method -- <code>control</code>.
+    </p>
+    <p>
+      <strong>Note</strong>: This service has been available since webOS 3.0.2.
+    </p>
+    <hr>
+    <h2 id="control">
+      control
+    </h2>
+    <p>
+      Opens a port on the firewall. If <code>subscribe</code>=<code>true</code>, then the port remains open until the service or app stops running.
+    </p>
+    <h3 id="syntax">
+      Syntax
+    </h3>
+    <pre>
+{
+    "subscribe" : boolean,
+    "rules"     : [ {
+        "protocol"           : string,
+        "destinationPort"    : number,
+        "sourcePort"         : number,      
+        "operation"          : string,
+        "source"             : string,  
+        "destination"        : string,  
+        "interfaceName"      : string,
+        "interfaceDirection" : string       
+    }]
+}
+</pre>
+    <h3 id="parameters">
+      Parameters
+    </h3>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Parameter
+          </th>
+          <th>
+            Required
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            subscribe
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            boolean
+          </td>
+          <td>
+            Flag to keep port open while calling app or service is still running
+          </td>
+        </tr>
+        <tr>
+          <td>
+            rules
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            object array
+          </td>
+          <td>
+            Object array, see fields below
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            protocol
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            TCP|UDP
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            destinationPort
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            number
+          </td>
+          <td>
+            Port number, must be higher than 1023
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            sourcePort
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            number
+          </td>
+          <td>
+            Source port number
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            operation
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            append|delete|insert|replace
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            source
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            address/mask
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            destination
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            address/mask
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            interfaceName
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Interface name, i.e., &quot;eth0&quot;
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            interfaceDirection
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            in|out
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="returns">
+      Returns
+    </h3>
+    <pre>
+{
+   "returnValue"  : boolean,
+   "errorCode"    : number,
+   "errorText"    : string
+}
+</pre>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Attribute
+          </th>
+          <th>
+            Required
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            returnValue
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            boolean
+          </td>
+          <td>
+            <code>true</code> (success) or <code>false</code> (failure)
+          </td>
+        </tr>
+        <tr>
+          <td>
+            errorCode
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            number
+          </td>
+          <td>
+            Error code returned on failure
+          </td>
+        </tr>
+        <tr>
+          <td>
+            errorText
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Error message returned on failure
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="examples">
+      Examples
+    </h3>
+    <p>
+      <strong>luna-send</strong>
+    </p>
+    <pre>
+ luna-send -P -i palm://com.palm.firewall/control '{"subscribe":true,"rules":[{"protocol":"TCP","destinationPort":7070}]}'
+{"returnValue":true}
+</pre>
+    <p>
+      <strong>Enyo</strong>
+    </p>
+    <pre>
+enyo.kind({
+   name : "enyo.Canon.Firewall",
+   kind : enyo.VFlexBox,
+   components : [ 
+     { flex : 1,
+      kind : "Pane",
+      components : [{
+         flex : 1,
+         kind : "Scroller",
+         components : [{
+            name : "openPort",
+            kind : "PalmService",
+            service : "palm://com.palm.firewall",
+            method : "control",
+            onSuccess : "openPortSuccess",
+            onFailure : "openPortFailure",
+            subscribe : true
+         },
+         {kind : "Button", name : "openPortButton", caption : "Open Port", onclick : "openPortClick"}
+        ]
+      }]
+    }],
+    openPortClick: function() {     
+         this.$.openPort.call({"subscribe":true,"rules":[{"protocol":"TCP","destinationPort":7070}]});
+    },
+    openPortSuccess: function(inSender, inResponse) {
+        this.log("Open port success, results=" + enyo.json.stringify(inResponse));
+    },          
+    // Log errors to the console for debugging
+    openPortFailure: function(inSender, inError, inRequest) {
+        this.log(enyo.json.stringify(inError));
+    }
+});
+</pre>
+		</div>
+	</body>
+</html>

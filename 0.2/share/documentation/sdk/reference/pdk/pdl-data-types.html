@@ -1,0 +1,2809 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="palm-pdk-library">
+      Palm PDK Library
+    </h1>
+    <p>
+      The PDK comes with the Palm Development Library (PDL), a library of function calls that extend SDL capabilities specifically for webOS devices.
+    </p>
+    <p>
+      <strong>To use the PDK Library in your code:</strong>
+    </p>
+    <ul>
+      <li>
+        <p>
+          Have an <code>#include &quot;PDL.h&quot;</code> line in your source file. For more information on the calls included in <code>PDL.h</code>, see <a href="/reference/pdk/plug-in-api-summary.html">Plug-in API Summary</a>.
+        </p>
+      </li>
+      <li>
+        <p>
+          Link with <code>&quot;-- lpdl&quot;</code>. The <code>libpdl.so</code> file can be found in your PDK's <code>/lib</code> directory.
+        </p>
+      </li>
+    </ul>
+    <p>
+      <strong>Note:</strong>
+    </p>
+    <p>
+      Though they have no effect if invoked, PDL calls can <strong>not</strong> be used on the desktop.
+    </p>
+    <h2 id="palm-development-library-data-structures">
+      Palm Development Library Data Structures
+    </h2>
+    <p>
+      On Windows, you can find these files in the PDK <code>include</code> directory, for example:
+    </p>
+    <blockquote>
+      <pre>
+<code>C:\Program Files\HP webOS\PDK\include\PDL_types.h
+</code>
+</pre>
+    </blockquote>
+    <p>
+      <strong>In this section:</strong>
+    </p>
+    <ul>
+      <li>
+        <a href="#defines">Defines</a>
+      </li>
+      <li>
+        <a href="#enums">Enums</a>
+      </li>
+      <li>
+        <a href="#enum-arrays">Enum Arrays</a>
+      </li>
+      <li>
+        <a href="#typedefs">Typedefs</a>
+      </li>
+      <li>
+        <a href="#structs">Structs</a>
+      </li>
+    </ul><a name="defines" id="defines"></a>
+    <hr>
+    <h3 id="defines">
+      Defines
+    </h3>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Name
+          </th>
+          <th>
+            Value
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <code>PDL_FALSE</code>
+          </td>
+          <td>
+            <code>SDL_FALSE</code>
+          </td>
+          <td>
+            Provided for consistent naming.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_TRUE</code>
+          </td>
+          <td>
+            <code>SDL_TRUE</code>
+          </td>
+          <td>
+            Provided for consistent naming.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>CALLBACK_PAYLOAD_MAX</code>
+          </td>
+          <td>
+            <code>1024</code>
+          </td>
+          <td>
+            Maximum size of buffer that can be passed from a JavaScript function to a Plug-in app's registered JS handler function.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>HARDWARE_UNKNOWN</code>
+          </td>
+          <td>
+            <code>-1</code>
+          </td>
+          <td>
+            Unknown hardware
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>HARDWARE_PRE</code>
+          </td>
+          <td>
+            <code>101</code>
+          </td>
+          <td>
+            Pre
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>HARDWARE_PRE_PLUS</code>
+          </td>
+          <td>
+            <code>102</code>
+          </td>
+          <td>
+            Pre Plus
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>HARDWARE_PIXI</code>
+          </td>
+          <td>
+            <code>201</code>
+          </td>
+          <td>
+            Pixi and Pixi Plus
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>HARDWARE_VEER</code>
+          </td>
+          <td>
+            <code>301</code>
+          </td>
+          <td>
+            Veer
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>HARDWARE_PRE_2</code>
+          </td>
+          <td>
+            <code>401</code>
+          </td>
+          <td>
+            Pre2
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>HARDWARE_PRE_3</code>
+          </td>
+          <td>
+            <code>501</code>
+          </td>
+          <td>
+            Pre3
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>HARDWARE_TOUCHPAD</code>
+          </td>
+          <td>
+            <code>601</code>
+          </td>
+          <td>
+            TouchPad
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>HARDWARE_TOUCHPAD_GO</code>
+          </td>
+          <td>
+            <code>701</code>
+          </td>
+          <td>
+            TouchPad GO
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_GPS_UPDATE</code>
+          </td>
+          <td>
+            <code>0xE100</code>
+          </td>
+          <td>
+            The user event code for a GPS event. For a GPS event, the event type will be <code>SDL_USEREVENT</code> . The event union's <code>user.code</code> value is <code>PDL_GPS_UPDATE</code>. The event union's <code>user.data1</code> is a pointer to a <code>PDL_Location</code> structure.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_GPS_FAILURE</code>
+          </td>
+          <td>
+            <code>0xE101</code>
+          </td>
+          <td>
+            Event sent for a GPS system failure. In this case, the event union's <code>user.data1</code> is a <code>PDL_Err *</code> cast you can dereference to find the <code>PDL_Err</code> code.<br>
+            <br>
+            For example:<br>
+            <code>PDL_Err err = *(PDL_Err *)Event.user.data;</code>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_COMPASS</code>
+          </td>
+          <td>
+            <code>0xE110</code>
+          </td>
+          <td>
+            The user event code for a compass event. You can identify a compass event with this. The event type is SDL_USEREVENT. The event union's <code>user.code</code> value will be PDL_COMPASS. The event union's <code>user.data1</code> will be a pointer to a <code>PDL_Compass</code> structure.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_PENDING_JSS</code>
+          </td>
+          <td>
+            <code>0xE120</code>
+          </td>
+          <td>
+            The user event code that means there are queued downstream JS calls pending. Your app should call <code>PDL_HandleJSCalls</code> to respond to this. The event type is <code>SDL_USEREVENT</code>. The event union's <code>user.code</code> value will be <code>PDL_PENDING_JS</code>. There is no data associated with this event.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_VERSION_STR_SIZE</code>
+          </td>
+          <td>
+            <code>256</code>
+          </td>
+          <td>
+            Maximum length of the full webOS <code>version</code> string in the <code>PDL_OSVersion</code> struct.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDLKey</code>
+          </td>
+          <td>
+            <code>PDL_key</code>
+          </td>
+          <td>
+            Provided for backward compatibility.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDLNETinfo</code>
+          </td>
+          <td>
+            <code>PDL_NetInfo</code>
+          </td>
+          <td>
+            Provided for backward compatibility.
+          </td>
+        </tr>
+      </tbody>
+    </table><a name="sensorDefines" id="sensorDefines"></a>
+    <h4 id="sensor-defines">
+      Sensor Defines
+    </h4>
+    <p>
+      These defines are used to set the value for a variable of type <code>PDL_SensorType</code>.
+    </p>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Name
+          </th>
+          <th>
+            Value
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <code>PDL_SENSOR_NONE</code>
+          </td>
+          <td>
+            (-1)
+          </td>
+          <td>
+            Unknown sensor
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_SENSOR_ACCELEROMETER</code>
+          </td>
+          <td>
+            0
+          </td>
+          <td>
+            Accelerometer sensor
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_SENSOR_COMPASS</code>
+          </td>
+          <td>
+            1
+          </td>
+          <td>
+            Compass sensor
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_SENSOR_ALS</code>
+          </td>
+          <td>
+            2
+          </td>
+          <td>
+            Ambient light sensor
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_SENSOR_ANGULAR_VELOCITY</code>
+          </td>
+          <td>
+            3
+          </td>
+          <td>
+            Angular velocity sensor
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_SENSOR_GRAVITY</code>
+          </td>
+          <td>
+            4
+          </td>
+          <td>
+            Gravity sensor
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_SENSOR_LINEAR_ACCELERATION</code>
+          </td>
+          <td>
+            5
+          </td>
+          <td>
+            Linear acceleration sensor
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_SENSOR_MAGNETIC_FIELD</code>
+          </td>
+          <td>
+            6
+          </td>
+          <td>
+            Magnetic field sensor
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_SENSOR_ORIENTATION</code>
+          </td>
+          <td>
+            7
+          </td>
+          <td>
+            Orientation sensor
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_SENSOR_PROXIMITY</code>
+          </td>
+          <td>
+            8
+          </td>
+          <td>
+            Proximity sensor
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_SENSOR_ROTATION</code>
+          </td>
+          <td>
+            9
+          </td>
+          <td>
+            Rotation sensor
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_SENSOR_SHAKE</code>
+          </td>
+          <td>
+            10
+          </td>
+          <td>
+            Shake sensor
+          </td>
+        </tr>
+      </tbody>
+    </table><br>
+    <br>
+    <a name="enums" id="enums"></a>
+    <hr>
+    <h3 id="enums">
+      Enums
+    </h3>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Name
+          </th>
+          <th>
+            Value
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <code>PDLK_GESTURE_AREA</code>
+          </td>
+          <td>
+            <code>231</code>
+          </td>
+          <td>
+            Returned as a key event when the user touches anywhere in the gesture area, which is the black area extending from the bottom of the screen to halfway down the Center button (or where the Center button would be).
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDLK_GESTURE_BACK</code>
+          </td>
+          <td>
+            <code>27</code>
+          </td>
+          <td>
+            Returned as a key event when the user swipes from right to left anywhere in the gesture area.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDLK_GESTURE_FORWARD</code>
+          </td>
+          <td>
+            <code>229</code>
+          </td>
+          <td>
+            Returned as a key event when the user swipes from left to right anywhere in the gesture area.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDLK_GESTURE_DISMISS_KEYBOARD</code>
+          </td>
+          <td>
+            <code>24</code>
+          </td>
+          <td>
+            Returned as a key event on the TouchPad when the user dismisses the keyboard.
+          </td>
+        </tr>
+      </tbody>
+    </table><br>
+    <br>
+    <a name="enum-arrays" id="enum-arrays"></a>
+    <hr>
+    <h3 id="enum-arrays">
+      Enum Arrays
+    </h3>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Name
+          </th>
+          <th>
+            Description
+          </th>
+          <th>
+            APIs
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <code>PDL_Err</code>
+          </td>
+          <td>
+            Enums used to indicate PDL API calls' success or failure and failure reason.
+          </td>
+          <td>
+            <ul>
+              <li>
+                <code>PDL_BannerMessagesEnable</code>
+              </li>
+              <li>
+                <code>PDL_CustomPauseUiEnable</code>
+              </li>
+              <li>
+                <code>PDL_EnableCompass</code>
+              </li>
+              <li>
+                <code>PDL_EnableLocationTracking</code>
+              </li>
+              <li>
+                <code>PDL_EnableSensor</code>
+              </li>
+              <li>
+                <code>PDL_GesturesEnable</code>
+              </li>
+              <li>
+                <code>PDL_GetAppinfoValue</code>
+              </li>
+              <li>
+                <code>PDL_GetCallingPath</code>
+              </li>
+              <li>
+                <code>PDL_GetCompass</code>
+              </li>
+              <li>
+                <code>PDL_GetDataFilePath</code>
+              </li>
+              <li>
+                <code>PDL_GetDeviceName</code>
+              </li>
+              <li>
+                <code>PDL_GetLanguage</code>
+              </li>
+              <li>
+                <code>PDL_GetLocation</code>
+              </li>
+              <li>
+                <code>PDL_GetNetInfo</code>
+              </li>
+              <li>
+                <code>PDL_GetOSVersion</code>
+              </li>
+              <li>
+                <code>PDL_GetRegionCountryCode</code>
+              </li>
+              <li>
+                <code>PDL_GetRegionCountryName</code>
+              </li>
+              <li>
+                <code>PDL_GetUniqueID</code>
+              </li>
+              <li>
+                <code>PDL_Init</code>
+              </li>
+              <li>
+                <code>PDL_LaunchBrowser</code>
+              </li>
+              <li>
+                <code>PDL_LaunchEmail</code>
+              </li>
+              <li>
+                <code>PDL_LaunchEmailTo</code>
+              </li>
+              <li>
+                <code>PDL_JSException</code>
+              </li>
+              <li>
+                <code>PDL_JSRegistrationComplete</code>
+              </li>
+              <li>
+                <code>PDL_JSReply</code>
+              </li>
+              <li>
+                <code>PDL_Minimize</code>
+              </li>
+              <li>
+                <code>PDL_NotifyMusicPlaying</code>
+              </li>
+              <li>
+                <code>PDL_PollActiveSensors</code>
+              </li>
+              <li>
+                <code>PDL_PollSensor</code>
+              </li>
+              <li>
+                <code>PDL_RegisterJSHandler</code>
+              </li>
+              <li>
+                <code>PDL_RegisterPollingJSHandler</code>
+              </li>
+              <li>
+                <code>PDL_ScreenTimeoutEnable</code>
+              </li>
+              <li>
+                <code>PDL_ServiceCall</code>
+              </li>
+              <li>
+                <code>PDL_ServiceCallWithCallback</code>
+              </li>
+              <li>
+                <code>PDL_SetAutomaticSoundPausing</code>
+              </li>
+              <li>
+                <code>PDL_SetFirewallPortStatus</code>
+              </li>
+              <li>
+                <code>PDL_SetOrientation</code>
+              </li>
+              <li>
+                <code>PDL_SetTouchAggression</code>
+              </li>
+              <li>
+                <code>PDL_UnregisterServiceCallback</code>
+              </li>
+              <li>
+                <code>PDL_Vibrate</code>
+              </li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_Orientation</code>
+          </td>
+          <td>
+            Enums used for setting the alignment of pop-up alerts and banner.
+          </td>
+          <td>
+            <code>PDL_SetOrientation</code>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_TouchAggression</code>
+          </td>
+          <td>
+            Enums used for setting the device's touch aggression.
+          </td>
+          <td>
+            <code>PDL_SetTouchAggression</code>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_OGLVersion</code>
+          </td>
+          <td>
+            Enums used to dynamically open a specific OpenGL version.
+          </td>
+          <td>
+            <code>PDL_LoadOGL</code>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h4 id="pdl_err">
+      PDL_Err
+    </h4>
+    <p>
+      Array of enums used to indicate API calls' success or failure and failure reason.
+    </p>
+    <p>
+      <strong>Note:</strong>
+    </p>
+    <p>
+      For failure responses, use the <code>PDL_GetError</code> API to retrieve a text message containing more information about the error.
+    </p>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Name
+          </th>
+          <th>
+            Value
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <code>PDL_NOERROR</code>
+          </td>
+          <td>
+            0
+          </td>
+          <td>
+            No error.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_EMEMORY</code>
+          </td>
+          <td>
+            1
+          </td>
+          <td>
+            Memory error.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_ECONNECTION</code>
+          </td>
+          <td>
+            2
+          </td>
+          <td>
+            Connection error.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_INVALIDINPUT</code>
+          </td>
+          <td>
+            3
+          </td>
+          <td>
+            Something was wrong with one or more passed parameters.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_EOTHER</code>
+          </td>
+          <td>
+            4
+          </td>
+          <td>
+            Unspecified error.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_UNINIT</code>
+          </td>
+          <td>
+            5
+          </td>
+          <td>
+            A needed initialization function was not called, e.g., <code>PDL_EnableLocationTracking</code> was not called before calling <code>PDL_GetLocation</code>.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_NOTALLOWED</code>
+          </td>
+          <td>
+            6
+          </td>
+          <td>
+            A non-configured option prevents success, e.g., the user has disabled Location Services, which prevents GPS from working (see <code>PDL_GetLocation</code>).
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_LICENSEFAILURE</code>
+          </td>
+          <td>
+            7
+          </td>
+          <td>
+            Indicates the device does not have a valid license for the application. See <code>PDL_isAppLicensedForDevice</code>.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_STRINGTOOSMALL</code>
+          </td>
+          <td>
+            8
+          </td>
+          <td>
+            Passed string is too small to hold returned value.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_SYSTEMERROR_FILE</code>
+          </td>
+          <td>
+            9
+          </td>
+          <td>
+            Could not access the internal Luna preferences database.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_SYSTEMERROR_NET</code>
+          </td>
+          <td>
+            10
+          </td>
+          <td>
+            Could not access network information.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_APPINFO</code>
+          </td>
+          <td>
+            11
+          </td>
+          <td>
+            The <code>appinfo.json</code> file was not found.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_ESTATE</code>
+          </td>
+          <td>
+            12
+          </td>
+          <td>
+            The system's runtime state does not allow the attempted operation.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h4 id="pdl_oglversion">
+      PDL_OGLVersion
+    </h4>
+    <p>
+      Enums used to dynamically open a specific OpenGL version.
+    </p>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Name
+          </th>
+          <th>
+            Value
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <code>PDL_OGL_1_1</code>
+          </td>
+          <td>
+            0
+          </td>
+          <td>
+            OpenGL version 1.1.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_OGL_2_0</code>
+          </td>
+          <td>
+            1
+          </td>
+          <td>
+            OpenGL version 2.0.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h4 id="pdl_orientation">
+      PDL_Orientation
+    </h4>
+    <p>
+      Array of enums used for setting the alignment of pop-up alerts and banner messages.
+    </p>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Name
+          </th>
+          <th>
+            Value
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <code>PDL_ORIENTATION_0</code>
+          </td>
+          <td>
+            0
+          </td>
+          <td>
+            Indicates center button is below screen.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_ORIENTATION_90</code>
+          </td>
+          <td>
+            1
+          </td>
+          <td>
+            Indicates center button is to screen's left.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_ORIENTATION_180</code>
+          </td>
+          <td>
+            2
+          </td>
+          <td>
+            Indicates center button is above screen.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_ORIENTATION_270</code>
+          </td>
+          <td>
+            3
+          </td>
+          <td>
+            Indicates center button is to screen's right.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h4 id="pdl_touchaggression">
+      PDL_TouchAggression
+    </h4>
+    <p>
+      Array of enums used for setting the device's touch aggression.
+    </p>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Name
+          </th>
+          <th>
+            Value
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <code>PDL_AGGRESSION_LESSTOUCHES</code>
+          </td>
+          <td>
+            0
+          </td>
+          <td>
+            The device is more likely to interpret indistinct input as single-touches than multi-touches. This is the default.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_AGGRESSION_MORETOUCHES</code>
+          </td>
+          <td>
+            1
+          </td>
+          <td>
+            The device is more likely to interpret indistinct input as multi-touches than single-touches.
+          </td>
+        </tr>
+      </tbody>
+    </table><br>
+    <br>
+    <a name="typdefs" id="typdefs"></a>
+    <hr>
+    <h3 id="typedefs">
+      Typedefs
+    </h3>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Type
+          </th>
+          <th>
+            Defines
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <code>PDL_ServiceParameters</code>
+          </td>
+          <td>
+            <code>struct PDL_ServiceParameters</code>
+          </td>
+          <td>
+            A hidden and internally managed type passed as a parameter to a callback function. The callback function is passed as a parameter to <code>PDL_ServiceCallWithCallback.</code>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_JSParameters</code>
+          </td>
+          <td>
+            <code>struct PDL_JSParameters</code>
+          </td>
+          <td>
+            A hidden and internally managed type used when a JS app calls a registered JS handler function.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_ServiceCallbackFunc</code>
+          </td>
+          <td>
+            <code>PDL_bool (PDL_ServiceParameters *params, void *user)</code>
+          </td>
+          <td>
+            The required function signature for a callback function passed to <code>PDL_ServiceCallWithCallback</code>.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_JSHandlerFunc</code>
+          </td>
+          <td>
+            <code>PDL_bool (PDL_JSParameters *params)</code>
+          </td>
+          <td>
+            The function signature for a Plug-in app function registered as a JavaScript handler with <code>PDL_RegisterJSHandler</code>.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_bool</code>
+          </td>
+          <td>
+            <code>SDL_bool</code>
+          </td>
+          <td>
+            Provided for consistent naming.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_key</code>
+          </td>
+          <td>
+            <code>SDLKey</code>
+          </td>
+          <td>
+            Provided for consistent naming.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_NetInfo</code>
+          </td>
+          <td>
+            <code>struct _PDL_NetInfo</code>
+          </td>
+          <td>
+            Provided for backward compatibility.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_ItemInfo</code>
+          </td>
+          <td>
+            <code>struct PDL_ItemInfo</code>
+          </td>
+          <td>
+            Used for purchases.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_ItemCollection</code>
+          </td>
+          <td>
+            <code>struct PDL_ItemCollection</code>
+          </td>
+          <td>
+            Used for purchases.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_SensorType</code>
+          </td>
+          <td>
+            <code>Sint32</code>
+          </td>
+          <td>
+            Used for sensor type defines (see <a href="#sensorDefines">sensor defines</a> section). For the PDK APIs it is used to either detect or enable a particular sensor or identify one for a sensor event.
+          </td>
+        </tr>
+      </tbody>
+    </table><br>
+    <br>
+    <a name="structs" id="structs"></a>
+    <hr>
+    <h3 id="structs">
+      Structs
+    </h3>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Name
+          </th>
+          <th>
+            Description
+          </th>
+          <th>
+            APIs
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <code>PDL_Compass</code>
+          </td>
+          <td>
+            Used to contain magnetic and true north bearings.
+          </td>
+          <td>
+            <code>PDL_Compass</code>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_Location</code>
+          </td>
+          <td>
+            Used to contain GPS latitude and longitude information.
+          </td>
+          <td>
+            <code>PDL_GetLocation</code>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_NetInfo</code>
+          </td>
+          <td>
+            Used to store information about a particular network interface (e.g., eth0). On Windows, only the IP address is populated.
+          </td>
+          <td>
+            <code>PDL_GetNetInfo</code>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_ScreenMetrics</code>
+          </td>
+          <td>
+            Used to contain data about the device's screen metrics.
+          </td>
+          <td>
+            <code>PDL_GetScreenMetrics</code>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>PDL_OSVersion</code>
+          </td>
+          <td>
+            Used to contain data about the device's webOS version.
+          </td>
+          <td>
+            <code>PDL_GetOSVersion</code>
+          </td>
+        </tr>
+      </tbody>
+    </table><a name="PDL_Compass" title="PDL_Compass" id="PDL_Compass"></a>
+    <h4 id="pdl_compass">
+      PDL_Compass
+    </h4>
+    <p>
+      Struct containing magnetic and true north bearings.
+    </p>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Name
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <code>confidence</code>
+          </td>
+          <td>
+            <code>int</code>
+          </td>
+          <td>
+            0-100. Bearing confidence rating.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>magneticBearing</code>
+          </td>
+          <td>
+            <code>double</code>
+          </td>
+          <td>
+            Magnetic north bearing.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>trueBearing</code>
+          </td>
+          <td>
+            <code>double</code>
+          </td>
+          <td>
+            True north bearing.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h4 id="pdl_location">
+      PDL_Location
+    </h4>
+    <p>
+      Struct containing latitude and longitude information.
+    </p>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Name
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <code>latitude</code>
+          </td>
+          <td>
+            <code>double</code>
+          </td>
+          <td>
+            Set to -1 if unknown.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>longitude</code>
+          </td>
+          <td>
+            <code>double</code>
+          </td>
+          <td>
+            Set to -1 if unknown.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>altitude</code>
+          </td>
+          <td>
+            <code>double</code>
+          </td>
+          <td>
+            Set to -1 if unknown.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>horizontalAccuracy</code>
+          </td>
+          <td>
+            <code>double</code>
+          </td>
+          <td>
+            In meters; set to -1 if unknown.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>verticalAccuracy</code>
+          </td>
+          <td>
+            <code>double</code>
+          </td>
+          <td>
+            In meters; set to -1 if unknown.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>heading</code>
+          </td>
+          <td>
+            <code>double</code>
+          </td>
+          <td>
+            Travel compass direction; set to -1 if unknown.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>velocity</code>
+          </td>
+          <td>
+            <code>double</code>
+          </td>
+          <td>
+            Velocity in meters per second; set to -1 if unknown.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h4 id="pdl_netinfo">
+      PDL_NetInfo
+    </h4>
+    <p>
+      Struct used to store information about a particular network interface (e.g., eth0). On Windows, only the IP address is populated.
+    </p>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Name
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <code>ipaddress</code>
+          </td>
+          <td>
+            <code>Uint32</code>
+          </td>
+          <td>
+            IP address.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>netmask</code>
+          </td>
+          <td>
+            <code>Uint32</code>
+          </td>
+          <td>
+            A 32-bit mask that divides an IP address into subnets and specifies the network's available hosts.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>broadcast</code>
+          </td>
+          <td>
+            <code>Uint32</code>
+          </td>
+          <td>
+            A network address that allows information to be sent to all nodes on a network.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h4 id="pdl_screenmetrics">
+      PDL_ScreenMetrics
+    </h4>
+    <p>
+      Struct used to contain data about the device's screen metrics.
+    </p>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Name
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <code>horizontalPixels</code>
+          </td>
+          <td>
+            <code>int</code>
+          </td>
+          <td>
+            Number of pixels horizontally.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>verticalPixels</code>
+          </td>
+          <td>
+            <code>int</code>
+          </td>
+          <td>
+            Number of pixels vertically.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>horizontalDPI</code>
+          </td>
+          <td>
+            <code>int</code>
+          </td>
+          <td>
+            Number of pixels per inch horizontally.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>verticalDPI</code>
+          </td>
+          <td>
+            <code>int</code>
+          </td>
+          <td>
+            Number of pixels per inch vertically.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>aspectRatio</code>
+          </td>
+          <td>
+            <code>double</code>
+          </td>
+          <td>
+            <code>horizontalDPI / verticalDPI.</code>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h4 id="pdl_osversion">
+      PDL_OSVersion
+    </h4>
+    <p>
+      Struct used to contain data about the device's webOS version.
+    </p>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Name
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <code>majorVersion</code>
+          </td>
+          <td>
+            <code>int</code>
+          </td>
+          <td>
+            The webOS major version number. If the version is &quot;1.4.5&quot;, then this value will be 1.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>minorVersion</code>
+          </td>
+          <td>
+            <code>int</code>
+          </td>
+          <td>
+            The webOS minor version number. If the version is &quot;1.4.5&quot;, then this value will be 4.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>revision</code>
+          </td>
+          <td>
+            <code>int</code>
+          </td>
+          <td>
+            The webOS revision number. If the version is &quot;1.4.5&quot;, then this value will be 5.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>versionStr</code>
+          </td>
+          <td>
+            <code>string</code>
+          </td>
+          <td>
+            The full webOS version as a string, added in case it contains more than 3 numbers. For example: &quot;Palm webOS 1.4.5.1&quot;.
+          </td>
+        </tr>
+      </tbody>
+    </table><a name="sensorStructs" id="sensorStructs"></a>
+    <h3 id="sensor-structs">
+      Sensor Structs
+    </h3>
+    <h4 id="pdl_accelerometerevent">
+      PDL_AccelerometerEvent
+    </h4>
+    <p>
+      Struct returned for a <code>PDL_SENSOR_ACCELEROMETER</code> event.
+    </p>
+    <p>
+      Each axis value returned measures direction and force. A zero result for a specific axis means there is no force acting on the accelerometer. For example, if you set the device flat on a table, the X and Y axes will measure at, or close to, zero. As you tilt the device left, the X-axis acceleration becomes increasingly negative. If you then center it and tilt it right, it becomes increasingly positive.
+    </p><a name="acc" id="acc"></a>
+    <pre>
+typedef struct
+{
+        PDL_SensorType type;
+        float32 x;
+        float32 y;
+        float32 z;
+} PDL_AccelerometerEvent;
+</pre>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Field
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <code>type</code>
+          </td>
+          <td>
+            <code>PDL_SensorType</code>
+          </td>
+          <td>
+            <code>PDL_SENSOR_ACCELEROMETER</code> (0)
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>x</code>
+          </td>
+          <td>
+            <code>float32</code>
+          </td>
+          <td>
+            Acceleration value for x-axis as a fraction of &quot;g&quot;
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>y</code>
+          </td>
+          <td>
+            <code>float32</code>
+          </td>
+          <td>
+            Acceleration value for y-axis as a fraction of &quot;g&quot;
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>z</code>
+          </td>
+          <td>
+            <code>float32</code>
+          </td>
+          <td>
+            Acceleration value for z-axis as a fraction of &quot;g&quot;
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h4 id="pdl_alsevent">
+      PDL_ALSEvent
+    </h4>
+    <p>
+      Struct returned for a <code>PDL_SENSOR_ALS</code> event.
+    </p>
+    <p>
+      An ALS event returns the ambient light level in SI lux units, a measure of a surface's luminosity. One <a href="http://en.wikipedia.org/wiki/Lux" target="_blank">lux</a> is equal to one <a href="http://en.wikipedia.org/wiki/Lumen_%28unit%29" target="_blank">lumen</a> per square meter. Office lighting typically measures between 320-500 lux.
+    </p>
+    <pre>
+typedef struct
+{
+        PDL_SensorType type;
+        Sint32 lux;
+} PDL_ALSEvent;
+</pre>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Field
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <code>type</code>
+          </td>
+          <td>
+            <code>PDL_SensorType</code>
+          </td>
+          <td>
+            <code>PDL_SENSOR_ALS</code> (2)
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>lux</code>
+          </td>
+          <td>
+            <code>Sint32</code>
+          </td>
+          <td>
+            Ambient light level in SI lux units, a measure of a surface's luminosity. One <a href="http://en.wikipedia.org/wiki/Lux" target="_blank">lux</a> is equal to one <a href="http://en.wikipedia.org/wiki/Lumen_%28unit%29" target="_blank">lumen</a> per square metre. Office lighting typically measures between 320-500 lux.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h4 id="pdl_angularvelocityevent">
+      PDL_AngularVelocityEvent
+    </h4>
+    <p>
+      Struct returned for a <code>PDL_SENSOR_ANGULAR_VELOCITY</code> event.
+    </p>
+    <p>
+      The angular velocity sensor returns a <a href="http://en.wikipedia.org/wiki/Euclidean_vector" target="_blank">vector</a> quantity specifying the angular speed of a device and the axis about which the device is rotating. Angular velocity around each axis is returned in <a href="http://en.wikipedia.org/wiki/Radian" target="_blank">radians</a> per second.
+    </p>
+    <pre>
+typedef struct
+{
+        PDL_SensorType type;
+        float32 x;
+        float32 y;
+        float32 z;
+} PDL_AngularVelocityEvent;
+</pre>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Field
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <code>type</code>
+          </td>
+          <td>
+            <code>PDL_SensorType</code>
+          </td>
+          <td>
+            <code>PDL_SENSOR_ANGULAR_VELOCITY</code> (3)
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>x</code>
+          </td>
+          <td>
+            <code>float32</code>
+          </td>
+          <td>
+            Angular velocity around x-axis in radians per second.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>y</code>
+          </td>
+          <td>
+            <code>float32</code>
+          </td>
+          <td>
+            Angular velocity around y-axis in radians per second.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>z</code>
+          </td>
+          <td>
+            <code>float32</code>
+          </td>
+          <td>
+            Angular velocity around z-axis in radians per second.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h4 id="pdl_compassevent">
+      PDL_CompassEvent
+    </h4>
+    <p>
+      Struct returned for a <code>PDL_SENSOR_COMPASS</code> event.
+    </p>
+    <p>
+      The compass sensor returns <a href="http://www.answers.com/topic/magnetic-north" target="_blank">magnetic north</a> and <a href="http://en.wikipedia.org/wiki/True_north">true north</a> bearings.
+    </p>
+    <pre>
+typedef struct
+{
+        PDL_SensorType type;
+        float32 magnetic;
+        float32 trueBearing;
+        float32 confidence;
+} PDL_CompassEvent;
+</pre>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Field
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <code>type</code>
+          </td>
+          <td>
+            <code>PDL_SensorType</code>
+          </td>
+          <td>
+            <code>PDL_SENSOR_COMPASS</code> (1)
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>magnetic</code>
+          </td>
+          <td>
+            <code>float32</code>
+          </td>
+          <td>
+            Magnetic north bearing in degrees.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>trueBearing</code>
+          </td>
+          <td>
+            <code>float32</code>
+          </td>
+          <td>
+            True north bearing in degrees.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>confidence</code>
+          </td>
+          <td>
+            <code>float32</code>
+          </td>
+          <td>
+            Bearing confidence rating percentage (0-100). Confidence is less than 100% if the magnetic environment changes significantly in a short amount of time. Confidence increases to 100% as the device rotates around a bit in its new environment.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h4 id="pdl_gravityevent">
+      PDL_GravityEvent
+    </h4>
+    <p>
+      Struct returned for a <code>PDL_SENSOR_GRAVITY</code> event.
+    </p>
+    <p>
+      This struct contains a three-dimensional <a href="http://en.wikipedia.org/wiki/Euclidean_vector" target="_blank">vector</a> indicating the direction and magnitude of gravity. Units are m/s^2 (<a href="http://whatis.techtarget.com/definition/0,,sid9_gci529957,00.html" target="_blank">meters per second squared</a>). The coordinate system is the same as that used by the accelerometer.
+    </p>
+    <pre>
+typedef struct
+{
+        PDL_SensorType type;
+        float32 x;
+        float32 y;
+        float32 z;
+} PDL_GravityEvent;
+</pre>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Field
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <code>type</code>
+          </td>
+          <td>
+            <code>PDL_SensorType</code>
+          </td>
+          <td>
+            <code>PDL_SENSOR_GRAVITY</code> (4)
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>x</code>
+          </td>
+          <td>
+            <code>float32</code>
+          </td>
+          <td>
+            Gravitational acceleration unit vector x component
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>y</code>
+          </td>
+          <td>
+            <code>float32</code>
+          </td>
+          <td>
+            Gravitational acceleration unit vector y component
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>z</code>
+          </td>
+          <td>
+            <code>float32</code>
+          </td>
+          <td>
+            Gravitational acceleration unit vector z component
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h4 id="pdl_linearaccelerationevent">
+      PDL_LinearAccelerationEvent
+    </h4>
+    <p>
+      Struct returned for a <code>PDL_SENSOR_LINEAR_ACCELERATION</code> event.
+    </p>
+    <p>
+      This struct contains a three dimensional vector indicating acceleration along each device axis, not including gravity. All values have units of m/s^2 (<a href="http://whatis.techtarget.com/definition/0,,sid9_gci529957,00.html" target="_blank">meters per second squared</a>).
+    </p>
+    <p>
+      The output of the accelerometer, gravity and linear-acceleration sensors has the following relation:
+    </p>
+    <pre>
+<code>acceleration = gravity + linear-acceleration
+</code>
+</pre>
+    <p>
+      Data points for two reference frames are provided:
+    </p>
+    <ol style="list-style-type: decimal">
+      <li>Regular coordinate values in a body reference frame
+      </li>
+      <li>World coordinate values in a world reference frame.
+      </li>
+    </ol>
+    <p>
+      Both of these measure acceleration with gravity removed.
+    </p>
+    <pre>
+typedef struct
+{
+        PDL_SensorType type;
+        float32 x;
+        float32 y;
+        float32 z;
+        float32 worldX;
+        float32 worldY;
+        float32 worldZ;
+} PDL_LinearAccelerationEvent;
+</pre>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Field
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <code>type</code>
+          </td>
+          <td>
+            <code>PDL_SensorType</code>
+          </td>
+          <td>
+            <code>PDL_SENSOR_LINEAR_ACCELERATION</code> (5)
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>x</code>
+          </td>
+          <td>
+            <code>float32</code>
+          </td>
+          <td>
+            Acceleration value for x-axis in meters per second squared.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>y</code>
+          </td>
+          <td>
+            <code>float32</code>
+          </td>
+          <td>
+            Acceleration value for y-axis in meters per second squared.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>z</code>
+          </td>
+          <td>
+            <code>float32</code>
+          </td>
+          <td>
+            Acceleration value for z-axis in meters per second squared.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>worldX</code>
+          </td>
+          <td>
+            <code>float32</code>
+          </td>
+          <td>
+            World coordinate acceleration value for x-axis in meters per second squared.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>worldY</code>
+          </td>
+          <td>
+            <code>float32</code>
+          </td>
+          <td>
+            World coordinate acceleration value for y-axis in meters per second squared.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>worldZ</code>
+          </td>
+          <td>
+            <code>float32</code>
+          </td>
+          <td>
+            World coordinate acceleration value for z-axis in meters per second squared.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h4 id="pdl_magneticfieldevent">
+      PDL_MagneticFieldEvent
+    </h4>
+    <p>
+      Struct returned for a <code>PDL_SENSOR_MAGNETIC_FIELD</code> event.
+    </p>
+    <p>
+      This struct contains data that measure the ambient magnetic field in the X, Y and Z axes. All values are in <a href="http://en.wikipedia.org/wiki/Tesla_%28unit%29" target="_blank">micro Teslas (uT)</a>.
+    </p>
+    <p>
+      Two types of values are returned:
+    </p>
+    <ul>
+      <li>Regular axis values
+      </li>
+      <li>Raw axis values
+      </li>
+    </ul>
+    <p>
+      Raw axis values are what the magnetometer is reading without any other math applied. In other words, this is the actual magnetic field that the magnetometer sees. The regular values have had any bias and offsets removed so that the values are centered around (0,0,0).
+    </p>
+    <pre>
+typedef struct
+{
+        PDL_SensorType type;
+        float32 x;
+        float32 y;
+        float32 z;
+        float32 rawX;
+        float32 rawY;
+        float32 rawZ;
+} PDL_MagneticFieldEvent;
+</pre>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Field
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <code>type</code>
+          </td>
+          <td>
+            <code>PDL_SensorType</code>
+          </td>
+          <td>
+            <code>PDL_SENSOR_MAGNETIC_FIELD</code> (6)
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>x</code>
+          </td>
+          <td>
+            <code>float32</code>
+          </td>
+          <td>
+            Magnetic field strength for x-axis in <a href="http://en.wikipedia.org/wiki/Tesla_%28unit%29" target="_blank">micro Teslas (uT)</a>.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>y</code>
+          </td>
+          <td>
+            <code>float32</code>
+          </td>
+          <td>
+            Magnetic field strength for y-axis in micro Teslas (uT).
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>z</code>
+          </td>
+          <td>
+            <code>float32</code>
+          </td>
+          <td>
+            Magnetic field strength for z-axis in micro Teslas (uT).
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>rawX</code>
+          </td>
+          <td>
+            <code>float32</code>
+          </td>
+          <td>
+            Raw magnetic field strength for x-axis in micro Teslas (uT).
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>rawY</code>
+          </td>
+          <td>
+            <code>float32</code>
+          </td>
+          <td>
+            Raw magnetic field strength for y-axis in micro Teslas (uT).
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>rawZ</code>
+          </td>
+          <td>
+            <code>float32</code>
+          </td>
+          <td>
+            Raw magnetic field strength for z-axis in micro Teslas (uT).
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h4 id="pdl_orientationevent">
+      PDL_OrientationEvent
+    </h4>
+    <p>
+      Struct returned for a <code>PDL_SENSOR_ORIENTATION</code> event.
+    </p>
+    <p>
+      An orientation event gives the device's general position - face up, face down, upside down, etc.
+    </p>
+    <pre>
+typedef struct
+{
+    PDL_SensorType type;
+    Sint32 orientation;
+} PDL_OrientationEvent;
+</pre>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Field
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <code>type</code>
+          </td>
+          <td>
+            <code>PDL_SensorType</code>
+          </td>
+          <td>
+            <code>PDL_SENSOR_ORIENTATION</code> (7)
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>orientation</code>
+          </td>
+          <td>
+            <code>Sint32</code>
+          </td>
+          <td>
+            <ul>
+              <li>0 - Unknown orientation
+              </li>
+              <li>1 - Facing up
+              </li>
+              <li>2 - Facing down
+              </li>
+              <li>3 - Normal orientation
+              </li>
+              <li>4 - Upside-down
+              </li>
+              <li>5 - Left-side facing down
+              </li>
+              <li>6 - Right-side facing down
+              </li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h4 id="pdl_proximityevent">
+      PDL_ProximityEvent
+    </h4>
+    <p>
+      Struct returned for a <code>PDL_SENSOR_PROXIMITY</code> event.
+    </p>
+    <p>
+      This struct contains data about one of two events:
+    </p>
+    <ol style="list-style-type: decimal">
+      <li>An object is close to the device (one inch or less)
+      </li>
+      <li>A close object has moved away from the device
+      </li>
+    </ol>
+    <p>
+      For example, the Phone app uses the proximity sensor value to turn the screen off when a person holds the phone close to their face. This is done to prevent the user from accidentally pressing buttons with their cheek while talking on the phone.
+    </p>
+    <pre>
+typedef struct
+{
+        PDL_SensorType type;
+        Sint32 presence;
+} PDL_ProximityEvent;
+</pre>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Field
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <code>type</code>
+          </td>
+          <td>
+            <code>PDL_SensorType</code>
+          </td>
+          <td>
+            <code>PDL_SENSOR_PROXIMITY</code> (8)
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>presence</code>
+          </td>
+          <td>
+            <code>Sint32</code>
+          </td>
+          <td>
+            <ul>
+              <li>0 - Close object not detected
+              </li>
+              <li>1 - Close object detected
+              </li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h4 id="pdl_rotationevent">
+      PDL_RotationEvent
+    </h4>
+    <p>
+      Struct returned for a <code>PDL_SENSOR_ROTATION</code> event.
+    </p>
+    <p>
+      This struct contains three roughly equivalent sets of numbers - a <a href="http://en.wikipedia.org/wiki/Rotation_matrix">rotation matrix</a>, a <a href="http://en.wikipedia.org/wiki/Quaternion" target="_blank">quaternion</a>, and a set of <a href="http://commons.wikimedia.org/wiki/Tait-Bryan_angles" target="_blank">Tait-Bryan angles</a>. Each can be used to represent an object's rotation. It is up to you to decide which set you want to use for rotation.
+    </p>
+    <p>
+      In linear algebra, a <a href="http://en.wikipedia.org/wiki/Rotation_matrix">rotation matrix</a> is a matrix that is used to perform a rotation in Euclidean space.
+    </p>
+    <p>
+      A <a href="http://en.wikipedia.org/wiki/Quaternion" target="_blank">quaternion</a> represents two things. It has an x, y, and z component, which represents the axis about which a rotation will occur. It also has a w component, which represents the amount of rotation that will occur about this axis or, in short, a vector, and a float. With these four numbers, it is possible to build a matrix which that represents all the rotations perfectly, with no chance o <a href="http://en.wikipedia.org/wiki/Gimbal_lock" target="_blank">gimbal lock</a>.
+    </p>
+    <p>
+      <a href="http://commons.wikimedia.org/wiki/Tait-Bryan_angles" target="_blank">Tait-Bryan angles</a> are three angles that describe device orientation. These angles are also known as &quot;yaw&quot;, &quot;pitch&quot; and &quot;roll&quot; and are used in conventional <a href="http://en.wikipedia.org/wiki/Flight_dynamics" target="_blank">flight dynamics</a>.
+    </p>
+    <pre>
+typedef struct
+{
+        PDL_SensorType type;
+        float32 matrix[9];
+        float32 quatW;
+        float32 quatX;
+        float32 quatY;
+        float32 quatZ;
+        float32 yaw;
+        float32 pitch;
+        float32 roll;
+} PDL_RotationEvent;
+</pre>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Field
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <code>type</code>
+          </td>
+          <td>
+            <code>PDL_SensorType</code>
+          </td>
+          <td>
+            <code>PDL_SENSOR_ROTATION</code> (9)
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>martix[]</code>
+          </td>
+          <td>
+            <code>float32 array</code>
+          </td>
+          <td>
+            A <a href="http://en.wikipedia.org/wiki/Rotation_matrix" target="_blank">matrix</a> used to perform a rotation in <a href="http://en.wikipedia.org/wiki/Euclidean_space" target="_blank">Euclidean space</a>. All matrix values are in the range of -1 to 1.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>quatW</code>
+          </td>
+          <td>
+            <code>float32</code>
+          </td>
+          <td>
+            The W component of the <a href="http://en.wikipedia.org/wiki/Quaternion" target="_blank">quaternion</a>.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>quatX</code>
+          </td>
+          <td>
+            <code>float32</code>
+          </td>
+          <td>
+            The X component of the quaternion.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>quatY</code>
+          </td>
+          <td>
+            <code>float32</code>
+          </td>
+          <td>
+            The Y component of the quaternion.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>quatZ</code>
+          </td>
+          <td>
+            <code>float32</code>
+          </td>
+          <td>
+            The Z component of the quaternion.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>yaw</code>
+          </td>
+          <td>
+            <code>float32</code>
+          </td>
+          <td>
+            Amount of yaw in degrees.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>pitch</code>
+          </td>
+          <td>
+            <code>float32</code>
+          </td>
+          <td>
+            Amount of pitch in degrees.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>roll</code>
+          </td>
+          <td>
+            <code>float32</code>
+          </td>
+          <td>
+            Amount of roll in degrees.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h4 id="pdl_shakeevent">
+      PDL_ShakeEvent
+    </h4>
+    <p>
+      Struct returned for <code>PDL_SENSOR_SHAKE</code> event.
+    </p>
+    <p>
+      Shaking starts above 1.3 g's and stops at 1.1 g's.
+    </p>
+    <pre>
+typedef struct
+{
+        PDL_SensorType type;
+        Sint32 state;
+        float32 magnitude;
+} PDL_ShakeEvent;
+</pre>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Field
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <code>type</code>
+          </td>
+          <td>
+            <code>PDL_SensorType</code>
+          </td>
+          <td>
+            <code>PDL_SENSOR_SHAKE</code> (10)
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>state</code>
+          </td>
+          <td>
+            <code>Sint32</code>
+          </td>
+          <td>
+            <ul>
+              <li>0 - Device is not shaking.
+              </li>
+              <li>1 - Device has started shaking.
+              </li>
+              <li>2 - Device continues to shake.
+              </li>
+              <li>3 - Device has stopped shaking.
+              </li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>magnitude</code>
+          </td>
+          <td>
+            <code>float32</code>
+          </td>
+          <td>
+            How vigorous the shaking is in units of gravitational acceleration or g's.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h4 id="pdl_sensorevent">
+      PDL_SensorEvent
+    </h4>
+    <p>
+      Struct used for all sensor events.
+    </p>
+    <p>
+      This struct is a union of all possible sensor type event structs. The <a href="/reference/pdk/pdl/pdl-poll-sensor.html" target="_blank"><code>PDL_PollSensor</code></a> and <a href="/reference/pdk/pdl/pdl-poll-active-sensors.html" target="_blank"><code>PDL_PollActiveSensors</code></a> APIs return this struct for a sensor event.
+    </p>
+    <pre>
+typedef union PDL_SensorEvent
+{
+        PDL_SensorType                 type;
+        PDL_AccelerometerEvent         accelerometer;
+        PDL_CompassEvent               compass;
+        PDL_ALSEvent                   als;
+        PDL_AngularVelocityEvent       angularVelocity;
+        PDL_GravityEvent               gravity;
+        PDL_LinearAccelerationEvent    linearAcceleration;
+        PDL_MagneticFieldEvent         magneticField;
+        PDL_OrientationEvent           orientation;
+        PDL_ProximityEvent             proximity;
+        PDL_RotationEvent              rotation;
+        PDL_ShakeEvent                 shake;
+        unsigned char                  reserved[128];
+} PDL_SensorEvent;
+</pre>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Field
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <code>type</code>
+          </td>
+          <td>
+            <code>PDL_SensorType</code>
+          </td>
+          <td>
+            Sensor type - compass, accelerometer, gyro, etc.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>accelerometer</code>
+          </td>
+          <td>
+            <code>PDL_AccelerometerEvent</code>
+          </td>
+          <td>
+            Accelerometer event struct
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>compass</code>
+          </td>
+          <td>
+            <code>PDL_CompassEvent</code>
+          </td>
+          <td>
+            Compass sensor event struct
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>als</code>
+          </td>
+          <td>
+            <code>PDL_ALSEvent</code>
+          </td>
+          <td>
+            Ambient light sensor event struct
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>angularVelocity</code>
+          </td>
+          <td>
+            <code>PDL_AngularVelocityEvent</code>
+          </td>
+          <td>
+            Angular velocity sensor event struct
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>gravity</code>
+          </td>
+          <td>
+            <code>PDL_GravityEvent</code>
+          </td>
+          <td>
+            Gravity sensor event struct
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>linearAcceleration</code>
+          </td>
+          <td>
+            <code>PDL_LinearAccelerationEvent</code>
+          </td>
+          <td>
+            Linear acceleration sensor event struct
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>magneticField</code>
+          </td>
+          <td>
+            <code>PDL_MagneticFieldEvent</code>
+          </td>
+          <td>
+            Magnetic field sensor event struct
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>orientation</code>
+          </td>
+          <td>
+            <code>PDL_OrientationEvent</code>
+          </td>
+          <td>
+            Orientation sensor event struct
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>proximity</code>
+          </td>
+          <td>
+            <code>PDL_ProximityEvent</code>
+          </td>
+          <td>
+            Proximity sensor event struct
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>rotation</code>
+          </td>
+          <td>
+            <code>PDL_RotationEvent</code>
+          </td>
+          <td>
+            Rotation sensor event struct
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>shake</code>
+          </td>
+          <td>
+            <code>PDL_ShakeEvent</code>
+          </td>
+          <td>
+            Shake event struct
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>reserved[128]</code>
+          </td>
+          <td>
+            <code>unsigned char array</code>
+          </td>
+          <td>
+            Field used to standardize size of return object.<br>
+            Includes room for future expansion.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+		</div>
+	</body>
+</html>

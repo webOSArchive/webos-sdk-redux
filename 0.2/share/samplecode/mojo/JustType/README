@@ -1,0 +1,20 @@
+As well as demonstrating the the API calls for DB8 this app also shows how an app can interact with the 
+universal search.
+
+Note the app has to be run first in order for the DB8 databases to be created.
+
+In the Universal search preferences add this application to the application search's
+
+Now enter the characters br, there are 2 places you can now launch the DB8 app from
+1. Just under the google search you should see DB8 with the number 5 - this means there are 5 records within the app that match
+Tapping on this brings up a listy of the results displaying each player (that matches the search) and the club.
+Tapping on one of the names launches the DB8 app to that player.
+
+2. In the universal search scroll down to "Quick Actions", you should see "Sample DB8". Tapping this will launch the app passing
+the search string "br" to the app. The app in turn this uses the string to filter the list of players displayed.
+
+As well as searching with in the app, universal search also allows the use of keywords. 
+1. In the universal search enter dts, this should display the launch icon for DB8Sample just like entering DB8Sample would, except 
+it will also display any other DTS samples that are installed with the keywords set in appinfo.json to "dts"
+
+Look in the appinfo.json file for all the settings for each of the items above. 

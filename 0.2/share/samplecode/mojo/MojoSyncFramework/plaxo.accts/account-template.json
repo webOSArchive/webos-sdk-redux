@@ -1,0 +1,29 @@
+{
+	"templateId": "com.plaxo.newcontacts.account",
+	"loc_name": "Plaxo New",
+	"icon": {
+		"loc_32x32": "images/plaxo-32x32.png",
+		"loc_48x48": "images/plaxo-48x48.png"
+	},
+	"validator": "palm://com.plaxo.newcontacts.service/checkCredentials",
+	"readPermissions": ["com.plaxo.newcontacts.service", 
+				"com.palm.service.contacts",
+                "com.palm.service.contacts.linker",
+                "com.palm.app.contacts"
+	],
+	"writePermissions": ["com.plaxo.newcontacts.service", "com.palm.app.contacts"],
+    "loc_usernameLabel": "email address",
+	"capabilityProviders": [{
+		"capability": "CONTACTS",
+		"id": "com.plaxo.newcontacts",
+		"loc_name": "Plaxo Contacts - NEW",
+		"implementation": "palm://com.plaxo.newcontacts.service/",
+		"onCreate": "palm://com.plaxo.newcontacts.service/onCreate",
+		"onEnabled": "palm://com.plaxo.newcontacts.service/onEnabled",
+		"onDelete": "palm://com.plaxo.newcontacts.service/onDelete",
+		"sync": "palm://com.plaxo.newcontacts.service/sync",
+        "dbkinds": {  
+                "contact": "com.plaxo.newcontacts:1"
+        }
+	}]
+}

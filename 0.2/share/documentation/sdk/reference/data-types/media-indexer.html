@@ -1,0 +1,2150 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="media-indexer">
+      Media Indexer
+    </h1>
+    <p>
+      The schemas below detail the layout of media JSON data objects kept in <a href="/reference/services/db8.html">db8</a> device storage; 3rd party applications can access this data using db8 service calls, principally, <a href="reference/services/db8.html#find">find</a> and <a href="reference/services/db8.html#search">search</a>.
+    </p>
+    <p>
+      As with all service calls, developers have the following options:
+    </p>
+    <ul>
+      <li>You can open a shell on a device through novacom or putty and use <code>luna-send</code> to test out accessing services at the command-line.
+      </li>
+      <li>Mojo apps can use <a href="/dev-guide/mojo/services-overview.html#accessing-services">serviceRequest</a>.
+      </li>
+      <li>Enyo apps can use <a href="/dev-guide/enyo/palm-service.html">PalmService</a>.
+      </li>
+      <li>JavaScript apps and services can use the <a href="/reference/javascript-libraries/foundations.html">Foundation</a> library's <a href="/reference/javascript-libraries/foundations/foundations-comms-palm-call.html">PalmCall</a>.
+      </li>
+      <li>PDK apps can use <a href="/reference/pdk/pdl/pdl-service-call.html">PDL_ServiceCall</a> and <a href="/reference/pdk/pdl/pdl-service-call-with-callback.html">PDL_ServiceCallWithCallback</a>.
+      </li>
+    </ul>
+    <p>
+      To access media data objects, you need to know the name of an object's <em>kind</em>. Kind objects in db8 define the indexes and access control for stored JSON data objects. You must specify the kind when accessing data objects <em>of that kind</em>. See the <a href="/dev-guide/mojo/db8.html">db8 Overview</a> for more information..
+    </p>
+    <p>
+      The Media Indexer has the following data objects and kinds. Note that the kind names are appended with a version number (i.e., &quot;:1&quot;).
+    </p>
+    <table border="1">
+      <thead>
+        <tr>
+          <th width="100">
+            Data Type
+          </th>
+          <th width="400">
+            Kind
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <a href="#albumimage">albumimage</a>
+          </td>
+          <td>
+            com.palm.media.image.album:1
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="#albumobject">album</a>
+          </td>
+          <td>
+            com.palm.media.audio.album:1
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="#artistobject">artist</a>
+          </td>
+          <td>
+            com.palm.media.audio.artist:1
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="#audiofile">audio file</a>
+          </td>
+          <td>
+            com.palm.media.audio.file:1
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="#genreobject">genre</a>
+          </td>
+          <td>
+            com.palm.media.audio.genre:1
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="#image">image</a>
+          </td>
+          <td>
+            com.palm.media.image.file:1
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="#playlistobject">playlist</a>
+          </td>
+          <td>
+            com.palm.media.audio.playlist.object:1
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="#thumbnail">thumbnail</a>
+          </td>
+          <td>
+            &#160;
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="#videofile">video file</a>
+          </td>
+          <td>
+            com.palm.media.video.file:1
+          </td>
+        </tr>
+      </tbody>
+    </table><br>
+    <p>
+      <strong>User Permission</strong>
+    </p>
+    <p>
+      When launched, your app must get permission from the user to access media data objects. It can do this using the <a href="/reference/services/media-permissions.html">Media Permissions</a> service.
+    </p>
+    <p>
+      <strong>Note about the <code>luna-send</code> examples</strong>
+    </p>
+    <p>
+      The <a href="/dev-guide/tools/luna-send.html"><code>luna-send</code></a> examples shown below for each schema work because I created an app - <code>com.palmdts.enyo.mediaidxr</code> - that went through the process of getting permissions from the user. I then used the impersonate app option (<code>-a com.palmdts.enyo.mediaidxr</code>) to get <code>luna-send</code> to work. You <strong>cannot</strong> get app permissions using <code>luna-send</code>.
+    </p>
+    <hr>
+    <h2 id="albumimage">
+      albumimage
+    </h2>
+    <p>
+      <strong>Kind</strong>: <code>com.palm.media.image.album:1</code>
+    </p>
+    <h3 id="schemad">
+      Schemad
+    </h3>
+    <pre>
+{
+    "accountId"    : string,
+    "modifiedTime" : number,
+    "name"         : string,
+    "path"         : string,
+    "searchKey"    : string,
+    "showAlbum"    : boolean,
+    "sortKey"      : string,
+    "thumbnails"   : thumbnail array
+    "toBeDeleted"  : string,
+    "total": {
+        "images" : int,
+        "videos" : int
+     },
+     "type" : string            
+}
+</pre>
+    <h3 id="elements">
+      Elements
+    </h3>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Element
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            accountId
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Account ID
+          </td>
+        </tr>
+        <tr>
+          <td>
+            modifiedTime
+          </td>
+          <td>
+            long
+          </td>
+          <td>
+            The last time the album was updated in milliseconds since the epoch (Jan 1, Midnight, 1970)
+          </td>
+        </tr>
+        <tr>
+          <td>
+            name
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Display name for albums (local albums start off as folder name on disk)
+          </td>
+        </tr>
+        <tr>
+          <td>
+            path
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Path to directory on disk
+          </td>
+        </tr>
+        <tr>
+          <td>
+            searchKey
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Used for searching
+          </td>
+        </tr>
+        <tr>
+          <td>
+            showAlbum
+          </td>
+          <td>
+            boolean
+          </td>
+          <td>
+            Show album flag
+          </td>
+        </tr>
+        <tr>
+          <td>
+            sortKey
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Used for correct sorting with priority
+          </td>
+        </tr>
+        <tr>
+          <td>
+            thumbnails
+          </td>
+          <td>
+            thumbnail array
+          </td>
+          <td>
+            A pre-populated array of up to three thumbnails to use as previews pulled from the first images of the album
+          </td>
+        </tr>
+        <tr>
+          <td>
+            total
+          </td>
+          <td>
+            inline object
+          </td>
+          <td>
+            Totals
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            images
+          </td>
+          <td>
+            int
+          </td>
+          <td>
+            The total number of album images
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            videos
+          </td>
+          <td>
+            int
+          </td>
+          <td>
+            The total number of album videos
+          </td>
+        </tr>
+        <tr>
+          <td>
+            type
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Album type
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="example">
+      Example
+    </h3>
+    <p>
+      <strong>luna-send</strong>
+    </p>
+    <pre>
+luna-send -n 1 -f -a com.palmdts.enyo.mediaidxr luna://com.palm.db/find '{"query":{"from":"com.palm.media.image.album:1"}}'
+{
+    "returnValue": true,
+    "results": [
+     {
+            "_id": "++HdXBhUoqw7rwCP",
+            "_kind": "com.palm.media.image.album:1",
+            "_rev": 712,
+            "accountId": "",
+            "modifiedTime": 1310788496,
+            "name": "Wallpapers",
+            "path": "/media/internal/wallpapers",
+            "searchKey": "Wallpapers",
+            "showAlbum": true,
+            "sortKey": "900_Wallpapers",
+            "thumbnails": [
+                {
+                    "_id": "2b3",
+                    "data": {
+                        "length": 0,
+                        "offset": 0,
+                        "path": "/media/internal/wallpapers/07.jpg"
+                    },
+                    "type": "embedded"
+                },
+                {
+                    "_id": "2b1",
+                    "data": {
+                        "length": 0,
+                        "offset": 0,
+                        "path": "/media/internal/wallpapers/05.jpg"
+                    },
+                    "type": "embedded"
+                },
+                {
+                    "_id": "2af",
+                    "data": {
+                        "length": 0,
+                        "offset": 0,
+                        "path": "/media/internal/wallpapers/01.jpg"
+                    },
+                    "type": "embedded"
+                }
+            ],
+            "toBeDeleted": "",
+            "total": {
+                "images": 11,
+                "videos": 0
+            },
+            "type": "local"
+        },
+    ]
+}
+</pre>
+    <p>
+      <a name="albumobject" id="albumobject">&#160;</a>
+    </p>
+    <hr>
+    <h2 id="album">
+      album
+    </h2>
+    <p>
+      <strong>Kind</strong>: <code>com.palm.media.audio.album:1</code>
+    </p>
+    <h3 id="schema">
+      Schema
+    </h3>
+    <pre>
+{
+    "artist"               : string,
+    "genre"                : string,
+    "hasResizedThumbnails" : boolean,
+    "name"                 : string,
+    "serviced"             : boolean,
+    "thumbnails":          : thumbnail array,
+    "total": {
+        "tracks": int
+    }
+}
+</pre>
+    <h3 id="elements-1">
+      Elements
+    </h3>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Element
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            artist
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Artist name
+          </td>
+        </tr>
+        <tr>
+          <td>
+            genre
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Artist name
+          </td>
+        </tr>
+        <tr>
+          <td>
+            hasResizedThumbnails
+          </td>
+          <td>
+            boolean
+          </td>
+          <td>
+            Has resized thumbnails flag
+          </td>
+        </tr>
+        <tr>
+          <td>
+            name
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Album name
+          </td>
+        </tr>
+        <tr>
+          <td>
+            serviced
+          </td>
+          <td>
+            boolean
+          </td>
+          <td>
+            Serviced flag
+          </td>
+        </tr>
+        <tr>
+          <td>
+            thumbnails
+          </td>
+          <td>
+            thumbnail array
+          </td>
+          <td>
+            Album thumbnails
+          </td>
+        </tr>
+        <tr>
+          <td>
+            total
+          </td>
+          <td>
+            inline object
+          </td>
+          <td>
+            See element below
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            tracks
+          </td>
+          <td>
+            int
+          </td>
+          <td>
+            Total number of tracks on album
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="example-1">
+      Example
+    </h3>
+    <p>
+      <strong>luna-send</strong>
+    </p>
+    <pre>
+luna-send -n 1 -f -a com.palmdts.enyo.mediaidxr luna://com.palm.db/find '{"query":{"from":"com.palm.media.audio.album:1"}}'
+{
+    "returnValue": true,
+    "results": [
+        {
+            "_id": "++HdYJk8_Y4bg1JF",
+            "_kind": "com.palm.media.audio.album:1",
+            "_rev": 985,
+            "artist": "Muddy Waters",
+            "genre": "Blues",
+            "hasResizedThumbnails": false,
+            "name": "King Bee",
+            "serviced": false,
+            "thumbnails": [],
+            "total": {
+                "tracks": 1
+            }
+        }
+    ]       
+}
+</pre>
+    <p>
+      <a name="artistobject" id="artistobject">&#160;</a>
+    </p>
+    <hr>
+    <h2 id="artist">
+      artist
+    </h2>
+    <p>
+      <strong>Kind</strong>: com.palm.media.audio.artist:1
+    </p>
+    <h3 id="schema-1">
+      Schema
+    </h3>
+    <pre>
+[{
+    "name"                 : string,
+    "hasResizedThumbnails" : boolean,
+    "serviced"             : boolean,
+    "thumbnails"           : thumbnail array,      
+    "total" : {  
+        "tracks" : int,
+        "albums" : int 
+    }
+}]
+</pre>
+    <h3 id="elements-2">
+      Elements
+    </h3>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Element
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            name
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Artist name
+          </td>
+        </tr>
+        <tr>
+          <td>
+            hasResizedThumbnails
+          </td>
+          <td>
+            boolean
+          </td>
+          <td>
+            Has resized thumbnails flag
+          </td>
+        </tr>
+        <tr>
+          <td>
+            serviced
+          </td>
+          <td>
+            boolean
+          </td>
+          <td>
+            Serviced flag
+          </td>
+        </tr>
+        <tr>
+          <td>
+            thumbnails
+          </td>
+          <td>
+            thumbnail array
+          </td>
+          <td>
+            Thumbnails for artist
+          </td>
+        </tr>
+        <tr>
+          <td>
+            total
+          </td>
+          <td>
+            inline object
+          </td>
+          <td>
+            See two elements below
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            tracks
+          </td>
+          <td>
+            int
+          </td>
+          <td>
+            Total number of the artist's audio tracks on the device
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            albums
+          </td>
+          <td>
+            int
+          </td>
+          <td>
+            Total number of the artist's audio albums on the device
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="example-2">
+      Example
+    </h3>
+    <p>
+      <strong>luna-send</strong>
+    </p>
+    <pre>
+luna-send -n 1 -f -a com.palmdts.enyo.mediaidxr luna://com.palm.db/find '{"query":{"from":"com.palm.media.audio.artist:1"}}'
+{
+    "returnValue": true,
+    "results": [
+        {
+            "_id": "++HdYJkH2p0_n5wU",
+            "_kind": "com.palm.media.audio.artist:1",
+            "_rev": 1004,
+            "hasResizedThumbnails": false,
+            "name": "Led Zeppelin",
+            "serviced": false,
+            "thumbnails": [
+                &lt;NULL&gt;
+            ],
+            "total": {
+                "albums": 1,
+                "tracks": 3
+            }
+        }
+    ] 
+}
+</pre>
+    <p>
+      <a name="audiofile" id="audiofile">&#160;</a>
+    </p>
+    <hr>
+    <h2 id="audio-file">
+      audio file
+    </h2>
+    <p>
+      <strong>Kind</strong>: <code>com.palm.media.audio.file:1</code>
+    </p>
+    <h3 id="schema-2">
+      Schema
+    </h3>
+    <pre>
+{
+    "album"       : string,
+    "albumArtist" : string,
+    "artist"      : string,
+    "bookmark"    : number,
+    "createdTime" : number,
+    "disc": {
+        "position": int,
+        "total"   : int
+     },
+    "duration"             : number,
+    "genre"                : string,
+    "hasResizedThumbnails" : boolean,
+    "isRingtone"           : boolean,
+    "modifiedTime"         : number,
+    "path"                 : string,
+    "searchKey"            : string,
+    "serviced"             : boolean,
+    "size"                 : number,
+    "sortKey": {
+        "albumArtistDiscAndTrack" : string,
+        "albumDiscAndTrack"       : string,
+        "trackAndDisc"            : int
+     },
+    "thumbnails" : thumbnail array,
+    "title" : string,
+    "track" : {
+        "position" : int,
+        "total"    : int
+    }
+}
+</pre>
+    <h3 id="elements-3">
+      Elements
+    </h3>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Element
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            album
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Album name
+          </td>
+        </tr>
+        <tr>
+          <td>
+            albumArtist
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Album artist
+          </td>
+        </tr>
+        <tr>
+          <td>
+            artist
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Artist name
+          </td>
+        </tr>
+        <tr>
+          <td>
+            bookmark
+          </td>
+          <td>
+            number
+          </td>
+          <td>
+            Bookmark
+          </td>
+        </tr>
+        <tr>
+          <td>
+            createdTime
+          </td>
+          <td>
+            number
+          </td>
+          <td>
+            The time this song was created, expressed in seconds elapsed since midnight on January 1, 1970 (epoch)
+          </td>
+        </tr>
+        <tr>
+          <td>
+            disc
+          </td>
+          <td>
+            inline object
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            position
+          </td>
+          <td>
+            int
+          </td>
+          <td>
+            Position on disc
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            total
+          </td>
+          <td>
+            int
+          </td>
+          <td>
+            Total songs on disc
+          </td>
+        </tr>
+        <tr>
+          <td>
+            duration
+          </td>
+          <td>
+            number
+          </td>
+          <td>
+            Duration in seconds
+          </td>
+        </tr>
+        <tr>
+          <td>
+            genre
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Song genre, i.e., country, blues, etc
+          </td>
+        </tr>
+        <tr>
+          <td>
+            hasResizedThumbnails
+          </td>
+          <td>
+            boolean
+          </td>
+          <td>
+            Has resized thumbnails flag
+          </td>
+        </tr>
+        <tr>
+          <td>
+            isRingtone
+          </td>
+          <td>
+            boolean
+          </td>
+          <td>
+            Is song a ringtone flag
+          </td>
+        </tr>
+        <tr>
+          <td>
+            modifiedTime
+          </td>
+          <td>
+            number
+          </td>
+          <td>
+            Last modified time, in milliseconds since epoch (aka Unix time)
+          </td>
+        </tr>
+        <tr>
+          <td>
+            path
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Path to song on device
+          </td>
+        </tr>
+        <tr>
+          <td>
+            searchKey
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Used in searching
+          </td>
+        </tr>
+        <tr>
+          <td>
+            serviced
+          </td>
+          <td>
+            boolean
+          </td>
+          <td>
+            Serviced flag
+          </td>
+        </tr>
+        <tr>
+          <td>
+            size
+          </td>
+          <td>
+            number
+          </td>
+          <td>
+            File size in bytes
+          </td>
+        </tr>
+        <tr>
+          <td>
+            sortKey
+          </td>
+          <td>
+            inline object
+          </td>
+          <td>
+            See three elements below
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            albumArtistDiscAndTrack
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Album artist disc and track
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            albumDiscAndTrack
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Album disc and track
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            trackAndDisc
+          </td>
+          <td>
+            int
+          </td>
+          <td>
+            Track and disc number
+          </td>
+        </tr>
+        <tr>
+          <td>
+            thumbnails
+          </td>
+          <td>
+            thumbnail array
+          </td>
+          <td>
+            Song thumbnails
+          </td>
+        </tr>
+        <tr>
+          <td>
+            title
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Audio file title
+          </td>
+        </tr>
+        <tr>
+          <td>
+            track
+          </td>
+          <td>
+            inline object
+          </td>
+          <td>
+            See elements below
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            position
+          </td>
+          <td>
+            int
+          </td>
+          <td>
+            Track position
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            total
+          </td>
+          <td>
+            int
+          </td>
+          <td>
+            Total number of tracks on file's album
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="example-3">
+      Example
+    </h3>
+    <p>
+      <strong>luna-send</strong>
+    </p>
+    <pre>
+luna-send -n 1 -f -a com.palmdts.enyo.mediaidxr luna://com.palm.db/find '{"query":{"from":"com.palm.media.audio.file:1"}}'
+{
+   "returnValue":true,
+   "results":[
+       {
+            "_id": "++HdYJjvp8ZbM2qS",
+            "_kind": "com.palm.media.audio.file:1",
+            "_rev": 966,
+            "album": "King Bee",
+            "albumArtist": "Muddy Waters",
+            "artist": "Muddy Waters",
+            "bookmark": 0,
+            "createdTime": 0,
+            "disc": {
+                "position": 1,
+                "total": 1
+            },
+            "duration": 0,
+            "genre": "Blues",
+            "hasResizedThumbnails": false,
+            "isRingtone": false,
+            "modifiedTime": 1312324182,
+            "path": "/media/internal/HPMusic/Muddy Waters/King Bee/I'm A King Bee.mp3",
+            "searchKey": "Muddy Waters King Bee I'm A King Bee",
+            "serviced": false,
+            "size": 5555148,
+            "sortKey": {
+                "albumArtistDiscAndTrack": "King BeeMuddy Waters100001",
+                "albumDiscAndTrack": "King Bee100001",
+                "trackAndDisc": 100001
+            },
+            "thumbnails": [
+            ],
+            "title": "I'm A King Bee",
+            "track": {
+                "position": 1,
+                "total": 0
+            }
+        }
+    ]
+}
+</pre>
+    <p>
+      <a name="genreobject" id="genreobject">&#160;</a>
+    </p>
+    <hr>
+    <h2 id="genre">
+      genre
+    </h2>
+    <p>
+      <strong>Kind</strong>: <code>com.palm.media.audio.genre:1</code>
+    </p>
+    <h3 id="schema-3">
+      Schema
+    </h3>
+    <pre>
+{
+    "hasResizedThumbnails" : boolean,
+    "name"                 : string,
+    "serviced"             : boolean,
+    "thumbnails"           : thumbnail array
+    "total": {
+        "albums": int,
+        "tracks": int
+    }
+}        
+</pre>
+    <h3 id="elements-4">
+      Elements
+    </h3>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Element
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            hasResizedThumbnails
+          </td>
+          <td>
+            boolean
+          </td>
+          <td>
+            Has resized thumbnails flag
+          </td>
+        </tr>
+        <tr>
+          <td>
+            name
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Genre name
+          </td>
+        </tr>
+        <tr>
+          <td>
+            serviced
+          </td>
+          <td>
+            boolean
+          </td>
+          <td>
+            Serviced flag
+          </td>
+        </tr>
+        <tr>
+          <td>
+            thumbnails
+          </td>
+          <td>
+            thumbnail array
+          </td>
+          <td>
+            Genre's thumbnails
+          </td>
+        </tr>
+        <tr>
+          <td>
+            total
+          </td>
+          <td>
+            inline object
+          </td>
+          <td>
+            See two elements below
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            tracks
+          </td>
+          <td>
+            int
+          </td>
+          <td>
+            Genre's total number of tracks
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            albums
+          </td>
+          <td>
+            int
+          </td>
+          <td>
+            Genre's total number of albums
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="example-4">
+      Example
+    </h3>
+    <p>
+      <strong>luna-send</strong>
+    </p>
+    <pre>
+luna-send -n 1 -f -a com.palmdts.enyo.mediaidxr luna://com.palm.db/find '{"query":{"from":"com.palm.media.audio.genre:1"}}'
+{
+   "returnValue":true,
+   "results":[
+      {
+         "_id":"++HdYJkJC7Fzgqhk",
+         "_kind":"com.palm.media.audio.genre:1",
+         "_rev":1017,
+         "hasResizedThumbnails":false,
+         "name":"Soul",
+         "serviced":false,
+         "thumbnails":[
+            &lt;NULL&gt;
+         ],
+         "total":{
+            "albums":1,
+            "tracks":3
+         }
+      }
+   ]
+}
+</pre>
+    <p>
+      <a name="image" id="image">&#160;</a>
+    </p>
+    <hr>
+    <h2 id="image">
+      image
+    </h2>
+    <p>
+      <strong>Kind</strong>: <code>com.palm.media.image.file:1</code>
+    </p>
+    <h3 id="schema-4">
+      Schema
+    </h3>
+    <pre>
+{
+    "albumId"          : string,
+    "albumPath"        : string,
+    "appCacheComplete" : boolean,
+    "appGridThumbnail" : {
+        "cached"  : boolean,
+        "dimensions" : {
+            "original-height" : int,
+            "original-width"  : int,
+            "output-height"   : int,
+            "output-width"    : int
+         },
+         "path" : string
+    },
+    "createdTime" : number,
+    "mediaType"   : string,
+    "path"        : string,
+    "thumbnails"  : thumbnail array,
+    "type"        : string
+}
+</pre>
+    <h3 id="elements-5">
+      Elements
+    </h3>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Element
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            albumId
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Album ID
+          </td>
+        </tr>
+        <tr>
+          <td>
+            albumPath
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Path to album on device
+          </td>
+        </tr>
+        <tr>
+          <td>
+            appCacheComplete
+          </td>
+          <td>
+            boolean
+          </td>
+          <td>
+            App cache complete flag
+          </td>
+        </tr>
+        <tr>
+          <td>
+            appGridThumbnail
+          </td>
+          <td>
+            inline object
+          </td>
+          <td>
+            See fields below
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            cached
+          </td>
+          <td>
+            boolean
+          </td>
+          <td>
+            Cached flag
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            dimensions
+          </td>
+          <td>
+            inline object
+          </td>
+          <td>
+            See fields below
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:60px">
+            original-height
+          </td>
+          <td>
+            int
+          </td>
+          <td>
+            Original height
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:60px">
+            original-width
+          </td>
+          <td>
+            int
+          </td>
+          <td>
+            Original width
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:60px">
+            output-height
+          </td>
+          <td>
+            int
+          </td>
+          <td>
+            Output height
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:60px">
+            output-width
+          </td>
+          <td>
+            int
+          </td>
+          <td>
+            Output width
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            path
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Path
+          </td>
+        </tr>
+        <tr>
+          <td>
+            createdTime
+          </td>
+          <td>
+            number
+          </td>
+          <td>
+            The metadata information for the created time in seconds
+          </td>
+        </tr>
+        <tr>
+          <td>
+            mediaType
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Media type
+          </td>
+        </tr>
+        <tr>
+          <td>
+            path
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Path
+          </td>
+        </tr>
+        <tr>
+          <td>
+            thumbnails
+          </td>
+          <td>
+            thumbnail array
+          </td>
+          <td>
+            Thumbnails for this image
+          </td>
+        </tr>
+        <tr>
+          <td>
+            type
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Type
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="example-5">
+      Example
+    </h3>
+    <p>
+      <strong>luna-send</strong>
+    </p>
+    <pre>
+luna-send -n 1 -f -a com.palmdts.enyo.mediaidxr luna://com.palm.db/find '{"query":{"from":"com.palm.media.image.file:1"}}'
+{
+   "returnValue":true,
+   "results":[
+      {
+         "_id":"++HdXBhuwlhB3+Yy",
+         "_kind":"com.palm.media.image.file:1",
+         "_rev":739,
+         "albumId":"++HdXBhUoqw7rwCP",
+         "albumPath":"/media/internal/wallpapers",
+         "appCacheComplete":true,
+         "appGridThumbnail":{
+            "cached":true,
+            "dimensions":{
+               "original-height":1024,
+               "original-width":1024,
+               "output-height":200,
+               "output-width":200
+            },
+            "path":"/media/internal/.photosApp/Generated/appGridThumbnail-++HdXBhuwlhB3+Yy-11.jpg"
+         },
+         "createdTime":0,
+         "mediaType":"image",
+         "path":"/media/internal/wallpapers/11.jpg",
+         "thumbnails":[
+            {
+               "_id":"2a9",
+               "data":{
+                  "length":0,
+                  "offset":0,
+                  "path":"/media/internal/wallpapers/11.jpg"
+               },
+               "type":"embedded"
+            }
+         ],
+         "type":"local"
+      }
+   ]
+}
+</pre>
+    <p>
+      <a name="playlistobject" id="playlistobject">&#160;</a>
+    </p>
+    <hr>
+    <h2 id="playlist">
+      playlist
+    </h2>
+    <p>
+      <strong>Kind</strong>: <code>com.palm.media.audio.playlist.object:1</code>
+    </p>
+    <h3 id="schema-5">
+      Schema
+    </h3>
+    <pre>
+{
+    "name"       : string,
+    "songIds"    : string array, 
+    "thumbnails" : thumbnail array
+}
+</pre>
+    <h3 id="elements-6">
+      Elements
+    </h3>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Element
+          </th>
+          <th>
+            Required
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            name
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Playlist name. Not necessarily unique
+          </td>
+        </tr>
+        <tr>
+          <td>
+            songIds
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            string array
+          </td>
+          <td>
+            In order array of db8 IDs of audiofile (&quot;com.palm.media.audio.file:1&quot;) objects
+          </td>
+        </tr>
+        <tr>
+          <td>
+            thumbnails
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            thumbnail array
+          </td>
+          <td>
+            Playlist thumbnails
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      <a name="thumbnail" id="thumbnail">&#160;</a>
+    </p>
+    <hr>
+    <h2 id="thumbnail">
+      thumbnail
+    </h2>
+    <h3 id="schema-6">
+      Schema
+    </h3>
+    <pre>
+{
+   "type" : string,
+   "data" : {
+      "path"   : string,
+      "offset" : int,
+      "length" : int
+   }  
+   "cacheEntry"  : {
+      "pathName" : string,
+      "aspect"   : string,
+      "width"    : int,
+      "height"   : int
+   }
+}
+</pre>
+    <h3 id="elements-7">
+      Elements
+    </h3>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Element
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            type
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Thumbnail format - &quot;external&quot; or &quot;embedded&quot; (on device)
+          </td>
+        </tr>
+        <tr>
+          <td>
+            data
+          </td>
+          <td>
+            inline object
+          </td>
+          <td>
+            See three fields below
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            path
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Location on device
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            offset
+          </td>
+          <td>
+            int
+          </td>
+          <td>
+            Offset into path where data is contained
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            length
+          </td>
+          <td>
+            int
+          </td>
+          <td>
+            Length of data in path (requires offset)
+          </td>
+        </tr>
+        <tr>
+          <td>
+            cacheEntry
+          </td>
+          <td>
+            inline object
+          </td>
+          <td>
+            See four fields below
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            pathName
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Path determined from filecache/InsertCacheObject
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            aspect
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Aspect used to crop at width/height specified
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            width
+          </td>
+          <td>
+            int
+          </td>
+          <td>
+            Cache entry width (less than or equal to this value)
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            height
+          </td>
+          <td>
+            int
+          </td>
+          <td>
+            Cache entry height (less than or equal to this value)
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      <a name="videofile" id="videofile">&#160;</a>
+    </p>
+    <hr>
+    <h2 id="video-file">
+      video file
+    </h2>
+    <p>
+      <strong>Kind</strong>: <code>com.palm.media.video.file:1</code>
+    </p>
+    <h3 id="schema-7">
+      Schema
+    </h3>
+    <pre>
+{
+    "albumId"          : string,
+    "albumPath"        : string,
+    "appCacheComplete" : boolean,
+    "appGridThumbnail" : {
+        "cached"  : boolean,
+        "dimensions" : {
+            "original-height" : int,
+            "original-width"  : int,
+            "output-height"   : int,
+            "output-width"    : int
+         },
+         "path" : string
+    },
+    "capturedOnDevice" : boolean,
+    "createdTime"      : number,
+    "description"      : string,
+    "duration"         : number,
+    "mediaType"        : string,
+    "modifiedTime"     : number,
+    "path"             : string,
+    "playbackPosition" : number,
+    "searchKey"        : string,
+    "size"             : number,
+    "thumbnails"       : thumbnail array,
+    "title"            : string,
+    "type"             : string
+}
+</pre>
+    <h3 id="elements-8">
+      Elements
+    </h3>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Element
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            albumId
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Album ID
+          </td>
+        </tr>
+        <tr>
+          <td>
+            albumPath
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Path to album on device
+          </td>
+        </tr>
+        <tr>
+          <td>
+            appCacheComplete
+          </td>
+          <td>
+            boolean
+          </td>
+          <td>
+            App cache complete flag
+          </td>
+        </tr>
+        <tr>
+          <td>
+            appGridThumbnail
+          </td>
+          <td>
+            inline object
+          </td>
+          <td>
+            See fields below
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            cached
+          </td>
+          <td>
+            boolean
+          </td>
+          <td>
+            Cached flag
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            dimensions
+          </td>
+          <td>
+            inline object
+          </td>
+          <td>
+            See fields below
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:60px">
+            original-height
+          </td>
+          <td>
+            int
+          </td>
+          <td>
+            Original height
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:60px">
+            original-width
+          </td>
+          <td>
+            int
+          </td>
+          <td>
+            Original width
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:60px">
+            output-height
+          </td>
+          <td>
+            int
+          </td>
+          <td>
+            Output height
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:60px">
+            output-width
+          </td>
+          <td>
+            int
+          </td>
+          <td>
+            Output width
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            path
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Path
+          </td>
+        </tr>
+        <tr>
+          <td>
+            capturedOnDevice
+          </td>
+          <td>
+            boolean
+          </td>
+          <td>
+            Was file captured on device flag
+          </td>
+        </tr>
+        <tr>
+          <td>
+            createdTime
+          </td>
+          <td>
+            float
+          </td>
+          <td>
+            The time this video was created, expressed in seconds since midnight on January 1, 1970 (epoch)
+          </td>
+        </tr>
+        <tr>
+          <td>
+            description
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Video description
+          </td>
+        </tr>
+        <tr>
+          <td>
+            duration
+          </td>
+          <td>
+            number
+          </td>
+          <td>
+            Video duration in milliseconds
+          </td>
+        </tr>
+        <tr>
+          <td>
+            mediaType
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Media type
+          </td>
+        </tr>
+        <tr>
+          <td>
+            modifiedTime
+          </td>
+          <td>
+            float
+          </td>
+          <td>
+            The time this video was last modified, expressed in seconds since midnight on January 1, 1970 (epoch)
+          </td>
+        </tr>
+        <tr>
+          <td>
+            path
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Path on device
+          </td>
+        </tr>
+        <tr>
+          <td>
+            playbackPosition
+          </td>
+          <td>
+            number
+          </td>
+          <td>
+            The last playback position in milliseconds
+          </td>
+        </tr>
+        <tr>
+          <td>
+            searchKey
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Used in searching
+          </td>
+        </tr>
+        <tr>
+          <td>
+            size
+          </td>
+          <td>
+            int
+          </td>
+          <td>
+            File size in bytes
+          </td>
+        </tr>
+        <tr>
+          <td>
+            thumbnails
+          </td>
+          <td>
+            thumbnail array
+          </td>
+          <td>
+            Video thumbnails
+          </td>
+        </tr>
+        <tr>
+          <td>
+            title
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Video title
+          </td>
+        </tr>
+        <tr>
+          <td>
+            path
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Path on device
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="example-6">
+      Example
+    </h3>
+    <p>
+      <strong>luna-send</strong>
+    </p>
+    <pre>
+luna-send -n 1 -f -a com.palmdts.enyo.mediaidxr luna://com.palm.db/find '{"query":{"from":"com.palm.media.video.file:1"}}'
+{
+    "returnValue": true,
+    "results": [
+        {
+            "_id": "++HdXBgzxh0U_Raw",
+            "_kind": "com.palm.media.video.file:1",
+            "_rev": 726,
+            "albumId": "++HdXBhUxPpa5pdc",
+            "albumPath": "/media/internal/files",
+            "appCacheComplete": true,
+            "appGridThumbnail": {
+                "cached": true,
+                "dimensions": {
+                    "original-height": 166,
+                    "original-width": 111,
+                    "output-height": 200,
+                    "output-width": 134
+                },
+                "path": "/media/internal/.photosApp/Generated/appGridThumbnail-++HdXBgzxh0U_Raw-HaveFun.jpg"
+            },
+            "capturedOnDevice": false,
+            "createdTime": 1242988599,
+            "description": "",
+            "duration": 52.600000,
+            "mediaType": "video",
+            "modifiedTime": 1306445850,
+            "path": "/media/internal/files/HaveFun.mp4",
+            "playbackPosition": 0,
+            "searchKey": "Palm Pre",
+            "size": 6417725,
+            "thumbnails": [
+                {
+                    "_id": "205",
+                    "data": "/media/internal/files/HaveFun.mp4:6411842:3835",
+                    "type": "embedded"
+                }
+            ],
+            "title": "Palm Pre",
+            "type": "local"
+        }
+    ]
+}
+</pre>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,82 @@
+{
+   "returnValue": true,
+   "results": [
+       {
+           "_id": "_Album_2",
+           "_kind": "com.palm.media.image.album:1",
+           "modifiedTime": 1270000020,
+           "name": "_Album_2",
+           "path": "mock/images/_Album_2",
+           "total": {
+               "images": 1
+           },
+           "type": "local"
+       },
+       {
+           "_id": "_Album_3",
+           "_kind": "com.palm.media.image.album:1",
+           "modifiedTime": 1270000030,
+           "name": "_Album_3",
+           "path": "mock/images/_Album_3",
+           "total": {
+               "images": 1
+           },
+           "type": "local"
+       },
+       {
+           "_id": "_Album_4",
+           "_kind": "com.palm.media.image.album:1",
+           "modifiedTime": 1270000040,
+           "name": "_Album_4",
+           "path": "mock/images/_Album_4",
+           "total": {
+               "images": 1
+           },
+           "type": "local"
+       },
+       {
+           "_id": "_Album_6",
+           "_kind": "com.palm.media.image.album:1",
+           "modifiedTime": 1270000060,
+           "name": "_Album_6",
+           "path": "mock/images/_Album_6",
+           "total": {
+               "images": 1
+           },
+           "type": "local"
+       },
+       {
+           "_id": "_Album_7",
+           "_kind": "com.palm.media.image.album:1",
+           "modifiedTime": 1270000070,
+           "name": "_Album_7",
+           "path": "mock/images/_Album_7",
+           "total": {
+               "images": 1
+           },
+           "type": "local"
+       },
+       {
+           "_id": "_Album_8",
+           "_kind": "com.palm.media.image.album:1",
+           "modifiedTime": 1270000080,
+           "name": "_Album_8",
+           "path": "mock/images/_Album_8",
+           "total": {
+               "images": 1
+           },
+           "type": "local"
+       },
+       {
+           "_id": "_Album_9",
+           "_kind": "com.palm.media.image.album:1",
+           "modifiedTime": 1270000090,
+           "name": "_Album_9",
+           "path": "mock/images/_Album_9",
+           "total": {
+               "images": 1
+           },
+           "type": "local"
+       }
+   ]
+}

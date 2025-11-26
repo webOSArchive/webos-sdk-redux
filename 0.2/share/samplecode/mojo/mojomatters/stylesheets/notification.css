@@ -1,0 +1,40 @@
+.system-notification {
+		overflow: hidden;
+		background: #000;
+}
+
+
+.palm-notification-button {
+		height: 45px;
+		font-size: 20px;
+		color: #fff;
+		text-align: center;
+		line-height: 45px;
+		margin: 10px;
+		padding-top: 2px;
+		-webkit-border-image: url(../images/palm-notification-button.png) 0 20 45 20;
+		-webkit-box-sizing: border-box;
+		-webkit-user-select: none;
+   		border-width: 0px 20px 0px 20px;
+}       
+
+.palm-notification-button:active {
+		-webkit-border-image: url(../images/palm-notification-button.png) 45 20 0 20;
+}
+
+.palm-notification-button.affirmative {    
+		-webkit-border-image: url(../images/palm-notification-button-affirmative.png) 0 20 45 20;   
+}
+
+.palm-notification-button.affirmative:active {
+		-webkit-border-image: url(../images/palm-notification-button-affirmative.png) 45 20 0 20;
+}
+                                                                                            
+.palm-notification-button.negative {    
+		-webkit-border-image: url(../images/palm-notification-button-negative.png) 0 20 45 20;   
+}
+
+.palm-notification-button.negative:active {
+		-webkit-border-image: url(../images/palm-notification-button-negative.png) 45 20 0 20;
+}
+

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="pdl_enablesensor">
+      PDL_EnableSensor
+    </h1>
+    <h2 id="description">
+      Description
+    </h2>
+    <p>
+      Enable or disable a sensor.
+    </p>
+    <h2 id="syntax">
+      Syntax
+    </h2>
+    <blockquote>
+      <pre>
+<code>PDL_Err PDL_EnableSensor(PDL_SensorType sensor, PDL_bool bEnable)     
+</code>
+</pre>
+    </blockquote>
+    <p>
+      Both fields are <strong>required</strong>.
+    </p>
+    <table border="0">
+      <thead>
+        <tr>
+          <th>
+            Argument
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            sensor
+          </td>
+          <td>
+            Type of sensor to enable - see <a href="/reference/pdk/pdl-data-types.html#sensorDefines" target="_blank">defines</a> for <code>PDL_SensorType</code>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            bEnable
+          </td>
+          <td>
+            <code>PDL_TRUE</code> (enable) or <code>PDL_FALSE</code> (disable)
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h2 id="returns">
+      Returns
+    </h2>
+    <blockquote>
+      <pre>
+<code>PDL_INVALIDINPUT - Unknown sensor.
+PDL_NOERROR - Sensor is enabled/disabled or sensor is already in the requested state.
+PDL_EOTHER - Unable to enable sensor.
+</code>
+</pre>
+    </blockquote>
+    <p>
+      <strong>Note</strong>: In all cases where an error is returned, your app can call <code>PDL_GetError</code> to get a plain-text error description. This is usually more informative than the returned error code.
+    </p>
+    <p>
+      <strong>See also:</strong>
+    </p>
+    <ul>
+      <li>
+        <a href="/reference/pdk/pdl/pdl-sensor-exists.html"><code>PDL_SensorExists</code></a>
+      </li>
+      <li>
+        <a href="/reference/pdk/pdl/pdl-poll-active-sensors.html"><code>PDL_PollActiveSensors</code></a>
+      </li>
+      <li>
+        <a href="/reference/pdk/pdl/pdl-poll-sensor.html"><code>PDL_PollSensor</code></a>
+      </li>
+    </ul>
+		</div>
+	</body>
+</html>

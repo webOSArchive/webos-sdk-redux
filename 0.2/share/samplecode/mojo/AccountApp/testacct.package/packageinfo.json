@@ -1,0 +1,12 @@
+{
+  "id": "com.palmdts.synergy",
+  "package_format_version": 2,
+  "loc_name": "Palm Synery Demo",
+  "version": "1.0.1",
+  "icon": "icon.png",
+  "miniicon": "icon.png",
+  "vendor": "PalmDTS",
+  "vendorurl": "developer.palm.com",
+  "app": "com.palmdts.synergy",
+  "accounts": ["com.palmdts.synergy.account"]
+}

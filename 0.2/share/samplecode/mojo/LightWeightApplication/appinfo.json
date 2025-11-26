@@ -1,0 +1,13 @@
+{
+	"title": "Light-Weight Application",
+	"type": "web",
+	"main": "index.html",
+	"id": "com.palmdts.lightweightapplication",
+	"icon": "icon.png",
+	"version": "1.0.0", 
+	"removable": "true",
+	"noWindow" : "true",
+    "visible": "true",
+	"vendor": "Palm DTS"
+}
+

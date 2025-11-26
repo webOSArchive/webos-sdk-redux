@@ -1,0 +1,38 @@
+<div class="palm-page-header">
+    <div class="palm-page-header-wrapper">
+        <div class="icon news-mini-icon"></div>
+        <div class="title">Preferencias para noticias</div>             
+    </div>
+</div>
+
+<div class="palm-group">
+    <div class="palm-group-title"><span>Fuente web destacada</span></div>
+        <div class="palm-list">
+            <div x-mojo-element="IntegerPicker" id="featureFeedDelay" class="featureFeedDelay"></div>
+        </div>
+    </div>
+</div>
+
+<div class="palm-group">
+    <div class="palm-group-title"><span>Actualización de fuentes web</span></div>
+           <div class="palm-list">
+            <div class="palm-row first">
+                <div class="palm-row-wrapper">
+                    <div x-mojo-element="ListSelector" id="feedCheckIntervalList"></div>
+                </div>
+            </div>
+            <div class="palm-row">
+                <div class="palm-row-wrapper">
+                       <div x-mojo-element="ToggleButton" id="notificationToggle"></div>
+                       <div class="title left">Mostrar aviso</div>
+                </div>
+            </div>
+            <div class="palm-row last">
+                <div class="palm-row-wrapper">
+                       <div x-mojo-element="ToggleButton" id="bgUpdateToggle"></div>
+                       <div class="title left">Activar dispositivo</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

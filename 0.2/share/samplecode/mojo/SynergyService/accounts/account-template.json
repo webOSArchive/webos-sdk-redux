@@ -1,0 +1,24 @@
+{
+    "templateId": "com.palmdts.testacct.contact",
+    "loc_name": "Plaxo Contacts",
+    "readPermissions": ["com.palmdts.testacct.contacts.service"],
+    "writePermissions": ["com.palmdts.testacct.contacts.service"],
+    "validator": "palm://com.palmdts.testacct.contacts.service/checkCredentials",
+    "onCapabiltiesChanged" : "palm://com.palmdts.testacct.contacts.service/onCapabiltiesChanged",		
+	"onCredentialsChanged" : "palm://com.palmdts.testacct.contacts.service/onCredentialsChanged",	
+    "loc_usernameLabel": "Email address",
+    "icon": {"loc_32x32": "images/plaxo32.png"},	
+    "capabilityProviders": [{
+        "capability": "CONTACTS",
+        "id"        : "com.palmdts.contacts.testacct",
+		"onCreate"  : "palm://com.palmdts.testacct.contacts.service/onCreate",  
+		"onEnabled" : "palm://com.palmdts.testacct.contacts.service/onEnabled", 
+		"onDelete"  : "palm://com.palmdts.testacct.contacts.service/onDelete",
+		"sync"      : "palm://com.palmdts.testacct.contacts.service/sync", 
+        "loc_name"  : "Plaxo Contacts",
+        "dbkinds": {  
+                "contact": "com.palmdts.contact.testacct:1"
+        }
+    }]
+}
+

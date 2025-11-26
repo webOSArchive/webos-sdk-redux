@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="layouts-sliding-panes">
+      Layouts: Sliding Panes
+    </h1>
+    <h2 id="pane-navigation">
+      Pane Navigation
+    </h2>
+    <p>
+      <img src="/images/design/layouts-pane-navigation.png"><br>
+      <br>
+      The Sliding Panes layout uses multiple panes to organize content hierarchically. Each level in the hierarchy is represented by a pane. The topmost level corresponds to the pane furthest to the left; lower levels slide into view from the right, on top of the panes below.
+    </p>
+    <p>
+      New panes are added dynamically as the user drills down through the hierarchy. When the user selects an item in a pane, a new pane slides in from the right. There is no limit to the number of panes that can be stacked in this way.
+    </p>
+    <p>
+      The currently selected list item within a pane is shown highlighted.
+    </p>
+    <p>
+      In landscape orientation, up to three panes are visible at any time. In portrait orientation, however, only a portion of the third pane is visible. If the user selects an item from a pane that is not the leftmost pane, the pane should automatically slide over to the left and a new pane slide in from the right to make sure that the new pane is visible.
+    </p>
+    <p>
+      Eventually, when the bottom of the hierarchy is reached, a detail pane is revealed.
+    </p>
+    <p>
+      Generally, panes are 320 px in width, but the detail pane can vary its width to fill the remaining space. It can fill the entire width of the screen if it is the only pane shown. Content within the pane should reflow to fit the available space.
+    </p>
+    <p>
+      Each pane can contain its own header and footer area.
+    </p>
+    <p>
+      The user can dismiss the rightmost pane by swiping it away from left to right.
+    </p>
+    <h3 id="app-examples">
+      App Examples
+    </h3>
+    <ul>
+      <li>Email<br>
+        <br>
+      </li>
+    </ul>
+    <h2 id="pane-peeking">
+      Pane Peeking
+    </h2>
+    <p>
+      <img src="/images/design/layouts-pane-peeking.png"><br>
+      <br>
+      Panes can be designed such that a portion of the leftmost pane (50 pixels is recommended) always remains visible.
+    </p>
+    <p>
+      This allows the user to always have a &quot;peek&quot; of the top-level navigation options and easily switch between the panes no matter how deep the user is within the hierarchy.
+    </p>
+    <p>
+      It is recommended that peeking be employed only if the following conditions are met:
+    </p>
+    <ul>
+      <li>
+        <p>
+          The peeking pane has minimal content (no scrolling).
+        </p>
+      </li>
+      <li>
+        <p>
+          The peeking pane does not have collapsing or expanding list items.
+        </p>
+      </li>
+      <li>
+        <p>
+          Icons are easy to recognize.
+        </p>
+      </li>
+      <li>
+        <p>
+          There is a strong use case for always being able to access content in the peeking pane.
+        </p>
+      </li>
+    </ul><br>
+    <br>
+		</div>
+	</body>
+</html>

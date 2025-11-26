@@ -1,0 +1,30 @@
+{
+	"templateId": "com.palmdts.synergy.account",
+	"loc_name": "Palm DTS Account",
+	"icon": {
+		"loc_32x32": "images/icon32x32.png",
+		"loc_48x48": "images/icon48x48.png"
+	},
+    "readPermissions": ["com.palmdts.synergy",
+				"com.palm.service.contacts",
+                "com.palm.service.contacts.linker",
+                "com.palm.app.contacts"
+		],
+    "writePermissions": ["com.palmdts.synergy", "com.palm.app.contacts"],
+	"capabilityProviders": [{
+		"capability": "CONTACTS",
+		"id": "com.palmdts.synergy.contact",
+		"loc_name": "Palm DTS Contacts",
+        "dbkinds": {  
+                "contact": "com.palmdts.synergy.contact:1"
+        	}
+		},{
+		"capability": "CALENDAR",
+		"id": "com.palmdts.synergy.calendar",
+		"loc_name": "Palm DTS Calendar",
+        "dbkinds": {
+			"calendar": "com.palmdts.synergy.calendar:1",
+			"calendarevent": "com.palmdts.synergy.calendarevent:1"
+			}
+	}]
+}

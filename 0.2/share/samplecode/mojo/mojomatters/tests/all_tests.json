@@ -1,0 +1,72 @@
+[
+	{
+		"title": "Cookie Tests",
+		"source": "tests/cookie_tests.js",
+		"testFunction": "CookieTests"
+	},
+	{
+		"title": "Render Tests",
+		"source": "tests/render_tests.js",
+		"testFunction": "RenderTests"
+	},
+	{
+		"title": "Function Tests",
+		"source": "tests/function_tests.js",
+		"testFunction": "FunctionTests"
+	},
+	{
+		"title": "Format Tests",
+		"source": "tests/format_tests.js",
+		"testFunction": "FormatTests"
+	},
+	{
+		"title": "Arsenal Tests",
+		"source": "tests/arsenal-test.js",
+		"testFunction": "TestDepot"
+	},
+	{
+		"title": "Stage Tests",
+		"source": "tests/stage_tests.js",
+		"testFunction": "StageTests"
+	},
+	{
+		"title": "Key Matcher Tests",
+		"source": "tests/keymatcher_tests.js",
+		"testFunction": "KeymatcherTests"
+	},
+	{
+		"title": "Timing Tests",
+		"source": "tests/timing_tests.js",
+		"testFunction": "TimingTests"
+	},
+	{
+		"title": "View Tests",
+		"source": "tests/view_tests.js",
+		"testFunction": "ViewTests"
+	},
+	{
+		"title": "ContainerStack Tests",
+		"source": "tests/container_tests.js",
+		"testFunction": "ContainerTests"
+	},
+	{
+		"title": "Encrypt/Decrypt Tests",
+		"source": "tests/encrypt_decrypt_tests.js",
+		"testFunction": "EncryptDecryptTest"
+	},
+	{
+		"title": "Transition Tests",
+		"source": "tests/transition_tests.js",
+		"testFunction": "TransitionTest"
+	},
+	{
+		"title": "Locale Tests",
+		"source": "tests/locale_tests.js",
+		"testFunction": "LocaleTest"
+	},
+	{
+		"title": "PalmSystem Tests",
+		"source": "tests/palmsystem_tests.js",
+		"testFunction": "PalmSystemTests"
+	}
+]

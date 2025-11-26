@@ -1,0 +1,16 @@
+{
+    "title": "News",
+    "type": "web",
+    "main": "index.html",
+    "id": "com.palm.app.news",
+    "version": "0.8.5",
+    "vendor": "Palm",
+    "noWindow" : "true",
+    "icon": "icon.png",
+    "logLevel": "99",
+    "timingEnabled": "true",
+    "noDeprecatedStyles": "true",
+    "theme": "light",
+    "escapeHTMLInTemplates": true
+}
+

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <div style="width:900">
+      <h1 id="pdl_setfullscreen">
+        PDL_SetFullscreen
+      </h1>
+      <h2 id="description">
+        Description
+      </h2>
+      <p>
+        Your app can call this API to go from being a plug-in to being fullscreen. It sets up a direct rendering channel for optimal performance, allowing you total control over the screen.
+      </p>
+      <p>
+        In addition to managing internals, this API calls <code>SDL_SetVideoMode</code> with the passed parameters and returns the surface generated. This is your new screen, the previous one becomes invalid.
+      </p>
+      <p>
+        For more information on the fields passed to this API, see the <a href="http://sdl.beuc.net/sdl.wiki/SDL_SetVideoMode" target="_blank">SDL_SetVideoMode</a> documentation.
+      </p>
+      <h2 id="syntax">
+        Syntax
+      </h2>
+      <blockquote>
+        <pre>
+<code>SDL_Surface *PDL_SetFullscreen(int width, int height, int bpp, Uint32 flags);     
+</code>
+</pre>
+      </blockquote>
+      <table border="0">
+        <thead>
+          <tr>
+            <th>
+              Argument
+            </th>
+            <th>
+              Description
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              width
+            </td>
+            <td>
+              New screen width
+            </td>
+          </tr>
+          <tr>
+            <td>
+              height
+            </td>
+            <td>
+              New screen height
+            </td>
+          </tr>
+          <tr>
+            <td>
+              bpp
+            </td>
+            <td>
+              Bits per pixel
+            </td>
+          </tr>
+          <tr>
+            <td>
+              flags
+            </td>
+            <td>
+              Flags
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <h2 id="returns">
+        Returns
+      </h2>
+      <p>
+        On success, returns a pointer to a new <code>SDL_Surface</code>.
+      </p>
+      <p>
+        Returns NULL under the following error conditions:
+      </p>
+      <ul>
+        <li>Not a plug-in
+        </li>
+        <li>App is already fullscreen.
+        </li>
+        <li>Could not init IPC.
+        </li>
+        <li>Failed to discern HW resolution
+        </li>
+        <li>Failed to get portal size
+        </li>
+      </ul>
+      <p>
+        <strong>Note</strong>: In all cases where an error is returned, your app can call <code>PDL_GetError</code> to get a plain-text error description. This is usually more informative than NULL.
+      </p><br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+    </div>
+		</div>
+	</body>
+</html>

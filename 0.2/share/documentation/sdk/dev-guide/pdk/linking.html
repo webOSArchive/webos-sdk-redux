@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="linking-for-the-device">
+      Linking for the Device
+    </h1>
+    <p>
+      Using the <code>-l</code> command option, apps should not link to, or call functions from, libraries that are not on the following <em>whitelist</em> of libraries that came with the PDK:
+    </p>
+    <p>
+      <strong>SDL</strong>
+    </p>
+    <pre>
+<code>libSDL.so, libSDL-1.2.so.0
+libSDL_image.so, libSDL_image-1.2.so.0
+libSDL_mixer.so, libSDL_mixer-1.2.so.0
+libSDL_net.so, libSDL_net-1.2.so.0
+libSDL_ttf.so, libSDL_ttf-2.0.so.0
+</code>
+</pre>
+    <p>
+      <strong>PDL</strong>
+    </p>
+    <pre>
+<code>libpdl.so
+libSDL_cinema.so
+</code>
+</pre>
+    <p>
+      <strong>OpenGL ES</strong>
+    </p>
+    <pre>
+<code>libGLES_CM.so
+libGLESv2.so
+</code>
+</pre>
+    <p>
+      <strong>glibc (libdl explicitly not included)</strong>
+    </p>
+    <pre>
+<code>libc.so, libc.so.6
+libgcc_s.so, libgcc_s.so.1
+libm.so, libm.so.6
+libpthread.so, libpthread.so.0
+librt.so, librt.so.1
+libcrypt.so, libcrypt.so.1
+libutil.so, libutil.so.1
+</code>
+</pre>
+    <p>
+      <strong>libstdc++</strong>
+    </p>
+    <pre>
+<code>libstdc++.so, libstdc++.so.6
+</code>
+</pre>
+    <p>
+      <strong>libz (added January 2011)</strong>
+    </p>
+    <pre>
+<code>libz.so, libz.so.1
+</code>
+</pre>
+    <p>
+      <strong>openal (added January 2011)</strong>
+    </p>
+    <pre>
+<code>libopenal.so, libopenal.so.1
+</code>
+</pre>
+    <p>
+      <strong>libcurl (added July 2011)</strong>
+    </p>
+    <pre>
+<code>libcurl.so.4
+</code>
+</pre>
+    <p>
+      <strong>openssl 0.9.8 (added July 2011)</strong>
+    </p>
+    <pre>
+<code>libcrypto.so, libcrypto.so.0.9.8
+libssl.so, libssl.so.0.9.8
+</code>
+</pre>
+    <p>
+      <strong>libpng 1.2 (added July 2011)</strong>
+    </p>
+    <pre>
+<code>libpng12.so.0
+</code>
+</pre>
+    <p>
+      <strong>libfreetype 2 (added July 2011)</strong>
+    </p>
+    <pre>
+<code>libfreetype.so, libfreetype.so.6
+</code>
+</pre>
+    <p>
+      This guarantees your apps will run on the device and be forward-compatible with future versions of device run-time libraries. Note that this is enforced through the app submission checker.
+    </p>
+		</div>
+	</body>
+</html>

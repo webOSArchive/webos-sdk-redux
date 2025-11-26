@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="accessing-device-sensors">
+      Accessing Device Sensors
+    </h1>
+    <p>
+      The PDK provides a set of unified APIs for accessing a number of device sensors.
+    </p>
+    <p>
+      <strong>Physical and Logical Sensors</strong>
+    </p>
+    <p>
+      Sensors are devices sensitive to light, movement, magnetic fields, and so on, such as accelerometers, gyroscopes and ambient light sensors (ALS) that transmit a signal to monitoring device software. Some of these sensors are physical, while others are logical, deriving their values from one or more physical sensor values.
+    </p>
+    <p>
+      <strong>In this section:</strong>
+    </p>
+    <ul>
+      <li>
+        <a href="#use">Advanced Sensor Use</a>
+      </li>
+      <li>
+        <a href="#supported">Supported Sensors</a>
+      </li>
+      <li>
+        <a href="#process">Sensor APIs and Basic Process</a>
+      </li>
+      <li>
+        <a href="#links">Links</a>
+      </li>
+    </ul>
+    <p>
+      <strong>See also:</strong>
+    </p>
+    <ul>
+      <li>
+        <a href="/reference/pdk/pdl-data-types.html#sensorDefines" target="_blank">C/C++ sensor defines</a> - One define for each type of supported sensor.
+      </li>
+      <li>
+        <a href="/reference/pdk/pdl-data-types.html#sensorStructs" target="_blank">C/C++ sensor event structs</a> - Each sensor has its own event struct. However, the two APIs that return sensor events always return the same struct, which is a union of all the different sensor structs.
+      </li>
+    </ul><a name="use" id="use"></a>
+    <hr>
+    <h2 id="advanced-sensor-use">
+      Advanced Sensor Use
+    </h2>
+    <p>
+      Examples of advanced sensor use include:
+    </p>
+    <p>
+      <strong>Mobile Gaming</strong>
+    </p>
+    <p>
+      Mobile gaming improves significantly when mobile device motion directly controls game input. A 3-axis accelerometer can support basic gaming, with improved motion control enabled with a combination of accelerometer and gyroscope (or alternatively magnetometer).
+    </p>
+    <p>
+      <strong>Image Stablization</strong>
+    </p><img src="/images/palm/imageStab.jpg">
+    <p>
+      The latest generation of smartphones include high-definition (HD) camcorders, which benefit greatly from gyroscope assisted image stabilization to minimize handheld camera shake.
+    </p>
+    <p>
+      <strong>Augmented Reality</strong>
+    </p><img src="/images/palm/augreality.jpg">
+    <p>
+      <a href="http://en.wikipedia.org/wiki/Augmented_reality" target="_blank">Augmented reality</a> browsers, which superimpose web derived scene data onto a cellphone display, require precise heading information (provided by a compass) and also benefit from image stabilization to insure a stable display.
+    </p>
+    <p>
+      <strong>Navigation</strong>
+    </p>
+    <p>
+      Accurate navigation applications will rely heavily on data from multiple motion sensors. Net-connected cellphones, as a primary navigation device, both in-vehicle and for pedestrian use, are being increasingly used. While GPS provides accurate location outdoors, given technology limits, it is generally not available indoors or sporadically available in dense urban areas. Motion sensors support dead reckoning - tracking a user's position from the last known position - enabling accurate positioning indoors and in GPS-challenged areas.
+    </p><a name="supported" id="supported"></a>
+    <hr>
+    <h2 id="supported-sensors">
+      Supported Sensors
+    </h2>
+    <p>
+      The PDK currently supports the following sensors:
+    </p>
+    <ul>
+      <li>
+        <p>
+          <strong>Accelerometer</strong>
+        </p>
+        <p>
+          Moving or tilting an accelerometer allows you to control device orientation.
+        </p>
+        <p>
+          Acceleration is measured in <a href="http://en.wikipedia.org/wiki/G-force" target="_blank">g-forces</a> along 3-axes:
+        </p><img src="/images/palm/portrait1.jpg">
+        <p>
+          Each axis measures direction and force. A zero result for a specific axis means there is no force acting on the accelerometer. For example, if you set the device flat on a table, the X and Y axes will measure at, or close to, zero. As you tilt the device left, the X-axis acceleration becomes increasingly negative. If you then center it and tilt it right, it becomes increasingly positive.
+        </p>
+      </li>
+      <li>
+        <p>
+          <strong>Ambient Light Sensor (ALS)</strong>
+        </p>
+        <p>
+          An ALS is a light-sensitive electronic component used to adjust the brightness of an LCD display's backlight so that the display remains comfortably readable over a range of ambient light conditions.
+        </p>
+        <p>
+          An ALS event returns the device's ambient light level in SI lux units, a measure of a surface's luminosity. One <a href="http://en.wikipedia.org/wiki/Lux" target="_blank">lux</a> is equal to one <a href="http://en.wikipedia.org/wiki/Lumen_%28unit%29" target="_blank">lumen</a> per square meter. Office lighting typically measures between 320-500 lux.
+        </p>
+        <p>
+          It is up to the caller to determine what the lux value means for the current device.
+        </p>
+      </li>
+      <li>
+        <p>
+          <strong>Angular Velocity</strong>
+        </p>
+        <p>
+          The angular velocity sensor returns a <a href="http://en.wikipedia.org/wiki/Euclidean_vector" target="_blank">vector</a> quantity specifying the angular speed of a device and the axis about which the device is rotating. The magnitude, or length, of the angular velocity vector is directly proportional to the angular speed, and is measured in the same units as angular speed (<a href="http://en.wikipedia.org/wiki/Radian" target="_blank">radians</a> per second).
+        </p>
+        <p>
+          The direction of the angular velocity vector is perpendicular to the plane in which the rotation takes place. If the rotation appears clockwise with respect to an observer, then the angular velocity vector points away from the observer. If the rotation appears counterclockwise, then the angular velocity vector points toward the observer.
+        </p>
+      </li>
+      <li>
+        <p>
+          <strong>Compass</strong>
+        </p>
+        <p>
+          The compass sensor returns <a href="http://www.answers.com/topic/magnetic-north" target="_blank">magnetic north</a> and <a href="http://en.wikipedia.org/wiki/True_north">true north</a> bearings.
+        </p>
+      </li>
+      <li>
+        <p>
+          <strong>Gravity</strong>
+        </p>A gravity sensor generates a three dimensional <a href="http://en.wikipedia.org/wiki/Euclidean_vector" target="_blank">vector</a> indicating the gravity event's direction and magnitude.
+      </li>
+      <li>
+        <p>
+          <strong>Linear Acceleration</strong>
+        </p>
+        <p>
+          <a href="http://www.ehow.com/about_5040289_linear-acceleration.html" target="_blank">Linear acceleration</a> is the rate of change in velocity over a given time period of an object moving in one direction.
+        </p>
+        <p>
+          A linear acceleration event returns a three-dimensional vector indicating acceleration along each device axis, not including gravity. All values have units of m/s^2 (<a href="http://whatis.techtarget.com/definition/0,,sid9_gci529957,00.html" target="_blank">meters per second squared</a>). The coordinate system is the same as that used by the accelerometer.
+        </p>
+      </li>
+      <li>
+        <p>
+          <strong>Magnetic Field</strong>
+        </p>
+        <p>
+          This sensor measures magnetized direction relative to the Earth's poles. A magnetic field event returns data for a device's ambient magnetic field in the X, Y and Z-axes. All values are in <a href="http://en.wikipedia.org/wiki/Tesla_%28unit%29" target="_blank">micro Teslas (uT)</a>.
+        </p>
+      </li>
+      <li>
+        <p>
+          <strong>Orientation</strong>
+        </p>
+        <p>
+          An orientation event gives the device's general position:
+        </p>
+        <ul>
+          <li>Facing up
+          </li>
+          <li>Facing down
+          </li>
+          <li>Normal orientation -The device's default orientation - for tablets, this is button on the bottom and camera on the top with the device perpendicular to the ground.
+          </li>
+          <li>Upside-down
+          </li>
+          <li>Left-side facing down
+          </li>
+          <li>Right-side facing down
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p>
+          <strong>Proximity</strong>
+        </p>
+        <p>
+          The proximity sensor generates an event if an object comes close (approximately, an inch or less) to a device. A close object moving away also generates an event.
+        </p>For example, the Phone app uses the proximity sensor to turn the screen off when a person holds the phone close to their face. Doing this prevents the user from accidentally pressing buttons with their cheek while talking on the phone.
+      </li>
+      <li>
+        <p>
+          <strong>Rotation</strong>
+        </p>
+        <p>
+          The rotation sensor can return 3 sets of equivalent values for a rotation event:
+        </p>
+        <ol style="list-style-type: decimal">
+          <li>
+            <p>
+              <a href="http://en.wikipedia.org/wiki/Rotation_matrix">Rotation matrix</a> - In linear algebra, a <a href="http://en.wikipedia.org/wiki/Rotation_matrix">rotation matrix</a> is used to perform a rotation in <a href="http://en.wikipedia.org/wiki/Euclidean_space" target="_blank">Euclidean space</a>. You can use rotation matrices to perform transformations in <a href="http://en.wikipedia.org/wiki/OpenGL" target="_blank">openGL</a> programming.
+            </p>
+          </li>
+          <li>
+            <p>
+              <a href="http://en.wikipedia.org/wiki/Quaternion" target="_blank">Quaternions</a> - A <a href="http://en.wikipedia.org/wiki/Quaternion" target="_blank">quaternion</a> represents two things. It has an x, y, and z component, which represents the axis about which a rotation will occur. It also has a w component, which represents the amount of rotation that will occur about this axis. With these four numbers, it is possible to build a matrix that represents all the rotations perfectly, with no chance of <a href="http://en.wikipedia.org/wiki/Gimbal_lock" target="_blank">gimbal lock</a>.
+            </p>
+          </li>
+          <li>
+            <p>
+              <a href="http://commons.wikimedia.org/wiki/Tait-Bryan_angles" target="_blank">Tait-Bryan angles</a> - Three angles that describe device orientation. These angles are also known as &quot;yaw&quot;, &quot;pitch&quot; and &quot;roll&quot; and are used in conventional <a href="http://en.wikipedia.org/wiki/Flight_dynamics" target="_blank">flight dynamics</a>.
+            </p>
+          </li>
+        </ol>
+        <p>
+          Each of these sets of values can be used to represent an object's rotation. It is up to the caller to decide which one to use. You can use rotation matrices, for example, with openGL programming.
+        </p>
+      </li>
+      <li>
+        <p>
+          <strong>Shake</strong>
+        </p>
+        <p>
+          A shake sensor event returns a value for state:
+        </p>
+        <ul>
+          <li>No shaking
+          </li>
+          <li>Shaking started
+          </li>
+          <li>Shaking continuing
+          </li>
+          <li>Shaking stopped
+          </li>
+        </ul>
+        <p>
+          And a value for shake magnitude, or how vigorous the shaking is, in units of gravitational acceleration or <a href="http://en.wikipedia.org/wiki/G_force" target="_blank">g's</a>.
+        </p>
+      </li>
+    </ul><a name="process" id="process"></a>
+    <hr>
+    <h2 id="sensor-apis-and-basic-process">
+      Sensor APIs and Basic Process
+    </h2>
+    <p>
+      The PDK provides four APIs for calling sensors:
+    </p>
+    <ol style="list-style-type: decimal">
+      <li>
+        <p>
+          <strong><a href="/reference/pdk/pdl/pdl-sensor-exists.html" target="_blank"><code>PDL_SensorExists</code></a></strong> - Returns flag indicating if sensor exists on a device.
+        </p>
+      </li>
+      <li>
+        <p>
+          <strong><a href="/reference/pdk/pdl/pdl-enable-sensor.html" target="_blank"><code>PDL_EnableSensor</code></a></strong> - Enables or disables a sensor. Once enabled, your app can receive the sensor's events. Once disabled, the events stop.
+        </p>
+      </li>
+      <li>
+        <p>
+          <strong><a href="/reference/pdk/pdl/pdl-poll-sensor.html" target="_blank"><code>PDL_PollSensor</code></a></strong> - Gets events from a specific, enabled sensor.
+        </p>
+      </li>
+      <li>
+        <p>
+          <strong><a href="/reference/pdk/pdl/pdl-poll-active-sensors.html" target="_blank"><code>PDL_PollActiveSensors</code></a></strong> - Same as <code>PDL_PollSensor</code>, but returns the first event available for all the currently active sensors.
+        </p>
+      </li>
+    </ol>
+    <p>
+      <strong>Basic Process for Accessing an Individual Sensor</strong>
+    </p>
+    <p>
+      As the above APIs suggest, the following is the basic process for accessing an individual sensor:
+    </p>
+    <ol>
+      <li>
+        <p>
+          Determine if sensor exists.
+        </p>
+      </li>
+      <li>
+        <p>
+          If sensor exists, enable it.
+        </p>
+      </li>
+      <li>
+        <p>
+          If sensor is enabled, poll on its events. Each sensor event returns the same union structure.
+        </p>
+      </li>
+      <li>
+        <p>
+          Use data returned from sensor event.
+        </p>
+      </li>
+      <li>
+        <p>
+          Disable sensor when done polling.
+        </p>
+      </li>
+    </ol>
+    <p>
+      <strong>Including Sensor APIs and Data Types in Your Code</strong>
+    </p>
+    <p>
+      This is the same process as the one for including all PDK code:
+    </p>
+    <ul>
+      <li>
+        <p>
+          Have an #include &quot;PDL.h&quot; line in your source file.
+        </p>
+      </li>
+      <li>
+        <p>
+          Link with &quot;-- lpdl&quot;. The libpdl.so file can be found in your PDK's /lib directory.
+        </p>
+      </li>
+    </ul>
+    <p>
+      The sensor API declarations and data types can be found in <code>PDL_Sensor.h</code>.
+    </p><a name="links" id="links"></a>
+    <hr>
+    <h2 id="links">
+      Links
+    </h2>
+    <p>
+      Here are links to more information about sensor technology.
+    </p>
+    <ul>
+      <li>
+        <a href="http://en.wikipedia.org/wiki/Augmented_reality" target="_blank">Augmented reality</a>
+      </li>
+      <li>
+        <a href="http://en.wikipedia.org/wiki/G-force" target="_blank">g-forces</a>
+      </li>
+      <li>
+        <a href="http://content.gpwiki.org/index.php/OpenGL:Tutorials:Using_Quaternions_to_represent_rotation" target="_blank">OpenGL:Tutorials:Using Quaternions to represent rotation</a>
+      </li>
+      <li>
+        <a href="http://www.3dcodingtutorial.com/Basic-OpenGL-functions/Translate-and-Rotate-functions.html" target="_blank">OpenGL Tutorials - Translate and Rotate functions</a>
+      </li>
+      <li>
+        <a href="http://www.youtube.com/watch?v=C7JQ7Rpwn2k" target="_blank">Video talk about fusion sensors</a>
+      </li>
+      <li>
+        <a href="http://developer.android.com/reference/android/hardware/SensorEvent.html" target="_blank">Android sensor event documentation</a>.
+      </li>
+      <li>
+        <a href="http://en.wikipedia.org/wiki/Rotation_matrix" target="_blank">Rotation matrix</a>
+      </li>
+      <li>
+        <a href="http://www.openintents.org/en/node/22" target="_blank">OpenGL sensors</a>
+      </li>
+      <li>
+        <a href="http://thetechjournal.com/electronics/iphone/iphone-4-gyroscope-makes-for-better-augmented-reality-experience.xhtml" target="_blank">iPhone 4 Gyroscope Makes For Better Augmented Reality Experience</a>
+      </li>
+      <li>
+        <a href="http://techcrunch.com/2010/06/24/iphone-4-gyroscope-game/" target="_blank">iPhone 4 + Gyroscope + Gaming = All Kinds Of Awesome [Video]</a>
+      </li>
+      <li>
+        <a href="http://www.phonearena.com/news/Gyroscope-apps-and-games_id15299" target="_blank">Gyroscope apps and games</a>
+      </li>
+    </ul><br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+		</div>
+	</body>
+</html>

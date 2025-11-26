@@ -1,0 +1,4 @@
+<div x-mojo-element="Button" id="PlayButton"></div>
+<div x-mojo-element="Button" id="PauseButton"></div>
+<button class="palm-button negative" id="StopButton">Stop</button>
+<div id="area-to-update">Sample Audio area to update</div>

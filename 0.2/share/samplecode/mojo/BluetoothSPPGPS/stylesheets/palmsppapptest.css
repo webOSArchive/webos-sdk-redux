@@ -1,0 +1,11 @@
+.gps-output {
+    height:190px;
+    width:100%;
+    display:block;
+    border:1px red solid;
+    padding:3px;    
+}
+
+#log-output {
+    font-size:11px;
+}

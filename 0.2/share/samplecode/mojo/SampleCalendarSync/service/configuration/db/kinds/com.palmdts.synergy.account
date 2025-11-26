@@ -1,0 +1,9 @@
+{
+    "id": "com.palmdts.synergy.account:1",
+    "owner": "com.palmdts.synergy.service",
+    "sync": true,
+    "indexes": [{ 
+       "name": "accountId", 
+       "props": [{ "name": "accountId"}]}], 
+    "extends": ["com.palm.calendar:1"]
+}

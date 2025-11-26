@@ -1,0 +1,11 @@
+{
+    "id": "com.palmdts.testacct",
+    "version": "1.0.0",
+    "vendor": "HP Palm",
+    "type": "web",
+    "main": "index.html",
+    "title": "Synergy Contacts",
+    "icon": "icon.png"
+}
+
+

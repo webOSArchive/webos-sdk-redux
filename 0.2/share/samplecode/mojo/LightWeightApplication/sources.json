@@ -1,0 +1,15 @@
+[
+  {
+    "source": "app\/assistants\/app-assistant.js"
+  },
+	
+	{
+		"source": "app\/assistants\/first-assistant.js",
+		"scenes": "first"
+	},
+	
+	{
+		"source": "app\/assistants\/second-assistant.js",
+		"scenes": "second"
+	}
+]

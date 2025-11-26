@@ -1,0 +1,15 @@
+[
+    {"source": "app\/assistants\/stage-assistant.js"},
+    {"source": "app\/assistants\/main-assistant.js"},
+    {"source": "app\/assistants\/dataParsing\/xmlParse-assistant.js"},
+    {"source": "app\/assistants\/networkData\/ajaxPost-assistant.js"},
+    {"source": "app\/assistants\/networkData\/ajaxGet-assistant.js"},
+    {"source": "app\/assistants\/security\/encryption-assistant.js"},
+    {"source": "app\/assistants\/storage\/cookie\/cookie-assistant.js"},
+    {"source": "app\/assistants\/storage\/depot\/add-assistant.js"},
+    {"source": "app\/assistants\/storage\/depot\/advanced-assistant.js"},
+    {"source": "app\/assistants\/storage\/depot\/depot-assistant.js"},
+    {"source": "app\/assistants\/storage\/depot\/get-assistant.js"},
+    {"source": "app\/assistants\/storage\/sqlite\/sqlite-assistant.js"},
+    {"source": "app\/assistants\/storage\/sqlite\/query-assistant.js"}
+]

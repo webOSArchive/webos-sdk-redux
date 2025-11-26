@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="calendar">
+      Calendar
+    </h1>
+    <p>
+      You can use the Application Manager's <code>launch</code> method to bring up the Calendar application at a specific date, or use the <code>open</code> method to add a new Calendar event on the user's behalf.
+    </p>
+    <p>
+      To use the <code>launch</code> method, pass in an object with the <code>id</code> property set to <code>&quot;com.palm.app.calendar&quot;</code>, and a <code>params</code> property set to an object that specifies a <code>date</code> expressed as a timestamp in milliseconds.
+    </p>
+    <p>
+      To add a new event, you construct an Event object and then use the Application Manager's <code>open</code> method to invoke the Calendar app, passing it the object you have created. The Calendar app will create a new event and display a scene allowing the user to make edits or additions as needed.
+    </p>
+    <p>
+      <strong>See Also:</strong>
+    </p>
+    <ul>
+      <li>
+        <a href="/reference/data-types/calendar.html#calendar-event">Event schema</a>
+      </li>
+    </ul>
+    <h2 id="examples">
+      Examples
+    </h2>
+    <p>
+      <strong>luna-send launch</strong>
+    </p>
+    <blockquote>
+      <pre>
+<code>// Open the calendar to May 1, 2011
+luna-send -P -n 1 palm://com.palm.applicationManager/launch
+  '{&quot;id&quot;: &quot;com.palm.app.calendar&quot;, &quot;params&quot;: {&quot;date&quot;: &quot;1304226000000&quot;}}' 
+</code>
+</pre>
+    </blockquote>
+    <p>
+      <strong>Enyo launch</strong>
+    </p>
+    <blockquote>
+      <pre>
+<code>components: [
+  {
+      name: &quot;openCalendarToDateCall&quot;,
+      kind: &quot;PalmService&quot;,
+      service: &quot;palm://com.palm.applicationManager/&quot;,
+      method: &quot;open&quot;,
+      onSuccess: &quot;openCalendarToDateSuccess&quot;,
+      onFailure: &quot;openCalendarToDateFailure&quot;,
+      onResponse: &quot;gotResponse&quot;,
+      subscribe: true
+  },
+  ...
+
+],
+
+...
+
+openCalendarToDateSuccess: function(inSender, inResponse) {
+  enyo.log(&quot;Open calendar to date success, results=&quot; + enyo.json.stringify(inResponse));
+},
+openCalendarToDateFailure: function(inSender, inResponse) {
+  enyo.log(&quot;Open calendar to date failure, results=&quot; + enyo.json.stringify(inResponse));
+},
+openCalendarToDate: function(inSender, inResponse) {
+  var params = { &quot;date&quot;: &quot;1304226000000&quot; }
+  this.$.openCalendarToDateCall.call({&quot;id&quot;: &quot;com.palm.app.calendar&quot;, &quot;params&quot;: params});
+}
+</code>
+</pre>
+    </blockquote>
+    <p>
+      <strong>Mojo open</strong>
+    </p>
+    <blockquote>
+      <pre>
+<code>this.controller.serviceRequest(&quot;palm://com.palm.applicationManager&quot;, {
+  method: &quot;open&quot;,
+  parameters: 
+  {
+      id: &quot;com.palm.app.calendar&quot;,
+      params:
+      {
+          newEvent: {
+          subject: 'Take daily medicine',  // string
+          dtstart: '1290711600000', // string representing the start date/time as timestamp in milliseconds
+          dtend: '1290718800000',  // string representing the end date/time as timestamp in milliseconds
+          location: 'Wherever I am!', // string
+          rrule: {
+              freq: &quot;DAILY&quot;,
+              count: 3
+          },  // rrule object -- see Calendar schema for details
+          tzId: &quot;America/Los_Angeles&quot;, // string representing a standard Olson timezone name
+          alarm: [
+              {
+                  alarmTrigger: {
+                      valueType: &quot;DURATION&quot;,
+                      value: &quot;-PT15M&quot;
+                  }
+              }
+          ], // array of alarm objects -- see Calendar schema for details
+          note: 'Take allergy medicine, 1 pill',  // string
+          allDay: false  // boolean
+      }
+  }
+});
+</code>
+</pre>
+    </blockquote>
+		</div>
+	</body>
+</html>

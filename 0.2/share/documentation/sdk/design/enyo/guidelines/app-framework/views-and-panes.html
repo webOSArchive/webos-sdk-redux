@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="views-and-panes">
+      Views and Panes
+    </h1>
+    <p>
+      The webOS framework provides a great deal of flexibility in creating view layouts for your app. An app can consist of one or more views, each of which can contain one or more panes that contain app content. A view can either have just a single pane, a split pane, or multiple panes--please see the <a href="/design/enyo/guidelines/designing-your-app.html">Designing Your App</a> section for more details of the different layouts.
+    </p>
+    <p>
+      <img src="/images/design/views-and-panes.png" alt="Single Pane Layout"><br>
+      Single Pane Layout<br>
+      <br>
+      App content can be freely assembled either using common UI components provided by the webOS framework, or using custom components and app-specific content. Content within the content area is scrollable. Panes can either be fixed or free--fixed panes maintain a fixed width regardless of layout orientation, whereas free panes adjust their size to fit the available space within the view.
+    </p>
+    <p>
+      Each pane in the app can also contain a Header and Footer area to contain application controls and navigational elements. If the view has multiple panes, they should all either consistently contain Headers or else none should contain Headers for a consistent visual appearance.
+    </p>
+    <p>
+      <img src="/images/design/views-and-panes-2.png" alt="Split Pane Layout"><br>
+      Split Pane Layout<br>
+      <br>
+      1. Status bar<br>
+      2. Pane header area<br>
+      3. Fixed pane content area<br>
+      4. Free pane content area<br>
+      5. Pane footer area<br>
+    </p>
+    <h2 id="status-bar">
+      Status Bar
+    </h2>
+    <p>
+      The status bar is generally visible on most views, as it provides an area for key system indicators, such as battery and network strength, as well app notifications. (See the <a href="/design/enyo/guidelines/app-framework/notifications.html">Notifications</a> section for more details.)
+    </p>However, the status bar may also be dismissed to provide a full-screen experience. See the <a href="/design/enyo/guidelines/designing-your-app/full-screen-mode.html">Full Screen</a> layout section for more details.<br>
+    <br>
+    <br>
+		</div>
+	</body>
+</html>

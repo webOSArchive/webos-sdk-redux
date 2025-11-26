@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="alerting-the-user">
+      Alerting the User
+    </h1>
+    <h2 id="notifications">
+      Notifications
+    </h2>
+    <p>
+      When an app is running in the background and does something the user should know about, but does not require an immediate response, display a banner notification.
+    </p>
+    <p>
+      When an app is running in the background or foreground and does something that the user should know about, but does not require any further interaction from the user, display a banner-only notification. For example, to inform the user that a process has been completed.
+    </p>
+    <p>
+      <img src="/images/design/alerting-the-user-notifications.png"><br>
+    </p>
+    <h2 id="alerts">
+      Alerts
+    </h2>
+    <p>
+      When an app is running in the background or foreground and does something that is important or sufficiently time-critical to disturb the user, it should display an alert.
+    </p>
+    <p>
+      <img src="/images/design/alerting-the-user-alerts.png"><br>
+      <br>
+      Include an app icon to inform the user which app is publishing the alert.
+    </p>
+    <p>
+      Include a push button that allows the user to dismiss the alert.
+    </p>
+    <p>
+      Provide other push buttons that allow the user to perform other actions associated with the alert event.
+    </p>
+    <h2 id="dialogs">
+      Dialogs
+    </h2>
+    <p>
+      When the app requires a decision from the user before it can proceed, it should display a dialog.
+    </p>
+    <p>
+      <img src="/images/design/dialogs-confirmation-dialog.png"><br>
+      <br>
+      When writing the message and naming the buttons, remember to phrase the message as concisely as possible so the user understands the issue and what actions they can take. Also, avoid the word &quot;please&quot;, negative phrases (for example, &quot;invalid account&quot; or &quot;wrong password&quot;), and technical phrases (for example, &quot;server error&quot; or &quot;timed out&quot;).
+    </p>
+    <p>
+      Provide buttons that make it simple to take corrective actions. Use verbs or phrases for the button titles that correspond directly to the language used in the message.
+    </p>
+    <p>
+      If any of the actions is destructive, use the red button style and provide a Cancel button.
+    </p>
+    <h2 id="inline-text">
+      Inline Text
+    </h2>
+    <p>
+      Use inline text to display an error alert icon and a message in the view under the tapped item that generated the problem.
+    </p>
+    <p>
+      If multiple items contributed to the problem (for example, incorrect user name and password), display a single message summarizing how the user can correct the problem.
+    </p><img src="/images/design/alerting-the-user-inline-text.png"><br>
+    <br>
+    <br>
+		</div>
+	</body>
+</html>

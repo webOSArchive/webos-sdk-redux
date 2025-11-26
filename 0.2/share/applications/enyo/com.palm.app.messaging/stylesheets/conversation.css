@@ -1,0 +1,236 @@
+/*----------------------
+Header
+----------------------*/
+.conversationList {
+	background-color:#fff;
+}
+.conversation-header-content {
+	margin-left:3px;
+	margin-right:3px;
+	color:#222222;
+	font-size: 20px;
+	text-align:left;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.conversation-header .status {
+	margin-left:8px;
+}
+.conversation-header-type.enyo-button {
+	padding:0 5px;
+	margin:0 7px 0;
+}
+.conversation-header .enyo-listselector-item{
+	display:none;
+}
+.conversation-header .enyo-listselector-arrow {
+	min-height: 24px;
+}
+.conversation-header .enyo-listselector-label {
+	color: #222;
+	line-height: 24px;
+}
+.block-delete-box {
+	padding: 0 12px 0 68px;
+}
+.button-left {
+	margin-right:10px;
+}
+.blocksender-bt,
+.deleteconversation-bt {
+	opacity:0.5;
+	color:#333;
+}
+.blocksender-bt {
+	margin-right:8px;
+}
+.accept-decline-box {
+	margin-top:3px;
+}
+.accept-decline-box .enyo-button {
+	min-width:120px;
+}
+.accept-decline-box div:first-child {
+	margin-right:6px;
+} 
+/*----------------------
+RichText Bottom
+----------------------*/
+.conversation-bottom.enyo-toolbar {
+	height: auto;
+	max-height: 192px;
+}
+.conversation-bottom .enyo-input {
+	margin-left:67px;
+	margin-right:11px;
+}
+
+.conversation-bottom .enyo-scroller-scrollee {
+	padding-top:0px;
+	padding-bottom:0px;
+}
+
+.header-shadow,
+.footer-shadow {
+	position: relative; 
+	z-index: 100;
+	height: 3px;
+	width: 100%;
+	pointer-events: none;
+}
+.header-shadow {
+	top: 0;
+	background:transparent url('../images/light_chrome_drop_shadow_header.png') bottom repeat-x;
+}
+.footer-shadow {
+	bottom: 0;
+	background:transparent url('../images/light_chrome_drop_shadow_footer.png') top repeat-x;
+}
+.header-app-shadow,
+.footer-app-shadow,
+.header-favorite-shadow {
+	position: absolute;
+}
+.header-app-shadow {
+	top: 48px;
+}
+.footer-app-shadow {
+	height: 57px;
+}
+/*----------------------
+Conversation List
+----------------------*/
+.conversationList .enyo-scroller-scrollee {
+	padding-top:10px;
+	padding-bottom:5px;
+}
+
+.conversation-bottom .enyo-scroller-scrollee {
+	padding-top:0px;
+	padding-bottom:0px;
+}
+
+
+/*----------------------
+Custom Balloon
+----------------------*/
+.chat-balloon {
+	padding:5px 8px 5px 13px;
+}
+.chat-balloon-received,
+.chat-balloon-sent,
+.chat-balloon-error,
+.chat-balloon-system {
+	margin: 0 7px 0 58px;
+	padding: 5px 10px 6px;
+	min-height: 36px;
+	font-size: 16px;
+	-webkit-border-radius: 9px;
+	word-wrap: break-word;
+	border:none;
+	position:relative;
+}
+.chat-balloon-received {
+	border: solid 1px #b3d9f2;
+	background-color:#d6edff;
+}
+.chat-balloon-sent {
+	border: solid 1px #d0e1cb;
+	background-color: #dcffd1;
+}
+.chat-balloon-error,
+.chat-balloon-received-error,
+.chat-balloon-system {
+	border: solid 1px #d4d4d4;
+	background-color: #f4f4f4;
+	color: #888888;
+}
+
+.chat-balloon-system {
+	font-style:italic;
+}
+
+.chat-balloon-received:after,
+.chat-balloon-sent:after,
+.chat-balloon-error:after,
+.chat-balloon-received-error  {
+	content:"";
+	position:absolute;
+	display:block;
+	top:18px;
+	width:8px;
+	height:14px;
+}
+.chat-balloon-received:after {
+	left:-8px;
+	background:transparent url(../images/chat-balloon-received-shape.png) no-repeat 0 0;
+}
+.chat-balloon-received-error:after {
+	left:-8px;
+	background:transparent url(../images/chat-balloon-received-error-shape.png) no-repeat 0 0;
+}
+.chat-balloon-sent:after {
+	right:-8px;
+	background:transparent url(../images/chat-balloon-sent-shape.png) no-repeat 0 0;
+}
+.chat-balloon-error:after {
+	right:-8px;
+	background:transparent url(../images/chat-balloon-error-shape.png) no-repeat 0 0;
+}
+.conversationContactImage {
+	position:absolute;
+}
+.erroricon {
+	position:absolute;
+	bottom:5px;
+	right:4px;
+}
+.message-time {
+	color: #888888;
+	font-size:12px;
+	padding-top:4px;
+}
+.conversationDivider .enyo-divider-icon {
+	margin-left:15px;
+}
+.conversationDivider .enyo-divider-caption {
+	margin-left:16px;
+	font-size:12px;
+	font-weight:normal;
+	color: #888888;
+}
+.conversationDivider .enyo-divider-right-cap,
+.conversationDivider .enyo-divider-left-cap {
+	-webkit-border-image: none;
+}
+
+.transport-picker .enyo-menuitem {
+	border: none;
+}
+
+/*
+.transport-picker-dial-icon,
+.transport-picker-video-icon {
+	display: block;
+	width: 60px;
+	height: 60px;
+	margin-right: -10px;
+}
+
+.transport-picker-dial-icon {
+	background: url(../images/phone-icon.png) top center no-repeat;
+}
+.transport-picker-video-icon {
+	background: url(../images/video-icon2.png) top center no-repeat;
+}
+*/
+
+.transport-picker-phoneLabel {
+	font-size:12px;
+	display: block;
+	color: #888888;	
+}
+.high-priority {
+	color:red;
+}

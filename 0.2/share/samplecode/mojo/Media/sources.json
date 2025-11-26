@@ -1,0 +1,11 @@
+[
+    {"source": "app/assistants/stage-assistant.js"},
+	{"source": "app/assistants/audioObject-assistant.js"},
+	{"source": "app/assistants/audioPlayer-assistant.js"},
+	{"source": "app/assistants/embedded-assistant.js"},
+	{"source": "app/assistants/videoPlayer-assistant.js"},
+    {
+        "scenes": "main",
+        "source": "app/assistants/main-assistant.js"
+    }
+]

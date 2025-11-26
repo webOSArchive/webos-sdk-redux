@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="command-line-tools">
+      Command-Line Tools
+    </h1>
+    <p>
+      <img src="/images/palm/commands.jpg" alt="image"><br>
+      Figure 1: Application Development Tools
+    </p>
+    <p>
+      The HP webOS SDK includes the following command-line development tools:
+    </p>
+    <ul>
+      <li>
+        <a href="#palm-generate">palm-generate</a> - Generates basic applications and scenes.
+      </li>
+      <li>
+        <a href="#palm-package">palm-package</a> - Packages a webOS application before installation on the Emulator or device.
+      </li>
+      <li>
+        <a href="#palm-install">palm-install</a> - Installs a packaged application on the Emulator or device.
+      </li>
+      <li>
+        <a href="#palm-launch">palm-launch</a> - Launches an installed application on the Emulator or device.
+      </li>
+      <li>
+        <a href="#palm-run">palm-run</a> - Packages, installs, and launches a webOS application, then follows the log output.
+      </li>
+      <li>
+        <a href="#palm-log">palm-log</a> - Displays app log messages on the Emulator or device.
+      </li>
+      <li>
+        <a href="#palm-help">palm-help</a> - Display help information.
+      </li>
+    </ul><a name="palm-generate" id="palm-generate"></a>
+    <hr>
+    <h2 id="palm-generate">
+      palm-generate
+    </h2>
+    <p>
+      Generates Enyo or Mojo applications.
+    </p>
+    <p>
+      <strong>Note</strong>:
+    </p>
+    <p>
+      With SDK version 3.0.4 the following is now supported:
+    </p>
+    <ul>
+      <li>
+        <p>
+          Generating Enyo apps, which can be packaged for a device or Emulator, or inspected and debugged in a desktop (Safari or Chrome) browser.
+        </p>
+      </li>
+      <li>
+        <p>
+          The sanitizing of a specified app title or directory name (removing hyphens, spaces, etc.) before using it as a generated app's Enyo kind.
+        </p>
+      </li>
+    </ul>
+    <h3 id="usage">
+      Usage
+    </h3>
+    <blockquote>
+      <pre>
+<code>palm-generate [OPTION...] APP_DIR
+</code>
+</pre>
+    </blockquote>
+    <h3 id="options">
+      Options
+    </h3>
+    <pre>
+      Option                    Description
+-f, --overwrite             Overwrite existing files
+-l, --list                  List the available templates
+-p, --property=PROPERTY     Set the property PROPERTY
+-t, --template=TEMPLATE     Use the template named TEMPLATE
+    --version               Display version info and exit
+    --help                  Display this help and exit
+</pre>
+    <h3 id="usage-notes">
+      Usage Notes
+    </h3>
+    <p>
+      APP_DIR is the application directory. It will be created if it does not exist.
+    </p>
+    <p>
+      PROPERTY defines properties to be used during generation. Properties can beo specified as key-value pairs of the form &quot;key=value&quot; or as JSON objects of the form &quot;{'key1':'value1', 'key2':'value2', ...}&quot;. Surrounding quotes are required in both cases.
+    </p>
+    <p>
+      TEMPLATE is the application template to use. If not specified, the default template is used ('new_app').
+    </p>
+    <h3 id="examples">
+      Examples
+    </h3>
+    <ul>
+      <li>List the available templates
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code> palm-generate -l
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>Generate a &quot;hello world&quot; sample application in <code>~/projects/hello</code> and set the title.
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code> palm-generate -t hello_app -p &quot;title=My First App&quot; ~/projects/hello
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>Generate a new application in <code>~/projects/newapp</code>.
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code> palm-generate -t new_app ~/projects/newapp
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>Generate a new application in <code>~/projects/ticker</code> and set the id, version, vendor and title.
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code> palm-generate -p &quot;{'id':'com.example.ticker', 'version':'1.0.0', 'vendor':'My Shop', 'title':'Stock Ticker'}&quot; ~/projects/ticker
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>Generate a new scene named &quot;first&quot; in <code>~/projects/ticker</code>.
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code> palm-generate -t new_scene -p &quot;name=first&quot; ~/projects/ticker
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>Generate a new Enyo single-pane application in ~/projects/singlepane.
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code> palm-generate ~/projects/singlepane
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>Generate a new Enyo split-view application in ~/projects/splitview.
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code> palm-generate -t enyo_splitview ~/projects/splitview
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>Generate a new Enyo application in ~/projects/multipane and set the id,# version, vendor and title.
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code> palm-generate -t enyo_multipane -p &quot;{'id':'com.example.multipane', 'version':'1.0.0', 'vendor':'My Shop', 'title':'MultiPane'}&quot; ~/projects/multipane
+</code>
+</pre>
+    </blockquote><a name="palm-package" id="palm-package"></a>
+    <hr>
+    <h2 id="palm-package">
+      palm-package
+    </h2>
+    <p>
+      Prepares an application for installation by converting the files in the application directory to an <code>.ipkg</code> file that you can run on a webOS device or Emulator.
+    </p>
+    <h3 id="usage-1">
+      Usage
+    </h3>
+    <p>
+      Usage 1: Create a package for webOS containing a single application.
+    </p>
+    <blockquote>
+      <pre>
+<code> palm-package [OPTION...] APP_DIR
+</code>
+</pre>
+    </blockquote>
+    <p>
+      Usage 2: Create a package for webOS containing an application and/or services and accounts.
+    </p>
+    <blockquote>
+      <pre>
+<code> palm-package [OPTION...] PKG_DIR [APP_DIR] [SERVICE_DIR...] [ACCOUNT_DIR...]
+</code>
+</pre>
+    </blockquote>
+    <h3 id="options-1">
+      Options
+    </h3>
+    <p>
+      The package filename is automatically generated from the <code>id</code> and <code>version</code> properties in the application's <a href="/reference/config/appinfo.json.html">appinfo.json</a> file.
+    </p>
+    <pre>
+         Option                        Description
+    --check                    Check the application but don't package it
+-o, --outdir=OUTPUT_DIR        Use OUTPUT_DIR as the output directory
+    --exclude=PATTERN          Exclude files, given as a PATTERN
+-X, --exclude-from=PATFILE     Exclude patterns listed in PATFILE
+    --ignore-case              Ignore case when matching names
+    --no-exclude-eclipse       Don't exclude Eclipse meta-data
+    --no-exclude-hidden        Don't exclude hidden files
+    --no-exclude-vcs           Don't exclude version control meta-data
+    --no-exclude-ipk           Don't exclude .ipk files
+-p, --property=PROPERTY        Set the property PROPERTY
+    --use-v1-format            Generate packages in old format (apps only)
+    --version                  Display version info and exit
+    --help                     Display this help and exit
+</pre>
+    <h3 id="usage-notes-1">
+      Usage Notes
+    </h3>
+    <p>
+      APP_DIR is an application directory containing a valid <code>appinfo.json</code> file. Only one application directory is allowed.
+    </p>
+    <p>
+      PKG_DIR is a package info directory containing a valid <code>packageinfo.json</code> file. Only one package info directory is allowed.
+    </p>
+    <p>
+      SERVICE_DIR is a service directory containing a valid <code>services.json</code> file.
+    </p>
+    <p>
+      ACCOUNT_DIR is a account directory containing a valid <code>account-templates.json</code> file.
+    </p>
+    <p>
+      OUTPUT_DIR is the output directory where the package will be created. If not specified, the current directory is used.
+    </p>
+    <p>
+      PATTERN is a name-matching string which may contain the wildcards * and ?. Matching is case-sensitive unless the <code>--ignore-case</code> option is used.
+    </p>
+    <p>
+      PATFILE is a text file with one PATTERN per line. Matching is case-sensitive unless the <code>--ignore-case</code> option is used.
+    </p>
+    <p>
+      By default, palm-package will exclude meta-data files used by Eclipse plugins. Use the <code>--no-exclude-eclipse</code> option to include these files.
+    </p>
+    <p>
+      By default, palm-package will exclude hidden files. Use the <code>--no-exclude-hidden</code> option to include these files.
+    </p>
+    <p>
+      By default, palm-package will exclude meta-data files used by the following version control systems: CVS, RCS, SCCS, SVN, Arch, Bazaar, Mercurial, and Darcs. Use the <code>--no-exclude-vcs</code> option to include these files.
+    </p>
+    <p>
+      By default, palm-package will exclude ipk files. Use the <code>--no-exclude-ipk</code> option to include these files.
+    </p>
+    <p>
+      PROPERTY defines properties to be used during package creation. Properties can be specified as key-value pairs of the form &quot;key=value&quot; or as JSON objects of the form &quot;{'key1':'value1', 'key2':'value2', ...}&quot;. Surrounding quotes are required in both cases.
+    </p>
+    <p>
+      If not specified, the package id and package version will be derived from the id and version properties in the application's <code>appinfo.json</code> file.
+    </p>
+    <p>
+      The filename of the newly created package will be derived from the package id and package version.
+    </p>
+    <p>
+      When developing a webOS 3.0 application using the Enyo framework, simply point the <code>&lt;script&gt;</code> tag in <code>index.html</code> at your local Enyo installation; when you run <code>palm-package</code>, the script will automatically change the URL to point to the location of Enyo on the device.
+    </p>
+    <p>
+      <strong>Note</strong>: To create a package compatible with webOS versions earlier than 2.0, use the <code>&quot;--use-v1-format</code>&quot; option. Only single-app packages (usage 1) are supported.
+    </p>
+    <h3 id="examples-1">
+      Examples
+    </h3>
+    <ul>
+      <li>Create a package for the webOS application in ~/projects/Ticker.
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code> palm-package ~/projects/Ticker
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>Create a package for the webOS application in ~/projects/Ticker and set the output directory to ~/packages.
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code> palm-package -o ~/packages ~/projects/Ticker
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>Create a package for the webOS application in ~/projects/Ticker. Exclude all text files and the tests directory.
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code> palm-package --exclude=&quot;*.txt&quot; --exclude=&quot;tests&quot; ~/projects/Ticker
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>Create a package for a webOS application and service.
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code> palm-package ticker-info ticker-app ticker-service
+</code>
+</pre>
+    </blockquote><a name="palm-install" id="palm-install"></a>
+    <hr>
+    <h2 id="palm-install">
+      palm-install
+    </h2>
+    <p>
+      Installs or remove applications from a webOS device or Emulator.
+    </p>
+    <p>
+      <strong>Note:</strong>
+    </p>
+    <p>
+      You cannot install an application if the device is in USB mode or Media Sync mode; it must be in <a href="/dev-guide/tools/enabling-developer-mode.html">developer mode</a>.
+    </p>
+    <h3 id="usage-2">
+      Usage
+    </h3>
+    <blockquote>
+      <pre>
+<code> palm-install [OPTION...] [PACKAGE | APP_ID]
+</code>
+</pre>
+    </blockquote>
+    <p>
+      Where:
+    </p>
+    <ul>
+      <li>[package] is the full path to the package ( .ipkg) file.
+      </li>
+    </ul>
+    <h3 id="options-2">
+      Options
+    </h3>
+    <pre>
+      Option                 Description
+-d, --device=DEVICE     Specify DEVICE to use
+    --device-list       List the available devices
+-l, --list              List the installed applications
+-r, --remove            Remove applications instead of installing
+    --version           Display version info and exit
+    --help              Display this help and exit
+</pre>
+    <h3 id="usage-notes-2">
+      Usage Notes
+    </h3>
+    <p>
+      PACKAGE is the file path of the package to install, e.g. <code>~/projects/packages/com.example.app_1.0_all.ipk</code>.
+    </p>
+    <p>
+      APP_ID is the id of the application to remove.
+    </p>
+    <p>
+      DEVICE is a unique identifier which matches a device name, type, or id (as returned by the device-list option). e.g. Use &quot;usb&quot; for a usb-connected device, or &quot;tcp&quot; for an Emulator (note: Emulator must be running). If not specified, the first device found is used.
+    </p>
+    <h3 id="examples-2">
+      Examples
+    </h3>
+    <ul>
+      <li>Install package
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code>palm-install ~/projects/packages/com.example.app_1.0_all.ipk
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>Remove application
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code>palm-install -r com.example.app
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>List applications on default device
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code>palm-install -l
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>List applications on usb device
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code>palm-install -d usb -l
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>List applications on Emulator
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code>palm-install -d tcp -l
+</code>
+</pre>
+    </blockquote><a name="palm-launch" id="palm-launch"></a>
+    <hr>
+    <h2 id="palm-launch">
+      palm-launch
+    </h2>
+    <p>
+      Launches (or closes) an application on a webOS device or Emulator.
+    </p>
+    <h3 id="usage-3">
+      Usage
+    </h3>
+    <blockquote>
+      <p>
+        palm-launch [OPTION...] [APP_ID]
+      </p>
+    </blockquote>
+    <p>
+      Where:
+    </p>
+    <ul>
+      <li>[APP_ID] is the application ID corresponding to the id property in the application's <a href="/reference/config/appinfo.json.html">appinfo.json</a> file.
+      </li>
+    </ul>
+    <h3 id="options-3">
+      Options
+    </h3>
+    <pre>
+      Option                  Description
+-c, --close             Close running applications instead of launching
+-d, --device=DEVICE     Specify DEVICE to use
+    --device-list       List the available devices
+-f, --relaunch          Relaunch app (close and reopen)
+-i, --inspect           Inspect the application
+-q, --list-stages       List the running stages
+-s, --stage=STAGE       Specify STAGE to inspect
+-l, --list              List the installed applications
+-p, --params=PARAMS     Set the launch parameters to PARAMS
+    --version           Display version info and exit
+    --help              Display help and exit
+</pre>
+    <h3 id="usage-notes-3">
+      Usage Notes
+    </h3>
+    <p>
+      APP_ID is the id of the application to launch (or close).
+    </p>
+    <p>
+      DEVICE is a unique identifier which matches a device name, type, or id (as returned by the device-list option). e.g. Use &quot;usb&quot; for a usb-connected device, or &quot;tcp&quot; for an Emulator (note: Emulator must be running). If not specified, the first device found is used.
+    </p>
+    <p>
+      STAGE is the id of the application's stage (as returned by the <code>--list-stages</code> option).
+    </p>
+    <p>
+      PARAMS defines launch parameters to be passed when launching an application. It is specified as a key-value pair of the form &quot;key:value&quot; or as a JSON object. Surrounding quotes are required in both cases.
+    </p>
+    <h3 id="examples-3">
+      Examples
+    </h3>
+    <ul>
+      <li>Launch application on default device
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code> palm-launch com.example.app
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>Launch application, passing in framework configuration options
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code> palm-launch -p &quot;{mojoConfig: {debuggingEnabled:true,timingEnabled:true}}&quot; com.example.app
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>Launch and inspect application
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code> palm-launch -i com.example.app
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>List stages of running application
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code> palm-launch -q com.example.app
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>Inspect specific stage of application
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code> palm-launch -i -s 1023 com.example.app
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>Close application
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code> palm-launch -c com.example.app
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>List applications on default device
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code> palm-launch -l
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>List applications on usb device
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code> palm-launch -d usb -l
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>List applications on Emulator
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code> palm-launch -d tcp -l
+</code>
+</pre>
+    </blockquote><a name="palm-run" id="palm-run"></a>
+    <hr>
+    <h2 id="palm-run">
+      palm-run
+    </h2>
+    <p>
+      Packages, installs, and launches a Palm webOS application, then follows the log output.
+    </p>
+    <h3 id="usage-4">
+      Usage
+    </h3>
+    <blockquote>
+      <pre>
+<code> palm-run [OPTION...] [DIR]...
+</code>
+</pre>
+    </blockquote>
+    <h3 id="options-4">
+      Options
+    </h3>
+    <pre>
+        Option                        Description
+    --exclude=PATTERN          Exclude files, given as a PATTERN
+-X, --exclude-from=PATFILE     Exclude patterns listed in PATFILE
+    --ignore-case              Ignore case when matching names
+    --no-exclude-eclipse       Don't exclude Eclipse meta-data
+    --no-exclude-hidden        Don't exclude hidden files
+    --no-exclude-vcs           Don't exclude version control meta-data
+    --no-exclude-ipk           Don't exclude .ipk files
+-p, --property=PROPERTY        Set the property PROPERTY
+-d, --device=DEVICE            Specify DEVICE to use
+    --device-list              List the available devices
+-l, --list                     List the installed applications
+    --version                  Display version info and exit
+    --help                     Display this help and exit
+</pre>
+    <h3 id="usage-notes-4">
+      Usage Notes
+    </h3>
+    <p>
+      PATTERN is a name-matching string which may contain the wildcards * and ?. Matching is case-sensitive unless the <code>--ignore-case</code> option is used.
+    </p>
+    <p>
+      PATFILE is a text file with one PATTERN per line. Matching is case-sensitive unless the <code>--ignore-case</code> option is used.
+    </p>
+    <p>
+      By default, palm-run will exclude meta-data files used by Eclipse plugins. Use the <code>--no-exclude-eclipse</code> option to include these files.
+    </p>
+    <p>
+      By default, palm-run will exclude hidden files. Use the <code>--no-exclude-hidden</code> option to include these files.
+    </p>
+    <p>
+      By default, palm-run will exclude meta-data files used by following version control systems: CVS, RCS, SCCS, SVN, Arch, Bazaar, Mercurial, and Darcs. Use the <code>--no-exclude-vcs</code> option to include these files.
+    </p>
+    <p>
+      By default, palm-run will exclude ipk files. Use the <code>--no-exclude-ipk</code> option to include these files.
+    </p>
+    <p>
+      PROPERTY defines properties to be used during package creation. Properties can be specified as key-value pairs of the form &quot;key=value&quot; or as JSON objects of the form &quot;{'key1':'value1', 'key2':'value2', ...}&quot;. Surrounding quotes are required in both cases.
+    </p>
+    <p>
+      DEVICE is a unique identifier which matches a device name, type, or id (as returned by the device-list option). e.g. Use &quot;usb&quot; for a usb-connected device, or &quot;tcp&quot; for an emulator (note: Emulator must be running). If not specified, the first device found is used.
+    </p>
+    <h3 id="examples-4">
+      Examples
+    </h3>
+    <ul>
+      <li>Package, install, and run the Palm application in <code>~/projects/Ticker</code>.
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code> palm-run ~/projects/Ticker
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>List applications on default device
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code> palm-run -l
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>List applications on usb device
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code> palm-run -d usb -l
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>List applications on emulator
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code> palm-run -d tcp -l
+</code>
+</pre>
+    </blockquote><a name="palm-log" id="palm-log"></a>
+    <hr>
+    <h2 id="palm-log">
+      palm-log
+    </h2>
+    <p>
+      The palm-log tool displays log messages from an application on the Emulator or USB-connected HP webOS device. The log output is simpler and easier to read than the output in <code>/var/log/messages</code>, and the timestamp is the local time instead of GMT. You can also use palm-log to display the installed applications, which is useful for getting the ID of the application to log.
+    </p>
+    <p>
+      For information about creating log output from your application, see the Logging page. It is especially important to set the log level, which controls which information (errors, warnings, etc.) gets logged.
+    </p>
+    <p>
+      <strong>Note:</strong>
+    </p>
+    <p>
+      If you hit Ctrl-C while running palm-log on Windows, you will see the message: &quot;terminate batch job (Y/N)?&quot;. It doesn't matter if you answer Y or N, since the palm-log tool has already stopped. This is not a bug; it's a Windows message that displays whenever a batch file is interrupted with Ctrl-C.
+    </p>
+    <h3 id="usage-5">
+      Usage
+    </h3>
+    <p>
+      palm-log [OPTION...] [APP_ID]
+    </p>
+    <p>
+      Displays application logs from an application on a webOS device. The App ID is the application ID, as specified in the application's <code>appinfo.json</code> file. Example: <code>com.mystuff.hello</code>
+    </p>
+    <h3 id="options-5">
+      Options
+    </h3>
+    <pre>
+      Option                         Description
+-d, --device=DEVICE              Specify DEVICE to use (emulator must be running)
+    --device-list                List the available devices
+-f, --follow                     Follow the log output (use Ctrl-C to terminate)
+-l, --list                       List the installed applications
+    --system-log-level=LEVEL     Set the system log level {error,warning, or info}. 
+                                 Default is  error. For more detailed logging, use warning or info.
+    --version                    Display version info and exit
+    --help                       Display help and exit
+</pre>
+    <h3 id="examples-5">
+      Examples
+    </h3>
+    <ul>
+      <li>Follow logs for app
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code>palm-log -f com.example.app
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>Display logs for app
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code>palm-log com.example.app 
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>List applications on default device
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code>palm-log -l 
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>List applications on usb-connected device
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code>palm-log -d usb -l 
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>List applications on the Emulator
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code>palm-log -d tcp -l 
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>Set the system log level to &quot;info&quot;
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code>palm-log --system-log-level info
+</code>
+</pre>
+    </blockquote>
+    <h3 id="sample-output">
+      Sample Output
+    </h3>
+    <blockquote>
+      <pre>
+<code>$ palm-log -f com.palm.app.maps
+
+connecting to device emulator
+
+(96C3BC9CC41E8A2A440C265DEDB8FB048F35B30E:tcp:64640)
+
+following logs for application com.palm.app.maps
+
+[20090813-07:51:06.138630] info: loadRealPage: 452
+[20090813-07:51:06.144874] info: palm system: true
+[20090813-07:51:06.145419] info: prepare transition
+[20090813-07:51:06.270742] info: =========&gt; looking for palmInitFramework191_15
+[20090813-07:51:06.271141] info: =========&gt; Calling palmInitFramework191_15
+[20090813-07:51:06.358450] info: Requested submission : 191.15
+[20090813-07:51:06.359008] info: Current locale is en_us
+[20090813-07:51:06.383186] info: MAPS App: AppAssistant
+[20090813-07:51:06.384085] info: Maps: AppAssistant: maps-countrycode cookie exists us
+[20090813-07:51:06.388776] info: Maps App: _startConnectionWatch
+[20090813-07:51:06.388998] info: Maps App: onAppActivate creating new connectionInfoRequest
+</code>
+</pre>
+    </blockquote><a name="palm-help" id="palm-help"></a>
+    <hr>
+    <h2 id="palm-help">
+      palm-help
+    </h2>
+    <p>
+      Displays system and SDK information.
+    </p>
+    <h3 id="usage-6">
+      Usage
+    </h3>
+    <blockquote>
+      <pre>
+<code> palm-help [OPTION...]
+</code>
+</pre>
+    </blockquote>
+    <h3 id="options-6">
+      Options
+    </h3>
+    <pre>
+       Option                 Description
+    --commands        List the available commands
+    --sdk-info        Display SDK information
+    --system-info     Display system information
+    --version         Display version info and exit
+    --help            Display help and exit
+</pre>
+    <p>
+      <strong>Note</strong> - The <code>--system-info</code> option returns a volumnious amount of information about your system and takes awhile to run.
+    </p>
+    <h3 id="examples-6">
+      Examples
+    </h3>
+    <ul>
+      <li>Version information
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code>  palm-help --version
+
+  Version: 3.0.0b22
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>Commands
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code>  palm-help --commands
+
+  Available commands:
+
+      palm-generate
+      palm-help
+      palm-install
+      palm-launch
+      palm-log
+      palm-package
+      palm-run
+
+  Type &quot;&lt;command&gt; --help&quot; for usage information.
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>SDK information
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code>  palm-help --sdk-info
+
+  Component versions for HP webOS SDK
+  =============================================
+  HP webOS SDK Version          3.0.2
+  HP webOS SDK Build            652
+  Framework (enyo)              117
+  Framework (mojo)              506
+  Emulator ROM                  3041
+  SDK Tools                     22
+  SDK Tools - Emulator          24
+  Enyo Framework                99
+  Samples                       142413
+  Reference Applications code...
+      com.palm.app.maps at submission 35
+      com.palm.app.email at submission 107.1
+      com.palm.app.browser at submission 68
+      com.palm.app.messaging at submission 58.2
+      com.palm.app.photos at submission 60.2
+      com.palm.app.notes at submission 22
+ End of Reference Applications code
+ Inspector                     2
+ Novacom(32-bit)               76
+ PDK                           115
+ Build mark                    499303
+ =============================================
+</code>
+</pre>
+    </blockquote>
+    <p>
+      . . .
+    </p><br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+		</div>
+	</body>
+</html>

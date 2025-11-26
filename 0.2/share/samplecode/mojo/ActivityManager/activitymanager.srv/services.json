@@ -1,0 +1,35 @@
+{
+"id": "com.palmdts.activitymanager.sample.service",
+"description": "Hello World Demo Service",
+"commandTimeout": 30,
+"activityTimeout": 30,
+"services": [ {
+    "name": "com.palmdts.activitymanager.sample.service",
+    "description": "helloworld example",
+	"assistant": "ActivityManagerService",
+    "commands": [ 
+		    { 
+            	"name": "hello", 
+            	"assistant": "HelloCommandAssistant",
+				"public": true,
+				"subscribe": true,
+            },
+			{
+				"name": "subscription",
+				"assistant": "SubscriptionCommandAssistant",
+				"subscribe": true,
+				"public": true
+			},
+			{
+				"name": "launch",
+				"assistant": "LaunchCommandAssistant",
+				"public": true
+			},
+			{
+				"name": "trigger",
+				"assistant": "SetTriggerCommandAssistant",
+				"public": true
+			}
+           ] 
+        }]
+}

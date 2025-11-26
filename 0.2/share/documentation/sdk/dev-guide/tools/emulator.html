@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="emulator">
+      Emulator
+    </h1>
+    <p>
+      The HP webOS Emulator simulates a webOS device on a Linux, Mac, or Windows computer. It is built on <a href="http://www.virtualbox.org">VirtualBox</a>, free <a href="http://en.wikipedia.org/wiki/Virtual_machine" target="_blank">virtual machine</a> software from Oracle/Sun. If you installed the SDK, you already have the Emulator on your computer.
+    </p>
+    <p>
+      The Emulator includes a <a href="/dev-guide/tools/radio-simulator.html">Radio Simulator</a> that lets you simulate phone calls and GPS fixes.
+    </p>
+    <p>
+      Currently, the Emulator does <strong>not</strong> support the following:
+    </p>
+    <ul>
+      <li>Accelerometer live data (does support orientation and shaking events)
+      </li>
+      <li>Audio
+      </li>
+      <li>Bluetooth (UI and any interface-specific APIs do not work in the Emulator)
+      </li>
+      <li>Camera
+      </li>
+      <li>Gesture area
+      </li>
+      <li>Multi-touch
+      </li>
+      <li>Sound
+      </li>
+      <li>Video
+      </li>
+      <li>Wi-Fi (UI and any interface-specific APIs do not work in the Emulator but, with a desktop connection, network connectivity does.)
+      </li>
+    </ul>
+    <p>
+      <strong>To start the Emulator:</strong>
+    </p>
+    <p>
+      Open a command prompt or SSH (Mac), type &quot;<code>palm-emulator</code>&quot; and press &quot;<code>Enter</code>&quot;. You are then asked to choose an image.
+    </p>
+    <p>
+      <strong>Note</strong>
+    </p>
+    <p>
+      The Emulator has a number of command-line options, including one to do a hard reset. See the <a href="#Command">Command-Line Reference</a> for more information.
+    </p>
+    <hr>
+    <h2 id="using-command-line-tools-to-run-apps">
+      Using Command-Line Tools to Run Apps
+    </h2>
+    <p>
+      You can use the webOS SDK <a href="/dev-guide/tools/command-line-tools.html">command-line tools</a> to package, install, launch, close and uninstall your app on the Emulator. The process for doing this is the same as it would be for a device.
+    </p>
+    <p>
+      <strong>Example usage:</strong>
+    </p>
+    <p>
+      Start the Emulator (and choose an image), package, install, launch, close and uninstall an app (executed from a command prompt in the workspace directory).
+    </p>
+    <pre>
+&gt; palm-emulator
+&gt; palm-package HelloWorld
+&gt; palm-install com.mystuff.hello_1.0.0_all.ipk
+&gt; palm-launch com.mystuff.hello
+&gt; palm-launch -c com.mystuff.hello
+&gt; palm-install -r com.mystuff.hello
+</pre>
+    <p>
+      See the <a href="/dev-guide/tools/command-line-tools.html">tools</a> documentation for more information.
+    </p>
+    <p>
+      <strong>Notes:</strong>
+    </p>
+    <ul>
+      <li>
+        <p>
+          Changes made during development and debugging may not appear unless you first delete the previous version, and then repackage and reinstall the updated application.
+        </p>
+      </li>
+      <li>
+        <p>
+          Installing a new version of an application does not remove source files not present in the new version. During testing, we recommend you delete the old version of an application before installing a new version.
+        </p>
+      </li>
+      <li>
+        <p>
+          If you do not have the Emulator running, but do have a webOS device plugged into your computer's USB port, the command-line tools will use that if the device has <a href="/dev-guide/tools/enabling-developer-mode.html">developer mode</a> enabled. You will find your app's icon at the bottom of the first launcher menu. When plugging the device into the computer to load an app, select the &quot;Just Charge&quot; option on the device.
+        </p>
+      </li>
+    </ul>
+    <hr>
+    <h2 id="using-eclipse-to-run-apps">
+      Using Eclipse to Run Apps
+    </h2>
+    <p>
+      If you are using Eclipse with the HP webOS plug-in, do the following to run an application on the Emulator:
+    </p>
+    <ol style="list-style-type: decimal">
+      <li>
+        <p>
+          Select <code>Run &gt; Run Configurations...</code>
+        </p>
+      </li>
+      <li>
+        <p>
+          Select &quot;Palm Emulator&quot; for the target of your application name.
+        </p>
+      </li>
+    </ol>
+    <p>
+      On subsequent activations, select <code>Run &gt; Run As... &gt; Mojo Application</code>.
+    </p>
+    <p>
+      Eclipse automatically packages, installs, and launches the application. With Eclipse, there is no need to uninstall the application before re-running it.
+    </p>
+    <hr>
+    <h2 id="running-pdk-apps">
+      Running PDK Apps
+    </h2>
+    <p>
+      Starting with webOS 3.0, you can run x86-compiled PDK code in the Emulator in either full-screen or hybrid mode. SDL APIs are supported, but OpenGL ES is not.
+    </p>
+    <p>
+      To build PDK code, you need a separate x86 toolchain. On Windows, you can download the current <a href="http://www.codesourcery.com/sgpp/lite/ia32/portal/release1567" target="_blank">CodeSourcery G++ Lite cross-compiler</a>.
+    </p>
+    <hr>
+    <h2 id="debugging-your-application">
+      Debugging Your Application
+    </h2>
+    <p>
+      You have two ways to debug an application in the Emulator:
+    </p>
+    <ol style="list-style-type: decimal">
+      <li>
+        <p>
+          Use the <a href="/dev-guide/tools/debugger.html">Debugger</a>.
+        </p>
+      </li>
+      <li>
+        <p>
+          Use the Emulator's console output:
+        </p>
+        <ol style="list-style-type: lower-alpha">
+          <li>
+            <p>
+              Open a <a href="/dev-guide/tools/device-shell.html">device shell</a> (scroll to the Emulator section).
+            </p>
+          </li>
+          <li>
+            <p>
+              At the command prompt, type &quot;<code>log com.yourdomain.your-app</code>&quot; and press &quot;<code>Enter</code>&quot;.
+            </p>
+          </li>
+        </ol>
+      </li>
+    </ol>
+    <p>
+      For more info about generating logs from your application, see <a href="/reference/mojo/classes/mojo-log.html">Logging</a> (Mojo apps) and <a href="/dev-guide/tools/command-line-tools.html#palm-log">palm-log</a> (all apps).
+    </p>
+    <hr>
+    <h2 id="keyboard-shortcuts-and-accelerometer-events">
+      Keyboard Shortcuts and Accelerometer Events
+    </h2>
+    <table border="1" cellspacing="5" cellpadding="5">
+      <thead>
+        <tr>
+          <th>
+            Key
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            Alt (Windows and Linux)<br>
+            Option (Mac)
+          </td>
+          <td>
+            Option key
+          </td>
+        </tr>
+        <tr>
+          <td>
+            End
+          </td>
+          <td>
+            Opens and closes the launcher
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Esc
+          </td>
+          <td>
+            Performs the back gesture (or swipe back)
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Home
+          </td>
+          <td>
+            Minimizes and maximizes the card
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Left/Right Arrow
+          </td>
+          <td>
+            Switches the application left or right in the Card view
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Control
+          </td>
+          <td>
+            Sym (symbol) key
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" align="center" bgcolor="lightgrey">
+            <strong>Accelerometer Events</strong>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            F5
+          </td>
+          <td>
+            Simulates shaking
+          </td>
+        </tr>
+        <tr>
+          <td>
+            F6
+          </td>
+          <td>
+            Simulates &quot;up&quot; (12:00 or normal) orientation
+          </td>
+        </tr>
+        <tr>
+          <td>
+            F7
+          </td>
+          <td>
+            Simulates &quot;right&quot; (3:00) orientation
+          </td>
+        </tr>
+        <tr>
+          <td>
+            F8
+          </td>
+          <td>
+            Simulates &quot;down&quot; (6:00) orientation
+          </td>
+        </tr>
+        <tr>
+          <td>
+            F9
+          </td>
+          <td>
+            Simulates &quot;left&quot; (9:00) orientation
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      For accelerometer events, note that the orientation keys will only be active if Window Orientation has been set to &quot;free&quot;.<br>
+    </p>
+    <hr>
+    <h2 id="keyboard-capture-on-the-mac">
+      Keyboard Capture on the Mac
+    </h2>
+    <p>
+      By default, VirtualBox captures the keyboard into a virtual machine. On the Mac, this can interfere with using the left command key to switch among applications with command-tab. If you run into this problem, try the following:
+    </p>
+    <ol style="list-style-type: decimal">
+      <li>
+        <p>
+          <a href="#Exit">Exit the Emulator</a>.
+        </p>
+      </li>
+      <li>
+        <p>
+          In the Applications folder, double-click the <strong>VirtualBox</strong> icon.
+        </p>
+      </li>
+      <li>
+        <p>
+          On the <strong>VirtualBox</strong> menu, select <strong>Preferences</strong>.
+        </p>
+      </li>
+      <li>
+        <p>
+          Switch to the <strong>Input</strong> section.
+        </p>
+      </li>
+      <li>
+        <p>
+          Press the right command key to switch the Host Key, and then turn off <strong>Auto Capture Keyboard</strong>.
+        </p>
+      </li>
+      <li>
+        <p>
+          Press <strong>OK</strong>, and then close VirtualBox.
+        </p>
+      </li>
+    </ol>
+    <hr>
+    <h2 id="using-emulator-host-mode">
+      Using Emulator Host Mode
+    </h2>
+    <p>
+      The webOS SDK Emulator (version 1.4.1 and later) includes a feature called Emulator Host Mode. This mode allows you to inspect your application using a desktop browser (Chrome or Safari). To accomplish this, the Emulator now contains its own Web server that renders your application on port 8080, which is automatically mapped by the &quot;<code>palm-emulator</code>&quot; tool to port 5580 on your desktop.
+    </p>
+    <p>
+      After the Emulator is started, you can launch a browser on your desktop and render any applications in your browser directly! (Note that if using Chrome, you will need to disable the popup blocker.)
+    </p>
+    <p>
+      <strong>To use Emulator Host Mode</strong>
+    </p>
+    <p>
+      In a Web browser (Chrome or Safari), enter the following URL:
+    </p>
+    <blockquote>
+      <pre>
+<code>http://localhost:5580/
+</code>
+</pre>
+    </blockquote><a name="Exit" id="Exit"></a>
+    <hr>
+    <h2 id="exiting-the-emulator">
+      Exiting the Emulator
+    </h2>
+    <p>
+      Select <code>Machine &gt; Close &gt; Power off the machine &gt; OK</code>
+    </p>
+    <h4 id="note">
+      Note:
+    </h4>
+    <p>
+      If you choose a different option, you cannot install applications on the Emulator the next time you start it.
+    </p><a name="Command" id="Command"></a>
+    <hr>
+    <h2 id="command-line-reference">
+      Command-Line Reference
+    </h2>
+    <p>
+      Command-line usage for the HP webOS Emulator.
+    </p>
+    <h3 id="syntax">
+      Syntax
+    </h3>
+    <blockquote>
+      <pre>
+<code>palm-emulator [OPTION...]
+</code>
+</pre>
+    </blockquote>
+    <h3 id="options">
+      Options
+    </h3>
+    <pre>
+      Option                     Description
+    --list                   List the available Emulator images
+    --start=IMAGE            Start an Emulator image
+    --stop=IMAGE             Stop an Emulator image
+    --reset=IMAGE            Reset an Emulator image
+    --install=IMAGE_FILE     Install an Emulator image
+    --remove=IMAGE           Remove a user-installed Emulator image
+    --remove-all             Remove all user-installed Emulator images
+    --version                Display version info and exit
+    --help                   Display this help and exit
+</pre>
+    <h3 id="usage-notes">
+      Usage Notes
+    </h3>
+    <p>
+      IMAGE is the name of an Emulator image, including the resolution.
+    </p>
+    <p>
+      IMAGE_FILE is the file path of the Emulator image file to install.
+    </p>
+    <p>
+      Note that SDK-installed Emulator images cannot be removed.
+    </p>
+    <p>
+      If no options are specified, an image selection window will be displayed.
+    </p>
+    <h3 id="examples">
+      Examples
+    </h3>
+    <ul>
+      <li>Start the Emulator and choose an image
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code> palm-emulator
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>List the available Emulator images
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code> palm-emulator --list
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>Start the Emulator image named &quot;SDK-1.4 (320x480)&quot;
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code> palm-emulator --start &quot;SDK-1.4 (320x480)&quot;
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>Stop the Emulator image named &quot;SDK-1.4 (320x480)&quot;
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code> palm-emulator --stop &quot;SDK-1.4 (320x480)&quot;
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>Install a new Emulator image
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code> palm-emulator --install &quot;~/Downloads/SDK 1.4.5.452.vmdk.zip&quot;
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>Remove a user-installed Emulator image
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code> palm-emulator --remove &quot;SDK 1.4.5.452&quot;
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>Remove all user-installed Emulator images
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code> palm-emulator --remove-all
+</code>
+</pre>
+    </blockquote>
+		</div>
+	</body>
+</html>

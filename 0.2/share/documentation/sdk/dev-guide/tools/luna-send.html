@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="luna-send">
+      luna-send
+    </h1>
+    <p>
+      <code>luna-send</code> is a command-line tool accessible through a shell on the Emulator or a device. <code>luna-send</code> is mainly used to test calls to services accessible on the device bus through the Luna System Manager.
+    </p>
+    <p>
+      If your app is going to call services, <code>luna-send</code> is a good way to learn service API syntax and experiment; after, you can write the code to do what you already did at the command line.
+    </p>
+    <p>
+      See <a href="/dev-guide/tools/device-shell.html">Device Shell</a> for information about opening a shell on a device or the Emulator.
+    </p>
+    <p>
+      See <a href="/reference/services.html">webOS Service APIs</a> for a list of services available to 3rd party apps.
+    </p>
+    <p>
+      Another useful tool for testing services is <a href="/dev-guide/tools/device-bus-monitor.html"><code>ls-monitor</code></a>, which lets you see traffic going over the webOS service bus, similar to a network sniffer that lets you observe HTTP traffic.
+    </p>
+    <h2 id="usage">
+      Usage
+    </h2>
+    <blockquote>
+      <p>
+        luna-send [OPTIONS...] URL '{JSON object}'
+      </p>
+    </blockquote>
+    <h2 id="options">
+      Options
+    </h2>
+    <pre>
+ -h this help screen
+ -P send over the public bus (send over private bus is default)
+ -s send a signal
+ -a send specified appId in message (default is none)
+ -m service name (default is none)
+ -d turn debug logging on
+ -i turn on interactive mode
+ -t x average over x times getting one response
+ -n x exit interactive mode after x replies
+ -l number responses
+ -f format JSON responses usefully
+ -q apply specific query to responses (multiple queries may be supplied), e.g.:
+        -q 'returnValue' -q 'queues[0]'
+</pre>
+    <h2 id="usage-notes">
+      Usage Notes
+    </h2>
+    <p>
+      For testing services accessible to 3rd party apps, always use the <code>-P</code> option to send on the public bus. The private bus is reserved for <code>com.palm</code> applications.
+    </p>
+    <p>
+      The <code>-a</code> option (impersonate app) is useful with services like DB8 where the app ID is used to determine ownership access to data resources.
+    </p>
+    <p>
+      You usually want to specify either <code>-n 1</code> or <code>-i</code>. This lets you see responses from the service. If you do interactive mode, you will need to hit Ctrl+C to exit the tool.
+    </p>
+    <p>
+      The -f switch (format JSON response) is really useful for services that return a lot of data, for example, the <a href="/reference/services/download-manager.html">Download Manager's</a> <code>listPending</code> call.
+    </p>
+    <p>
+      Here's an example - call the Download Manager to download a website file:
+    </p>
+    <pre>
+luna-send -P -n 1 palm://com.palm.downloadmanager/download '{"target":"http://example.com/file.mp3"}'
+</pre>
+    <p>
+      The single quotes around the JSON body are very important - it tells the shell to group everything inside as a single argument and not to interpret any inside characters as special. JSON requires double-quoted strings, so use those inside.
+    </p>
+    <p>
+      To do the same download but see status updates as it downloads, you would code:
+    </p>
+    <pre>
+luna-send -P -i palm://com.palm.downloadmanager/download '{"target":"http://example.com/file.mp3", "subscribe":true}'
+</pre>
+    <p>
+      The two changes here are using full interactive mode (<code>-i</code>) and adding <code>&quot;subscribe&quot;:true</code> to the request. You would have to exit the <code>luna-send</code> tool once you get the final response to get back to the shell prompt.
+    </p>
+    <h2 id="examples">
+      Examples
+    </h2>
+    <ul>
+      <li>db8 - Delete a kind object
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code>  luna-send -n 1 -P -a com.palm.contacts luna://com.palm.db/delKind '{&quot;id&quot;:&quot;com.palm.test:1&quot;}'
+  {&quot;returnValue&quot;:true}
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>GPS - Get current location
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code>  luna-send -f -P -i palm://com.palm.location/getCurrentPosition '{&quot;subscribe&quot;:true}'
+  {
+      &quot;altitude&quot;: 0,
+      &quot;errorCode&quot;: 0,
+      &quot;heading&quot;: 0,
+      &quot;horizAccuracy&quot;: 20,
+      &quot;latitude&quot;: 37.390196,
+      &quot;longitude&quot;: -122.037845,
+      &quot;returnValue&quot;: true,
+      &quot;timestamp&quot;: 2147483647,
+      &quot;velocity&quot;: 0,
+      &quot;vertAccuracy&quot;: 0
+  }
+</code>
+</pre>
+    </blockquote>
+    <ul>
+      <li>Key service - Subscribe to volume key status changes
+      </li>
+    </ul>
+    <blockquote>
+      <pre>
+<code>  luna-send -n -i -P palm://com.palm.keys/audio/status '{&quot;subscribe&quot;:true}'
+  { &quot;returnValue&quot;: true, &quot;subscribed&quot;: true }
+  { &quot;key&quot;: &quot;volume_up&quot;, &quot;state&quot;: &quot;down&quot; }
+  { &quot;key&quot;: &quot;volume_up&quot;, &quot;state&quot;: &quot;up&quot; }
+  . . .
+</code>
+</pre>
+    </blockquote><br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+		</div>
+	</body>
+</html>

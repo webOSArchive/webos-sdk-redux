@@ -1,0 +1,10 @@
+{
+	"id": "com.palmdts.app.accelerometer",
+	"version": "1.0.0",
+	"vendor": "Your Company",
+	"type": "web",
+	"main": "index.html",
+	"title": "Accelerometer",
+	"icon": "icon.png",
+	"uiRevision":2
+}

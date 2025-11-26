@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="just-type">
+      Just Type
+    </h1>
+    <p>
+      This article describes how to integrate your app with HP's &quot;Just Type&quot; (formerly known as &quot;Universal Search&quot;) feature. Just Type activates when a user begins typing in Launcher or Card view—starting an activity which can include searching, sending an email, making a phone call, searchiing app stored data, and so on.
+    </p>
+    <p>
+      An app can integrate with three different Just Type components:
+    </p>
+    <table border="1" cellpadding="5" cellspacing="5">
+      <thead>
+        <tr>
+          <th width="120">
+            Just Type Name
+          </th>
+          <th width="120">
+            Just Type Preferences Name
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            Quick Actions
+          </td>
+          <td>
+            Actions
+          </td>
+          <td>
+            Displays apps that launch with a specific task, for example: send a new email, write a new memo, add a contact, etc.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Search Using
+          </td>
+          <td>
+            Search Using
+          </td>
+          <td>
+            Displays apps that can search the Web/Cloud or the app's db8 data.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Launch
+          </td>
+          <td>
+            Content
+          </td>
+          <td>
+            Just Type can search through your app's db8 stored objects. If a user selects an object, your app is launched with that selection.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      You can configure each of these in your app's <code>appinfo.json</code> file.
+    </p>
+    <p>
+      <strong>In this section:</strong>
+    </p>
+    <ul>
+      <li>
+        <a href="#configuring">Configuring appinfo.json for Just Type</a>
+      </li>
+      <li>
+        <a href="#permissions">Granting Permissions for db8 Search</a>
+      </li>
+      <li>
+        <a href="#preferences">User Settings for Just Type</a>
+      </li>
+      <li>
+        <a href="#javascript">JavaScript Implementation</a>
+      </li>
+    </ul><a name="configuring" id="configuring"></a>
+    <hr>
+    <h2 id="configuring-appinfo.json-for-just-type">
+      Configuring appinfo.json for Just Type
+    </h2>
+    <p>
+      You can add the following object and sub-objects to your app's <a href="/reference/config/appinfo.json.html">appinfo.json</a> file to configure it for Just Type.
+    </p>
+    <h3 id="schema">
+      Schema
+    </h3>
+    <pre>
+   "universalSearch" : {
+      "action" :  { 
+          "displayName" : string,
+          "url"         : string,
+          "launchParam" : string | any object
+      },
+      "dbsearch":  {
+          "displayName"        : string,
+          "url"                : string,
+          "launchParam"        : string,
+          "launchParamDbField" : string,
+          "displayFields"      : string array,
+          "dbQuery"            : db8 <a href="/reference/data-types/db8.html#Query">Query</a> object array
+      },
+      "search" :   { 
+          "displayName"  : string,
+          "url"          : string,
+          "launchParam"  : string | any object
+      }
+   } 
+</pre>
+    <h3 id="action">
+      action
+    </h3>
+    <p>
+      <img src="/images/QuickAction.jpg"><br>
+      <strong>Figure 1</strong>: Sample Quiick Actions menu
+    </p>
+    <p>
+      Configures an app for Just Type's Quick Actions menu. When launched, the application is passed a <code>launchParam</code> argument indicating the action requested. This field is HTML-encoded, so for example, any spaces would be replaced with &quot;%20&quot;.
+    </p>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Element
+          </th>
+          <th>
+            Required
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            displayName
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            App's display name in Just Type's Quick Actions menu.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            url
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Application ID, i.e., &quot;com.palmdts.contacts&quot;.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            launchParam
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            string or any object
+          </td>
+          <td>
+            HTML-encoded, passed as an argument when the app is launched; indicates the action the app should take.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="dbsearch">
+      dbsearch
+    </h3>
+    <p>
+      Defines a db8 query Just Type uses for its Launch menu. The app is launched if the user selects one of the objects returned. For example, for a contacts app, this allows the user to select one contact and launch the app to edit that contact. The app is passed a <code>launchParam</code> argument that is HTML-encoded, so, for example, any spaces are replaced with &quot;%20&quot;.
+    </p>
+    <p>
+      <img src="/images/launch.jpg"><br>
+      <strong>Figure 2</strong>: Sample app in Launch indicating how many db8 records (5) match the entered search criteria so far.
+    </p>
+    <p>
+      Note that Launch allows the user to drill-down to select one record. In the screenshot above, the user could select &quot;Just Type sample app&quot; and they would see a screen with 5 records. They could then select one and the app would launch with that selection. Alternatively, the user could keep entering text and continue to narrow the search results.
+    </p>
+    <p>
+      With &quot;<code>dbsearch</code>&quot; you can configure the following:
+    </p>
+    <ul>
+      <li>The query Just Type uses to access db8 storage
+      </li>
+      <li>The result fields it displays
+      </li>
+      <li>The parameters it passes when the app is launched
+      </li>
+    </ul>
+    <p>
+      Including this object also means you have to give Just Type permission to access your db8 stored data, see <a href="#permissions">Configuring Permissions for db8 Search</a>.
+    </p>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Element
+          </th>
+          <th>
+            Required
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            displayName
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            App's display name in Just Type's Launch menu.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            url
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Application ID.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            launchParam
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Name of field passed as an argument to the app.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            launchParamDbField
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Name of field in database whose value is passed in &quot;launchParam&quot; to identify the record selected, usually the object's db8 ID (&quot;<code>_id</code>&quot;).
+          </td>
+        </tr>
+        <tr>
+          <td>
+            displayFields
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            string array
+          </td>
+          <td>
+            db8 query result set fields displayed to user in Just Type, i.e., &quot;firstname&quot;, &quot;lastname&quot;, ...
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dbQuery
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            string array
+          </td>
+          <td>
+            db8 query used in Just Type. The &quot;val&quot; field value (in the query's where clause) is set to the user-entered search text. See the db8 documentation for information on formatting a db8 query.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="search">
+      search
+    </h3>
+    <p>
+      <img src="/images/SearchUsing.jpg"><br>
+      <strong>Figure 3</strong>: Sample Search Using menu
+    </p>
+    <p>
+      Configures an app for Just Type's Search Using menu. The application gets passed a &quot;<code>launchParam</code>&quot; argument that is HTML-encoded.
+    </p>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>
+            Element
+          </th>
+          <th>
+            Required
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            displayName
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            App's display name in Just Type's Search Using menu.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            url
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Application ID, i.e., &quot;com.palmdts.mycontacts&quot;
+          </td>
+        </tr>
+        <tr>
+          <td>
+            launchParam
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            string or any object
+          </td>
+          <td>
+            HTML-encoded, passed as an argument when the app is launched. If this field is a string, then it names a property of launchParams and is set to the user-entered text. For example, if set to &quot;myField&quot;, then <code>launchParams.myField</code> contains the user-entered text. If defined as an object that contains <code>&quot;#{searchTerms}&quot;</code>, then <code>launchParams</code> is set to that object but <code>&quot;#{searchTerms}&quot;</code> is replaced with the user-entered text (see examples below).
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="appinfo.json-keywords">
+      appinfo.json Keywords
+    </h3>
+    <p>
+      You can add a &quot;<code>keywords</code>&quot; option to <code>appinfo.json</code>—a string array containing keyword meta-data. For example:
+    </p>
+    <blockquote>
+      <pre>
+<code>&quot;keywords&quot;: [&quot;dts&quot;, &quot;email&quot;]
+</code>
+</pre>
+    </blockquote>
+    <p>
+      Just Type will list apps that contain the user-entered text in their &quot;<code>keywords</code>&quot; values.
+    </p>
+    <h3 id="example-1">
+      Example 1
+    </h3>
+    <pre>
+{
+   "universalSearch":{
+      "action":{
+         "displayName":"Add New Contact",
+         "url":"com.palmdts.mycontactsapp",
+         "launchParam":"addContact"
+      },
+      "dbsearch":{
+         "displayName":"My Contacts App",
+         "url":"com.palmdts.mycontactsapp",
+         "launchParam":"contactId",
+         "launchParamDbField":"_id",
+         "displayFields":[
+            "firstname",
+            "lastname",
+            "Nickname"
+         ],
+         "dbQuery":{
+            "from":"com.palmdts.mycontacts:1",
+            "where":[
+               {
+                  "prop":"firstname",
+                  "op":"?",
+                  "val":""
+               }
+            ],
+            "orderBy":"firstname",
+            "limit":40
+         }
+      }
+   }
+}
+</pre>
+    <p>
+      In this example, the user-entered text becomes the value for the &quot;val&quot; field when searching db8 storage.
+    </p>
+    <h3 id="example-2">
+      Example 2
+    </h3>
+    <pre>
+{
+   "universalSearch":{
+      "search":{
+         "displayName":"Palm App Catalog",
+         "url":"com.palmdts.app.findapps",
+         "launchParam":{
+            "common":{
+               "sceneType":"search",
+               "params":{
+                  "type":"query",
+                  "search":"#{searchTerms}"
+               }
+            }
+         }
+      }
+   }
+}
+</pre>
+    <p>
+      In this example, &quot;<code>#(searchTerms)</code>&quot; is replaced with the user-entered text.
+    </p><a name="permissions" id="permissions"></a>
+    <hr>
+    <h2 id="granting-permissions-for-db8-search">
+      Granting Permissions for db8 Search
+    </h2>
+    <p>
+      If you want Just Type to access your db8 data storage as indicated with the &quot;<code>dbsearch</code>&quot; object in <code>appinfo.json</code>, then you need to give the launcher permission to do so.
+    </p>
+    <p>
+      You can implement this programmatically with a db8 <a href="/reference/services/db8.html#putPerm"><code>putPermissions</code></a> service call.
+    </p>
+    <p>
+      <strong>Enyo</strong>
+    </p>
+    <p>
+      This example gives <code>com.palm.launcher</code> permission to access <code>com.palmdts.sample:1</code> data objects. This code is taken from the sample JustType Enyo app that comes with the SDK.
+    </p>
+    <pre>
+    . . .
+        {
+            name: "putDBPermissions", 
+            kind: enyo.PalmService,
+            service: "palm://com.palm.db/",
+            method: "putPermissions",
+            onSuccess: "permissionSuccess",
+            onFailure: "permissionFailure",
+        }
+    ],
+    permissionSuccess: function(){
+        console.log("DB permission granted successfully!");
+    },
+    permissionFailure: function(){
+        console.log("DB failed to grant permissions!");
+    },
+    . . . 
+
+    var permObj = [ {
+      "type":"db.kind",
+      "object":"com.palmdts.justtype:1",
+      "caller":"com.palm.launcher",
+      "operations":{
+         "read":"allow"
+      }}];
+
+    this.$.putDBPermissions.call({"permissions":permObj});
+</pre>
+    <p>
+      <strong>Mojo</strong>
+    </p>This example gives <code>com.palm.launcher</code> permission to access <code>com.palmdts.sample:1</code> data objects.
+    <pre>
+
+var permObj =[{
+   "type"   : "db.kind",
+   "object" : "com.palmdts.sample:1",
+   "caller" : "com.palm.launcher",
+   "operations":{
+      "read":"allow"
+   }}];
+
+this.controller.serviceRequest("palm://com.palm.db/", {
+    method: "putPermissions",
+    parameters: {"permissions":permObj},
+    onSuccess: function() { Mojo.Log.info("DB permission granted successfully!");},
+    onFailure: function() { Mojo.Log.error("DB failed to grant permissions!");}
+ });
+ 
+</pre><a name="preferences" id="preferences"></a>
+    <hr>
+    <h2 id="user-settings-for-just-type">
+      User Settings for Just Type
+    </h2>
+    <p>
+      For your app to integrate with Just Type, the user has to select (check) the app for use in each Just Type category (Content, Search Using, and Actions) in the Just Type preferences program (under Setttings).
+    </p><a name="javascript" id="javascript"></a>
+    <hr>
+    <h2 id="javascript-implementation">
+      JavaScript Implementation
+    </h2>
+    <h3 id="enyo">
+      Enyo
+    </h3>
+    <p>
+      The SDK comes with a sample Just Type Enyo app , which you can find in the SDK's ...<code>\\more-examples\\JustType</code> folder. This app displays and manages a hypothetical club's ball player roster and is configured to integrate with all 3 Just Type capabilities:
+    </p>
+    <ul>
+      <li>Quick Actions - Add a player.
+      </li>
+      <li>Search Using - Search player records with user-entered text.
+      </li>
+      <li>Launch - Search the players' firstname field with entered text. Edit player's record if selected in results.
+      </li>
+    </ul>
+    <p>
+      The app's <code>appinfo.json</code> Just Type configuration looks like this:
+    </p>
+    <pre>
+{
+   . . .
+
+   "universalSearch":{
+      "search":{
+         "displayName":"Just Type app search",
+         "url":"com.palmdts.justtype",
+         "launchParam":"query"
+      },
+      "action":{
+         "displayName":"JustType add player",
+         "url":"com.palmdts.justtype",
+         "launchParam":"newPlayer"
+      },
+      "dbsearch":{
+         "displayName":"Just Type sample app",
+         "url":"com.palmdts.justtype",
+         "launchParam":"playerId",
+         "launchParamDbField":"_id",
+         "displayFields":[
+            "firstname",
+            "lastname",
+            "Club"
+         ],
+         "dbQuery":{
+            "from":"com.palmdts.justtype:1",
+            "where":[
+               {
+                  "prop":"firstname",
+                  "op":"%",
+                  "val":""
+               }
+            ],
+            "orderBy":"firstname",
+            "limit":20
+         }
+      }
+   }
+}
+</pre>
+    <p>
+      Note how <code>launchParam</code> (app argument) is defined for each category. Here is how it is handled in the app's <code>index.html</code> file:
+    </p>
+    <pre>
+&lt;body&gt;
+&lt;script type="text/javascript"&gt;
+    var appInstance = enyo.create({kind: "JustType"});
+
+    //if we're being launched from the Just Type system then pass in any parameters
+    if (window.PalmSystem && enyo.windowParams){
+        appInstance.setLaunchParams(enyo.windowParams);
+    }
+    appInstance.renderInto(document.body);
+&lt;/script&gt;
+&lt;/body&gt;
+</pre>
+    <p>
+      Here, the main Enyo kind for this app is allocated (found in <code>source\JustType.js</code>). This kind has <code>launchParams</code> as one of its public properties:
+    </p>
+    <pre>
+published: {        
+    launchParams: null
+},
+</pre>
+    <p>
+      If a parameter is passed on launch, as it is with Just Type, the <code>launchParams</code> property is modified with a call to <code>setLaunchParams</code>. This automatically invokes the kind's <code>launchParamsChanged</code> function:
+    </p>
+    <pre>
+//
+// This will be called if setLaunchParams is called from index.html.  
+// It is  called automatically since launchParams is a published property on our kind.
+//
+launchParamsChanged: function(){
+    //
+    // If we received a launch parameter then we either make a 
+    // query based on it, add a new player, or edit a player
+    //
+    if (this.launchParams){
+        if (this.launchParams.playerId){
+            //
+            // Launch
+            // Get player who was picked in db8 search result set
+            //
+            var inQuery = {
+                "from":"com.palmdts.justtype:1",
+                "where":[{
+                    "prop":"_id",
+                    "op":"=","val":this.launchParams.playerId
+            }]};
+            this.$.dbFind.call({query: inQuery}, 
+                               {onSuccess: "playerQuerySuccess", 
+                                onFailure: "playerQueryFail"});
+
+         } else if (this.launchParams.newPlayer){
+             //
+             // Quick Actions
+             // User selected "Add new player"
+             //
+             this.createNewPlayer();
+
+         } else if (this.launchParams.query){
+             //
+             // Search Using
+             // Reset the player list display based on our query param
+             //
+             this.$.list.reset(); 
+        }
+    }
+},
+</pre>
+    <p>
+      Note how for each <code>launchParam</code> type (action, search, launch) it is handled in the above function as the app is launched and begins processing.
+    </p>
+    <p>
+      For the <code>db8search</code> to work, the launcher had to be given permission to access its db8 data objects:
+    </p>
+    <pre>
+//
+// Attempt to give db permissions to the launcher so user's can perform queries on 
+// our data with the Just Type feature. We do this after the db has been installed 
+// since otherwise we'd have nothing to grant permissions for.
+//
+var permObj = [ {
+        "type":"db.kind",
+        "object":'com.palmdts.justtype:1',
+        "caller":"com.palm.launcher",
+        "operations":{
+            "read":"allow"
+         }
+     }
+];
+
+this.$.putDBPermissions.call({"permissions":permObj});
+</pre>
+    <h3 id="mojo">
+      Mojo
+    </h3>
+    <p>
+      Your Mojo code can handle the Quick Actions or Search launch in the <code>handleLaunch</code> method in your app's <code>AppAssistant</code>. Using the fields defined by &quot;<code>launchParam</code>&quot; from Example 1 (above), it would look something like this:
+    </p>
+    <pre>
+AppAssistant.prototype.handleLaunch = function(launchParams) {
+    if (this.launchParams) {
+
+        if (this.launchParams.searchString) 
+        {
+            /* Do something, i.e., query database with searchString and display
+        }
+        else if (this.launchParams.playerId)
+        {
+            /* Do something, i.e., query database with ID and display
+        }
+    }
+}
+</pre>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,108 @@
+#!/bin/bash
+set -e
+
+abs_path()
+{
+	echo "$(cd "${1%/*}" 2>/dev/null && echo "$PWD"/"${1##*/}")" || exit 1
+}
+
+where_am_i()
+{
+	local realme="$1"
+	while [ -L "$realme" ]; do
+		realme=`readlink "$realme"`
+	done
+	echo "$(cd "${realme%/*}" 2>/dev/null && pwd)" || exit 1
+}
+
+# Find Java on macOS if not in PATH
+find_java_macos()
+{
+	if [ -x /usr/libexec/java_home ]; then
+		local java_home=$(/usr/libexec/java_home 2>/dev/null)
+		if [ -n "$java_home" ] && [ -x "$java_home/bin/java" ]; then
+			echo "$java_home/bin/java"
+			return 0
+		fi
+	fi
+	return 1
+}
+
+# Determine which java to use
+setup_java()
+{
+	# First try java in PATH
+	if command -v java >/dev/null 2>&1; then
+		JAVA_CMD="java"
+	# On macOS, try java_home utility
+	elif [ "$(uname -s)" = "Darwin" ]; then
+		JAVA_CMD=$(find_java_macos)
+		if [ -z "$JAVA_CMD" ]; then
+			echo "error: java not installed or not found"
+			echo "Install Java or ensure it's in your PATH"
+			exit 1
+		fi
+	else
+		echo "error: java not installed or not found in PATH"
+		exit 1
+	fi
+}
+
+# Get major version number from java
+java_major_version()
+{
+	local version_output=$($JAVA_CMD -version 2>&1 | grep -i "version" | head -n 1)
+	local version=$(echo "$version_output" | sed -n 's/.*version "\(.*\)".*/\1/p')
+
+	if [ -z "$version" ]; then
+		echo "error: could not determine java version"
+		exit 1
+	fi
+
+	# Extract major version: 1.8.0_xxx -> 8, or 11.0.x -> 11
+	local major=$(echo "$version" | sed -n 's/^1\.\([0-9]*\).*/\1/p')
+	if [ -z "$major" ]; then
+		major=$(echo "$version" | sed -n 's/^\([0-9]*\).*/\1/p')
+	fi
+
+	echo "$major"
+}
+
+# check java version
+setup_java
+JAVA_VER=$(java_major_version)
+if [ -z "$JAVA_VER" ]; then
+	echo "error: could not determine java version"
+	exit 1
+fi
+if [ "$JAVA_VER" -lt 5 ]; then
+	echo "error: java 5 or greater is required (found version $JAVA_VER)"
+	exit 1
+fi
+
+# the jar file
+JAR_FILE="webos-tools.jar"
+
+# the command name
+PALM_COMMAND="$(basename "$0")"
+
+HERE="$(where_am_i "$0")"
+
+# look for relative dirs
+JARS_DIR="$(abs_path "$HERE/../share/jars")"
+
+# the vm arguments
+VM_ARGS[0]=-Dpalm.command=$PALM_COMMAND
+
+# the jar path
+JAR="$JARS_DIR/$JAR_FILE"
+
+# set IFS to end-of-line
+ORIGIFS=$IFS
+IFS=`echo -en "\n\b"`
+
+# launch the app
+"$JAVA_CMD" ${VM_ARGS[@]} -jar "$JAR" "$@"
+
+# restore IFS
+IFS=$ORIGIFS

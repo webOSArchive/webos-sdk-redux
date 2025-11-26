@@ -1,0 +1,9 @@
+{
+	"id": "com.palmdts.app.palmspptest",
+	"version": "1.0.0",
+	"vendor": "Palm",
+	"type": "web",
+	"main": "index.html",
+	"title": "Palm SPP App Test",
+	"icon": "icon.png"
+}

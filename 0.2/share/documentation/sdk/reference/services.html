@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="webos-service-apis">
+      webOS Service APIs
+    </h1>
+    <p>
+      This section documents APIs for interacting with webOS services.
+    </p>
+    <p>
+      <strong>Developer options for accessing services</strong>
+    </p>
+    <ul>
+      <li>You can <a href="/dev-guide/tools/device-shell.html">open a shell</a> on a device through novacom or putty and use <a href="/dev-guide/tools/luna-send.html"><code>luna-send</code></a> to test out accessing services at the command-line.
+      </li>
+      <li>Mojo apps can use <a href="/dev-guide/mojo/services-overview.html#accessing-services">serviceRequest</a>.
+      </li>
+      <li>Enyo apps can use <a href="/dev-guide/enyo/palm-service.html">PalmService</a>.
+      </li>
+      <li>JavaScript apps and services can use the <a href="/reference/javascript-libraries/foundations.html">Foundation</a> library's <a href="/reference/javascript-libraries/foundations/foundations-comms-palm-call.html">PalmCall</a>.
+      </li>
+      <li>PDK apps can use <a href="/reference/pdk/pdl/pdl-service-call.html">PDL_ServiceCall</a> and <a href="/reference/pdk/pdl/pdl-service-call-with-callback.html">PDL_ServiceCallWithCallback</a>. The PDK also has its own APIs specifically for the In-App Payment service.
+      </li>
+    </ul>
+    <p>
+      <strong>Tools for testing services</strong>
+    </p>
+    <ul>
+      <li>
+        <a href="/dev-guide/tools/luna-send.html"><code>luna-send</code></a> - A good way to learn service API syntax and experiment; after, you can write the code to do what you already did at the command line.
+      </li>
+      <li>
+        <a href="/dev-guide/tools/device-bus-monitor.html"><code>ls-monitor</code></a> - Lets you see traffic going over the webOS service bus, similar to a network sniffer that lets you observe HTTP traffic.
+      </li>
+    </ul>
+    <p>
+      <strong>See also</strong>
+    </p>
+    <ul>
+      <li>
+        <a href="/dev-guide/mojo/services-overview.html">Services Overview</a>
+      </li>
+    </ul>
+    <table cellspacing="5" cellpadding="5" border="1">
+      <thead>
+        <tr bgcolor="lightgrey">
+          <th width="150">
+            Service
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <a href="/reference/services/accelerometer.html">Accelerometer</a>
+          </td>
+          <td>
+            Captures orientation events and accelerometer data.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="/reference/services/activity-manager.html">Activity Manager</a>
+          </td>
+          <td>
+            Schedules and priotizes device activities - apps, services, tasks, network flows, etc.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="/reference/services/alarms.html">Alarms</a>
+          </td>
+          <td>
+            Sets a timer to activate on the device either after a specified interval or at a specified date and time.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="/reference/services/application-manager.html">Application Manager</a>
+          </td>
+          <td>
+            Invokes default handlers or apps for common resource types and basic device operations.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="/reference/services/bluetooth.html">Bluetooth</a>
+          </td>
+          <td>
+            Use the Bluetooth Serial Port Protocol (SPP) to access certain Bluetooth devices.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="/reference/services/connection-manager.html">Connection Manager</a>
+          </td>
+          <td>
+            Gets connection status and subscribes to notifications of connection status changes.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="/reference/services/db8.html">db8</a>
+          </td>
+          <td>
+            Interfaces to an embedded JSON database.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="/reference/services/display-manager.html">Display Manager</a>
+          </td>
+          <td>
+            Gets display status.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="/reference/services/download-manager.html">Download Manager</a>
+          </td>
+          <td>
+            Downloads or uploads a file.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="/reference/services/firewall.html">Firewall</a>
+          </td>
+          <td>
+            Opens a port on the firewall.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="/reference/services/gps.html">GPS</a>
+          </td>
+          <td>
+            Provides basic location services for single or multiple location fixes.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="/reference/services/in-app-payment.html">In-App Payment</a>
+          </td>
+          <td>
+            Allows apps to embed a store directly in their app and process payments for digital content.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="/reference/services/key-manager.html">Key Manager</a>
+          </td>
+          <td>
+            Provides key management and cryptographic functionality.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="/reference/services/key-service.html">Key Service</a>
+          </td>
+          <td>
+            Provides information about keypresses and other events on the device.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="/reference/services/media-permissions.html">Media Permissions</a>
+          </td>
+          <td>
+            Grants read-only access to media files stored in db8.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="/reference/services/power-management.html">Power Management</a>
+          </td>
+          <td>
+            Manages power on the device.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="/reference/services/print-manager.html">Print Manager</a>
+          </td>
+          <td>
+            Provides webOS printing services.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="/dev-guide/tools/radio-simulator.html">Radio Simulator</a>
+          </td>
+          <td>
+            Lets you simulate telephone and GPS radio hardware at the lowest level on the <a href="/dev-guide/tools/emulator.html">Emulator</a>.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="/reference/services/system-properties.html">System Properties</a>
+          </td>
+          <td>
+            Retrieves named system properties.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="/reference/services/system-services.html">System Services</a>
+          </td>
+          <td>
+            Enables apps to access various system settings
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="/reference/services/system-sounds.html">System Sounds</a>
+          </td>
+          <td>
+            Allows apps to play embedded system sounds.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="/reference/services/touch2share.html">Touch2Share</a>
+          </td>
+          <td>
+            Allows devices to share data at a tap.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="/reference/services/zeroconf.html">Zeroconf</a>
+          </td>
+          <td>
+            Automatically discovers printers, computer services, and other local network device services.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+		</div>
+	</body>
+</html>

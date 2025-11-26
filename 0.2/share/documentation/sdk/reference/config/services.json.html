@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="services.json">
+      services.json
+    </h1>
+    <p>
+      The <code>services.json</code> file resides in a service's root directory and describes how the service is constructed and operates.
+    </p>
+    <h2 id="schema">
+      Schema
+    </h2>
+    <pre>
+{
+   "id"              : string,
+   "description"     : string,
+   "engine"          : string,   
+   "commandTimeout"  : number,
+   "activityTimeout" : number,
+   "globalized"      : boolean,
+   "services":
+   [
+      {
+         "name"           : string,
+         "description"    : string,
+         "assistant"      : string,
+         "commandTimeout" : number,
+         "commands":
+         [
+            {
+               "name"           : string,
+               "description"    : string,
+               "assistant"      : string,
+               "public"         : boolean,
+               "watch"          : boolean,
+               "subscribe"      : boolean,
+               "argsSchema"     : string | object,
+               "commandTimeout" : number
+             }
+          ]
+      }
+   ],
+   "schemas":
+   {
+      schema: object
+   }
+}
+</pre>
+    <h2 id="properties">
+      Properties
+    </h2>
+    <table border="1" cellspacing="0" cellpadding="0">
+      <thead>
+        <tr>
+          <th>
+            Property
+          </th>
+          <th>
+            Required
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            id
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Identifies the service. The service ID must begin with the app ID. For example:<br>
+            App ID : com.palmdts.helloworld<br>
+            Service ID : com.palmdts.helloworld.service
+          </td>
+        </tr>
+        <tr>
+          <td>
+            description
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Used to provide an informative aaplication description.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            engine
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            node | triton<br>
+            Selects the JavaScript engine the service runs under. Default is <code>node</code>.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            commandTimeout
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Number of seconds commands should run before a timeout error is returned to the caller. This can be overridden (see below). If not defined, this defaults to 30 seconds.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            activityTimeout
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Number of seconds the application continues to run after the completion of the last activity, before it terminates. Services do not run all the time, but launch when needed, and terminate when not in use. Typically, a command is considered to be an activity, so the application will not terminate while a command is being processed. It is also possible to have other non-command activities (e.g., background activities). If not defined, this defaults to 30 seconds.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            globalized
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            boolean
+          </td>
+          <td>
+            If <code>true</code>, locale-dependent processing, such as the way names, addresses and phone numbers are parsed, is invoked. In general, services should try to be locale-agnostic as invoking this can add significant processing time.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            services
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            object array
+          </td>
+          <td>
+            <p>
+              Services the application provides. Typically, an application provides only one service. However, there may be reasons to provide multiple services within the same application (e.g., old API versions). An application must define at least one service (since an application without services probably does not make sense).
+            </p>Note: more than one service per application is <strong>NOT</strong> currently supported.
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            name
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            <p>
+              Name of service on webOS message bus.
+            </p>
+            <p>
+              The name must begin with the app name. For example:
+            </p>
+            <pre>
+app name: "com.palmdts.testacct" 
+service name: "com.palmdts.testacct.contacts.service"
+</pre>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            description
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Service description.
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            assistant
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            <p>
+              Name of class that should be instantiated to manage this service. The service assistant runs only once when the service starts. However, it can be used to store more-persistent state since command assistants are only around when processing a request.
+            </p>
+            <p>
+              For example:
+            </p>
+            <pre>
+var assistant = this.controller.service.assistant;
+assistant.saveState(someState);
+</pre>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            commandTimeout
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Number of seconds commands should run before a timeout error is returned to the caller. This overrides any value defined at the application level for this service, but may be overridden in turn by a command (see below). If not defined, this inherits the value defined for the application.
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            commands
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            object array
+          </td>
+          <td>
+            Commands this service provides. A service may provide zero or more commands per service (a service with no commands may simply want to run once when the application is started).
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:60px">
+            name
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Command name.
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:60px">
+            description
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Command description
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:60px">
+            assistant
+          </td>
+          <td>
+            Yes
+          </td>
+          <td>
+            string
+          </td>
+          <td>
+            Name of class that should be instantiated to manage this command. The command assistant's <code>run</code> method is called to execute the command.
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:60px">
+            public
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            boolean
+          </td>
+          <td>
+            If <code>true</code>, the command is callable on the public bus.
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:60px">
+            watch
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            boolean
+          </td>
+          <td>
+            <p>
+              If <code>true</code>, this command is watchable. A watchable command has two return values to the caller:
+            </p>
+            <ol style="list-style-type: decimal">
+              <li>
+                <p>
+                  The first return value is the usual response to the command.
+                </p>
+              </li>
+              <li>
+                <p>
+                  The second return value, which is sent sometime later, indicates that the command should be re-executed, because the value it returns may be different from the last time it was called.
+                </p>
+              </li>
+            </ol>
+            <p>
+              This mechanism is similar to subscriptions, but is naturally rate-limited by the consumer of the service, resulting in less unnecessary bus traffic and fewer application stampedes when service state changes.
+            </p>Defaults to <code>false</code> if not present.
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:60px">
+            subscribe
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            boolean
+          </td>
+          <td>
+            <p>
+              If <code>true</code>, this command supports subscriptions. To subscribe, an app or service sets <code>subscribe</code>=<code>true</code> in the request.
+            </p>
+            <p>
+              A subscription is typically used for a command which can take a long time to run, but where incremental progress can be indicated to the caller. The webOS Download Manager is an example of a service that implements subscriptions.
+            </p>
+            <p>
+              Commands which have a subscription active do not time out.
+            </p>
+            <p>
+              For a subscribeable command, the <code>run(</code>) function is passed a second parameter, which is a FutureFactory object, which provides Future objects for subsequent responses.
+            </p>
+            <p>
+              Example:
+            </p>
+            <pre>
+run: function(future, subscription) {
+    var count = 1;
+    future.result = { reply: "this is the initial response"};
+    this.interval = setInterval(function ping() {
+       // subscription.get() returns a future to use for the next response
+       var f = subscription.get();
+       f.result = { reply: "response #"+count++};
+    }, 1000);
+},
+</pre>
+            <p>
+              Apps implementing a subscribable command should make requests from the application with Mojo.Service.Request, rather than using the Mojo.Controller.SceneController's request() method, since the controller cancels any requests when the scene closes.
+            </p>Defaults to <code>false</code> if not present.
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:60px">
+            argsSchema
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            string | object
+          </td>
+          <td>
+            Defines a JSON schema used to validate incoming command arguments. This can either be a JSON schema or a string. If a string is used, this should match a property in the application-level schema object.
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:60px">
+            commandTimeout
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            number
+          </td>
+          <td>
+            Number of seconds this command should run before a timeout error is returned to the caller. This overrides any value defined at the service or application level. If not defined, this inherits the value defined by the service or the application.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            schemas
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            object
+          </td>
+          <td>
+            Command arguments may be optionally validated using a JSON Schema. If a schema is used, the service executes only validated commands. Otherwise, schema errors are returned to the caller.
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-left:30px">
+            schema
+          </td>
+          <td>
+            No
+          </td>
+          <td>
+            object
+          </td>
+          <td>
+            The schema property at the application level defines a set of string/schema pairs. Each named schema can be referenced by zero or more commands using their schema property. The value of the pair corresponds to a JSON schema, which is used for command validation.
+          </td>
+        </tr>
+      </tbody>
+    </table><br>
+    <br>
+    <h2 id="example">
+      Example
+    </h2>
+    <pre>
+{
+   "id":"com.palmdts.testacct.contacts.service",
+   "description":"Test Contact Service",
+   "engine":"node",
+   "activityTimeout":60,
+   "services":[
+      {
+         "name":"com.palmdts.testacct.contacts.service",
+         "description":"Test Contact",
+         "globalized":false,
+         "commands":[
+            {
+               "name":"checkCredentials",
+               "assistant":"checkCredentialsAssistant",
+               "public":true
+            },
+            {
+               "name":"onCapabiltiesChanged",
+               "assistant":"onCapabiltiesChangedAssistant",
+               "public":true
+            },  
+            {
+               "name":"onCredentialsChanged",
+               "assistant":"onCredentialsChangedAssistant",
+               "public":true
+            },    
+            {
+               "name":"onCreate",
+               "assistant":"onCreateAssistant",
+               "public":true
+            },    
+            {
+               "name":"onEnabled",
+               "assistant":"onEnabledAssistant",
+               "public":true
+            },        
+            {
+               "name":"onDelete",
+               "assistant":"onDeleteAssistant",
+               "public":true
+            },            
+            {
+               "name":"sync",
+               "assistant":"syncAssistant",
+               "public":true
+            }                                                                    
+         ]
+      }
+   ]
+}
+</pre><a name="security" id="security"></a>
+    <hr>
+    <h2 id="security">
+      Security
+    </h2>
+    <p>
+      The LS2 security role files will be automatically created from <code>services.json</code> at build time. You will be able to override certain default behavior with custom properties in the <code>services.json</code> file. Check back soon for details.
+    </p>
+		</div>
+	</body>
+</html>

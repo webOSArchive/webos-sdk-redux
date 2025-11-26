@@ -1,0 +1,3 @@
+palm-package testacct.application testacct.accts testacct.package 
+palm-install com.palmdts.synergy_1.0.1_all.ipk
+ 

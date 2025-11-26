@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="running-the-sample-application">
+      Running the Sample Application
+    </h1>
+    <p>
+      The PDK comes with a sample app provided to verify and test your setup. The sample app can be run on the following host PCs:
+    </p>
+    <ul>
+      <li>
+        <p>
+          Windows PCs - See <a href="#RunningSampleWindows">Running the Sample app on a Windows PC.</a>
+        </p>
+      </li>
+      <li>
+        <p>
+          Apple Macs - See <a href="#RunningSampleAppMac">Running the Sample app on a Mac.</a>
+        </p>
+      </li>
+    </ul>
+    <p>
+      <strong>Notes:</strong>
+    </p>
+    <ul>
+      <li>
+        <p>
+          The sample app will not work if your machine does not support OpenGL 2.0. See &quot;All Host PCs&quot; under <a href="/dev-guide/pdk/overview.html#prerequisites">prerequisites</a> for more information.
+        </p>
+      </li>
+      <li>
+        <p>
+          Starting with webOS 3.0, you can run x86-compiled PDK code in the Emulator in either full-screen or hybrid mode. SDL APIs are supported, but OpenGL ES is not.
+        </p>
+      </li>
+      <li>
+        <p>
+          To build PDK code, you need a separate x86 toolchain. On Windows, you can download the current <a href="http://www.codesourcery.com/sgpp/lite/ia32/portal/release1567" target="_blank">CodeSourcery G++ Lite cross-compiler</a>.
+        </p>
+      </li>
+    </ul>
+    <hr>
+    <a name="RunningSampleWindows" title="RunningSampleWindows" id="RunningSampleWindows"></a>
+    <h2 id="running-the-sample-app-on-a-windows-pc">
+      Running the Sample App on a Windows PC
+    </h2>
+    <p>
+      A sample app (<code>C:\Program Files\HP webOS\PDK\share\samples\simple</code>) is provided with the PDK to verify your setup. You can run this app in one of two ways:
+    </p>
+    <ol style="list-style-type: decimal">
+      <li>
+        <p>
+          From the command line - the sample app runs directly on the device.
+        </p>
+      </li>
+      <li>
+        <p>
+          In the Visual Studio IDE - the sample app is run on the desktop.
+        </p>
+      </li>
+    </ol>
+    <p>
+      When launched in Visual Studio, a red, multi-sided, rotating shape appears in its own app window. When run from the command line, the same rotating shape displays on the device.
+    </p>
+    <p>
+      <img src="/images/palm/pdk_rotatingcube.jpg" alt="image"><br>
+      <br>
+    </p>
+    <p>
+      <strong>Note:</strong>
+    </p>
+    <p>
+      To validate your setup, you only need to run the sample app in one of the described ways. If you are using Visual Studio, you may want to try both, as you will need to do both to develop and test your app.
+    </p>
+    <hr>
+    <h3 id="running-the-sample-app-on-the-device-from-the-command-line">
+      Running the sample app on the device from the command-line
+    </h3>
+    <ol style="list-style-type: decimal">
+      <li>
+        <p>
+          Make sure the device is USB connected, powered and has <a href="/dev-guide/tools/enabling-developer-mode.html">developer mode</a> enabled.
+        </p>
+      </li>
+      <li>
+        <p>
+          Open a command prompt.
+        </p>
+      </li>
+      <li>
+        <p>
+          Go to the <code>C:\Program Files\HP webOS\PDK\share\samples\simple\windows\</code> directory.
+        </p>
+      </li>
+      <li>
+        <p>
+          Execute the <code>runit.cmd</code> script. This script builds the app, then installs and runs it on the device.
+        </p>
+      </li>
+    </ol>
+    <p>
+      In a few seconds, or less, the red, multi-sided, rotating shape displays fullscreen on the device.
+    </p><a name="RunningSampleAppVisualStudio" title="RunningSampleAppVisualStudio" id="RunningSampleAppVisualStudio"></a>
+    <hr>
+    <h3 id="running-the-sample-app-in-visual-studio-desktop">
+      Running the sample app in Visual Studio (desktop)
+    </h3>
+    <p>
+      <strong>Note:</strong>
+    </p>
+    <p>
+      This procedure steps you through the configurations necessary for developing a desktop app in Visual Studio. Any version of Visual Studio that supports C/C++ should work for developing apps - 2003, 2005 and 2008 have been tested.
+    </p>
+    <p>
+      <strong>To run the sample app in Visual Studio:</strong>
+    </p>
+    <ol style="list-style-type: decimal">
+      <li>
+        <p>
+          Launch Visual Studio.
+        </p>
+      </li>
+      <li>
+        <p>
+          Configure the Visual Studio library and header search path to point to HP webOS PDK include header files and code libraries:
+        </p>
+        <ol style="list-style-type: lower-alpha">
+          <li>
+            <p>
+              Select <strong>Tools</strong> &gt; <strong>Options.</strong>
+            </p>
+          </li>
+          <li>
+            <p>
+              In the <strong>Options</strong> dialog box, expand the <strong>Projects and Solutions</strong> menu.
+            </p>
+          </li>
+          <li>
+            <p>
+              Select <strong>VC++ Directories.</strong>
+            </p>
+          </li>
+          <li>
+            <p>
+              In the <strong>Show Directories for</strong> drop-down list box, select <strong>Library files.</strong>
+            </p>
+          </li>
+          <li>
+            <p>
+              Click your mouse below the last entry in the main text box (or click the Add New Line button).
+            </p>
+          </li>
+          <li>
+            <p>
+              In the entry box that appears, type &quot;C: Files webOS&quot;. (Doing this allows Visual Studio projects to link with PDK libraries for host PC development.)
+            </p>
+          </li>
+          <li>
+            <p>
+              In the <strong>Show Directories for</strong> drop-down list box, select <strong>Include files.</strong>
+            </p>
+          </li>
+          <li>
+            <p>
+              Repeat steps e and f to add entries for &quot;C: Files webOS&quot; and &quot;C: Files webOS&quot;.
+            </p>
+          </li>
+          <li>
+            <p>
+              Click <strong>OK.</strong>
+            </p>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <p>
+          Open the simple project file (not backward compatible with 2003):
+        </p>
+        <p>
+          <code>C:\Program Files\HP webOS\PDK\share\samples\simple\windows\simple.sln</code>.
+        </p>
+      </li>
+      <li>
+        <p>
+          Build and run the project (<strong>Debug</strong> &gt; <strong>Start Without Debugging</strong>).
+        </p>
+      </li>
+    </ol>
+    <p>
+      A red, multi-sided rotating shape appears in an app window.
+    </p>
+    <p>
+      <strong>Note</strong>
+    </p>
+    <p>
+      In simple.cpp, you can see a few calls needed to use the GLES library:
+    </p>
+    <ul>
+      <li>
+        <p>
+          <code>SDL_GL_LoadLibrary()</code>
+        </p>
+      </li>
+      <li>
+        <p>
+          _<code>dgles_load_library()</code>
+        </p>
+      </li>
+    </ul>
+    <p>
+      Since these are only necessary in the desktop environment, they are enclosed in <code>#if WIN32</code> directives.<br>
+      In the future, these will be merged into the Windows SDL library and no longer be visible.
+    </p><a name="RunningSampleAppOnDeviceFromVS" title="RunningSampleAppOnDeviceFromVS" id="RunningSampleAppOnDeviceFromVS"></a>
+    <hr>
+    <h3 id="running-the-sample-app-on-the-device-from-visual-studio">
+      Running the sample app on the device from Visual Studio
+    </h3>
+    <p>
+      Completing this procedure is not necessary for verifying your set-up, but running an app directly on the device from Visual Studio can be useful during the development process. Note that this bypasses the normal creating and installing a package on the device method.
+    </p>
+    <ol style="list-style-type: decimal">
+      <li>
+        <p>
+          Launch Visual Studio.
+        </p>
+      </li>
+      <li>
+        <p>
+          Complete the previous procedure - <em>Running the Sample app in Visual Studio</em> - and have the <code>simple</code> app open as your current project.
+        </p>
+      </li>
+      <li>
+        <p>
+          Select <strong>Tools</strong> &gt; <strong>External Tools.</strong> The <strong>External Tools</strong> dialog box appears.
+        </p>
+      </li>
+      <li>
+        <p>
+          Click <strong>Add.</strong>
+        </p>
+      </li>
+      <li>
+        <p>
+          For <strong>Title</strong>, enter <strong>&quot;Run on Device&quot;.</strong>
+        </p>
+      </li>
+      <li>
+        <p>
+          Next to the <strong>Command</strong> textbox, click the <strong>...</strong> button.
+        </p>
+      </li>
+      <li>
+        <p>
+          Browse to the <code>...\share\samples\simple\windows\</code> directory and select <code>runit.cmd.</code>
+        </p>
+      </li>
+      <li>
+        <p>
+          For <strong>Initial Directory,</strong> select <strong>Solution Directory</strong> from the menu.
+        </p>
+      </li>
+      <li>
+        <p>
+          Select the <strong>Use Output Window</strong> check box.
+        </p>
+      </li>
+      <li>
+        <p>
+          Click <strong>OK.</strong>
+        </p>
+      </li>
+      <li>
+        <p>
+          Make sure the device is powered, has <a href="/dev-guide/tools/enabling-developer-mode.html">developer mode</a> enabled and is USB-connected.
+        </p>
+      </li>
+      <li>
+        <p>
+          Select <strong>Tools</strong> &gt; <strong>Run on Device.</strong>
+        </p>
+      </li>
+    </ol>
+    <p>
+      The red, multi-sided rotating shape should appear fullscreen on the device. For more information about how it was built and transferred, inspect the <code>runit.cmd</code> script.
+    </p>
+    <hr>
+    <a name="RunningSampleAppMac" title="RunningSampleAppMac" id="RunningSampleAppMac"></a>
+    <h2 id="running-the-sample-app-on-a-mac">
+      Running the Sample app on a Mac
+    </h2>
+    <p>
+      A sample app (<code>/opt/PalmPDK/share/samplecode/simple/</code>) is provided with the PDK to test your setup. You can run this app in one of two ways:
+    </p>
+    <ol style="list-style-type: decimal">
+      <li>
+        <p>
+          From the Terminal app - the sample app runs directly on the device.
+        </p>
+      </li>
+      <li>
+        <p>
+          From the Xcode IDE - the sample app runs on the desktop.
+        </p>
+      </li>
+    </ol>
+    <p>
+      <strong>Note:</strong>
+    </p>
+    <p>
+      To validate your setup, you only need to run the sample app in one of the described ways. If you are using Xcode, you may want to try both, as you will need to do both to develop and test your app.
+    </p>
+    <h3 id="running-the-sample-app-on-the-device">
+      Running the sample app on the device
+    </h3>
+    <p>
+      <strong>To run the sample app on the device:</strong>
+    </p>
+    <ol style="list-style-type: decimal">
+      <li>
+        <p>
+          Make sure the device is USB connected, powered and has <a href="/dev-guide/tools/enabling-developer-mode.html">developer mode</a> enabled.
+        </p>
+      </li>
+      <li>
+        <p>
+          Launch the Terminal app.
+        </p>
+      </li>
+      <li>
+        <p>
+          Go to <code>/opt/PalmPDK/share/samplecode/simple/mac.</code>
+        </p>
+      </li>
+      <li>
+        <p>
+          Execute the <code>runit.sh</code> script - &quot;<code>./runit.sh</code>&quot; or &quot;<code>sh runit.sh</code>&quot;.
+        </p>
+      </li>
+      <li>
+        <p>
+          When prompted for a password, press ENTER.
+        </p>
+      </li>
+    </ol>
+    <p>
+      In a few seconds, or less, a red, multi-sided, rotating shape appears fullscreen on the device.
+    </p>
+    <h3 id="running-the-sample-app-in-the-xcode-ide-desktop">
+      Running the sample app in the Xcode IDE (desktop)
+    </h3>
+    <p>
+      <strong>To run the sample app from the Xcode IDE:</strong>
+    </p>
+    <ol style="list-style-type: decimal">
+      <li>
+        <p>
+          Launch Xcode.
+        </p>
+      </li>
+      <li>
+        <p>
+          Open <code>/opt/PalmPDK/share/samplecode/simple/mac/simple.xcodeproj.</code>
+        </p>
+      </li>
+      <li>
+        <p>
+          Click the <strong>Build and Run</strong> button.
+        </p>
+      </li>
+    </ol>
+    <p>
+      An app window, displaying a red, multi-sided, rotating shape appears.
+    </p>
+    <p>
+      <strong>Note:</strong>
+    </p>
+    <p>
+      Currently, you cannot run apps on the device from Xcode.
+    </p><br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+		</div>
+	</body>
+</html>

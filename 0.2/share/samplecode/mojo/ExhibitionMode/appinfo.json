@@ -1,0 +1,12 @@
+{
+	"id": "com.palmdts.app.exhibitionsample",
+	"version": "2.0.0",
+	"vendor": "Palm, inc",
+	"type": "web",
+	"main": "index.html",
+	"title": "ExhibitionSample",
+	"icon": "icon.png",
+	"noWindow": "true",
+	"dockMode": true,
+	"touchstoneMode": "enabled",
+}

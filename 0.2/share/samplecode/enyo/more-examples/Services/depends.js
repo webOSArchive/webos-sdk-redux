@@ -1,0 +1,26 @@
+/* Copyright 2009-2011 Hewlett-Packard Development Company, L.P. All rights reserved. */
+enyo.depends(
+   "source/Services.js",
+	"source/HeaderView.js",
+	"source/ViewItem.js",
+	"source/Main.js",
+   "source/applicationManager/ApplicationManager.js",
+   "source/applicationManager/AudioPlayer.js",
+   "source/applicationManager/Browser.js",
+   "source/applicationManager/Email.js",
+   "source/applicationManager/Maps.js",
+   "source/applicationManager/Messaging.js",
+   "source/applicationManager/Phone.js",
+   "source/applicationManager/Photos.js",
+   "source/system/Alarms.js",
+   "source/system/Calendar.js",
+   "source/system/ConnectionManager.js",
+   "source/system/Contacts.js",
+   "source/system/DownloadManager.js",
+   "source/system/GPS.js",
+   "source/system/MediaIndexer.js",
+   "source/system/PowerManager.js",
+   "source/system/SystemProperties.js",
+   "source/system/SystemServices.js",
+   "source/system/SystemSounds.js"
+);

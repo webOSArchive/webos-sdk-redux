@@ -1,0 +1,20 @@
+[
+	{
+	"library": {
+		"name": "foundations",
+		"version": "1.0"
+	}
+	},
+	{
+		"library": {
+			"name": "foundations.json",
+			"version": "1.0"
+		}
+	},
+    {   "source": "app/assistants/stage-assistant.js" },
+    {
+        "scenes": "first",
+        "source": "app/assistants/first-assistant.js"
+    },
+	{   "source": "app/models/helpers.js" }
+]

@@ -1,0 +1,17 @@
+[
+	{ "library": { "name": "underscore", "version": "1.0" } },
+	{ "library": { "name": "foundations", "version": "1.0" } },
+	{ "source": "activityManagerService.js" },
+	{
+		"source": "HelloCommandAssistant.js" 
+	},
+	{
+		"source": "SubscriptionCommandAssistant.js" 
+	},
+	{
+		"source": "LaunchCommandAssistant.js"
+	},
+	{
+		"source": "SetTriggerCommandAssistant.js"
+	}
+]

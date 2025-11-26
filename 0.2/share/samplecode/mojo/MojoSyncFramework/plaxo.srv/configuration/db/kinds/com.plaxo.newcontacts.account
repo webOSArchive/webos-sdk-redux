@@ -1,0 +1,17 @@
+{
+    "id": "com.plaxo.newcontacts.account:1",
+    "indexes": [{
+        "name": "accountId",
+        "props": [{
+            "name": "accountId"
+        }]
+    },
+	{
+		"name": "accountId_remoteId",
+		"props": [{
+			"name": "accountId"
+		}, {
+			"name": "remoteId"
+		}]
+	}]
+}

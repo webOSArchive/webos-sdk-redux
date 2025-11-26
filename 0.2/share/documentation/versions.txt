@@ -1,0 +1,22 @@
+Component versions for HP webOS SDK
+=============================================
+HP webOS SDK Version          3.0.5
+HP webOS SDK Build            676
+Framework (enyo)              128 (version 1.0)
+Framework (mojo)              506
+Emulator ROM                  3065
+SDK Tools                     38
+SDK Tools - Emulator          40
+Samples                       142490
+Reference Applications code...
+          com.palm.app.browser at submission 73
+          com.palm.app.maps at submission 41
+          com.palm.app.email at submission 136
+          com.palm.app.messaging at submission 66.6
+          com.palm.app.photos at submission 80.1
+          com.palm.app.notes at submission 24
+End of Reference Applications code
+Novacom                       80
+PDK                           138
+Build mark                    528691
+=============================================

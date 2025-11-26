@@ -1,0 +1,55 @@
+/* CSS for the Ajax Get sample. */
+.result .url, .search-title {
+	margin-left: 10px;
+}
+
+.url {
+	font-style: italic;
+	font-size: 80%;
+}
+
+.search-title {
+	
+}
+
+
+/* CSS for the XML Parse sample */
+
+#string, #response {
+	padding: 0 5px 0 5px;
+}
+
+#response {
+	background-color: white;
+}
+
+/* encryption scene */
+.DisplayTime {
+		font-size: 50px;
+}
+palm-button .buttonfloat {
+	float:left;
+	width:100px;
+}   
+
+/* depot scene(s) */
+
+.info-text {	
+	text-align: center;
+	font-size: 14px;	
+}
+
+.buttons {
+	text-align: center;
+	padding: 5px 0 0 0
+}
+
+#response {
+	text-align: left;
+	font-size: 14px;		
+}
+palm-button .button1 {
+	float:left;
+	width:100px;
+}
+

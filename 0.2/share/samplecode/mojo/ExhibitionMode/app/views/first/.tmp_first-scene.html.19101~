@@ -1,0 +1,16 @@
+<div id='scene' height='100%'>
+<div class="palm-hasheader">
+	<div class="palm-header">
+		Exhibition Sample
+	</div>
+</div>
+<div class="palm-header-spacer"></div>
+<div id="update-area">
+	For your app to show up in the Exhibition prefs you need to add <b><i>"touchstoneMode": "enabled"</i></b>
+	to you app's appinfo.json.<br>
+	When the system laucnhes your app in exhibition it passes the parameter <b><i>touchstoneMode=true</b></i> 
+	to the app-assistant's handleLaunch.<br />
+	When this app is selected it launches a screen save type sceen.
+</div>
+<div id="launchPrefs" class="palm-button" x-mojo-tap-highlight="momentary" x-mojo-loc=''>Exhibition Prefs</div>
+</div>

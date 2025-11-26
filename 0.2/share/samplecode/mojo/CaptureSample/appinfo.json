@@ -1,0 +1,9 @@
+{
+	"id": "com.palmdts.capturesample",
+	"version": "2.0.0",
+	"vendor": "Palm, inc",
+	"type": "web",
+	"main": "index.html",
+	"title": "CaptureSample",
+	"icon": "icon.png"
+}

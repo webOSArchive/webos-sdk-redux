@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <h1 id="alerts">
+      Alerts
+    </h1>
+    <h2 id="what-they-are">
+      What They Are
+    </h2>
+    <p>
+      Similar to notifications, alerts are also non-modal elements used to inform users of events. Alerts, however, are more prominent and noticeable and should be used when it necessary to get the user's attention. Alerts appear above app content until actively dismissed by the user or until the alerts time-out. The time-out schedule can be configured by the app that triggers the alert.
+    </p>
+    <p>
+      As with notifications, an app can publish an alert to the user if the app is running in the background, or even if the app's card has been dismissed altogether by the user from the card view.
+    </p>
+    <p>
+      The design of the alert is at the discretion of the calling app; however, please note the following guidelines:
+    </p>
+    <ul>
+      <li>
+        <p>
+          Include an app icon to inform the user which app is publishing the alert.
+        </p>
+      </li>
+      <li>
+        <p>
+          Include an action button that allows the user to dismiss the notification.
+        </p>
+      </li>
+      <li>
+        <p>
+          Provide other action buttons that allow the user to perform other actions associated with the alert event.
+        </p>
+      </li>
+    </ul>
+    <p>
+      <img src="/images/design/alerts.png" alt="Alert"><br>
+      <br>
+      1. App icon<br>
+      2. Action buttons<br>
+      <br>
+      As with notifications, when a notification is received, the app can specify whether a sound is played by the device, or whether the device vibration is activated, or both. The app can customize the sound that is played by the device.
+    </p>
+    <p>
+      Unlike notifications, only one alert can be shown at any one time. If more than one alert is active at one time, the most recent alert is shown and older alerts are shown as the more recent alerts are dismissed.
+    </p>
+    <h2 id="when-to-use">
+      When To Use
+    </h2>Use alerts to inform the user of an important or time-critical event. Use alerts only if the event is important enough to disturb the user.<br>
+    <br>
+    <br>
+		</div>
+	</body>
+</html>

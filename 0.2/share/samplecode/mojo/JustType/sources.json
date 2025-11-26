@@ -1,0 +1,17 @@
+[
+    {"source": "app/assistants/app-assistant.js"},
+    {"source": "app/model/PlayerListDataSource.js"},
+    {"source": "app/model/app_db.js"},
+    {
+        "scenes": "main",
+        "source": "app/assistants/main-assistant.js"
+    },
+    {
+        "scenes": "editPlayer",
+        "source": "app/assistants/editPlayer-assistant.js"
+    },
+    {
+        "scenes": "Splash",
+        "source": "app/assistants/Splash-assistant.js"
+    }
+]

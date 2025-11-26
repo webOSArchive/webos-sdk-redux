@@ -1,0 +1,21 @@
+{
+	"id": "com.palm.app.messaging",
+	"version": "3.0.6606",
+	"uiRevision": 2,
+	"vendor": "HP",
+	"type": "web",
+	"main": "nowindow.html",
+	"noWindow": true,
+	"removable": false,
+	"title": "Messaging",
+	"icon": "icon.png",
+	"splashicon": "icon-256x256.png",
+	"keywords": ["Text","SMS","MMS","IM","Instant","Chat"],
+	"universalSearch":{
+		"action":{ 
+			"displayName": "New Message",
+			"url":"com.palm.app.messaging",
+			"launchParam":{"compose":{"messageText":"#{searchTerms}"}}
+		}
+	}
+}

@@ -1,0 +1,36 @@
+#!/bin/sh
+set -e
+
+# default SDK location is /opt/PalmSDK/Current
+if [ ! "$PalmSDK" ]; then
+PalmSDK=/opt/PalmSDK/Current
+fi
+
+# check if we're running under cygwin
+case $(uname -s) in
+CYGWIN*) CYGWIN=y;;
+esac
+
+# the app jar
+APP_JAR="worm.jar"
+
+# the command name
+PALM_COMMAND=$(basename "$0")
+
+# remove the trailing slash (if any)
+SDK_DIR=${PalmSDK%/}
+
+# the jars location
+JARS_DIR=$SDK_DIR/share/jars
+
+# pass command to java
+JAVA_OPTS=-Dpalm.command="$PALM_COMMAND"
+
+# convert to windows paths if we're under cygwin
+if [ $CYGWIN ]; then
+    CLASSPATH="$(cygpath -amp "$CLASSPATH")"
+    JAVA_OPTS="$JAVA_OPTS -Duser.home=$(cygpath -am ~)"
+fi
+
+# start our Java app and pass in the arguments
+exec java -Xmx256m $JAVA_OPTS -jar "$JARS_DIR/$APP_JAR" "$@"

@@ -1,0 +1,18 @@
+{
+	"id": "com.plaxo.newcontacts:1",
+    "indexes": [{
+		"name": "accountId",
+		"props": [{
+			"name": "accountId"
+		}]
+	},
+	{
+		"name": "accountId_remoteId",
+		"props": [{
+			"name": "accountId"
+		}, {
+			"name": "remoteId"
+		}]
+	}],
+	"extends": ["com.palm.contact:1"]
+}

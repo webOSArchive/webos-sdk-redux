@@ -1,0 +1,81 @@
+[	
+
+	{
+		"source": "app/assistants/app-assistant.js"
+	},
+	{
+		"source": "app/assistants/stage-assistant.js"
+	},
+	{
+		"source": "app/assistants/main-assistant.js"
+	},
+	{
+		"source": "app/assistants/animation/animateStyle-assistant.js"
+	},	
+	{
+		"source": "app/assistants/input/keyPress-assistant.js"
+	},	
+	{
+		"source": "app/assistants/input/gesture-assistant.js"
+	},	
+	{
+		"source": "app/assistants/input/screenMovement-assistant.js"
+	},	
+	{
+		"source": "app/assistants/localization/formatting-assistant.js"
+	},	
+	{
+		"source": "app/assistants/localization/localization-assistant.js"
+	},	
+	{
+		"source": "app/assistants/logging/logging-assistant.js"
+	},	
+	{
+		"source": "app/assistants/notifications/popupAlert-assistant.js"
+	},	
+	{
+		"source": "app/assistants/notifications/bannerAlert-assistant.js"
+	},	
+	{
+		"source": "app/assistants/notifications/notificationChain-assistant.js"
+	},
+	{
+		"source": "app/assistants/rendering/view/view-assistant.js"
+	},	
+	{
+		"source": "app/assistants/rendering/view/renderList-assistant.js"
+	},	
+	{
+		"source": "app/assistants/rendering/view/renderObject-assistant.js"
+	},	
+	{
+		"source": "app/assistants/scenes/fullScreenMain-assistant.js"
+	},	
+	{
+		"source": "app/assistants/scenes/fullScreenSecond-assistant.js"
+	},	
+	{
+		"source": "app/assistants/scenes/rotationMain-assistant.js"
+	},	
+	{
+		"source": "app/assistants/scenes/rotationSecond-assistant.js"
+	},	
+	{
+		"source": "app/assistants/scenes/transitionMain-assistant.js"
+	},	
+	{
+		"source": "app/assistants/scenes/transitionSecond-assistant.js"
+	},	
+	{
+		"source": "app/assistants/stages/card-assistant.js"
+	},	
+	{
+		"source": "app/assistants/stages/crossApp-assistant.js"
+	},	
+	{
+		"source": "app/assistants/stages/dashboard-assistant.js"
+	},	
+	{
+		"source": "app/assistants/system/orientation/orientation-assistant.js"
+	},	
+]

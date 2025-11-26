@@ -1,0 +1,24 @@
+{ "id": "com.plaxo.newcontacts.transport:1", 
+	"indexes": [{
+		"name": "accountId_lid",
+		"props": [{
+			"name": "accountId"
+		}, {
+			"name": "lid"
+		}]
+	},
+	{
+		"name": "accountId_rid",
+		"props": [{
+			"name": "accountId"
+		}, {
+			"name": "rid"
+		}]
+	},
+	{
+		"name": "accountId",
+		"props": [{
+			"name": "accountId"
+		}]
+	}]
+}

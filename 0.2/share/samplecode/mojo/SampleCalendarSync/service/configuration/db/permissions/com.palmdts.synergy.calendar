@@ -1,0 +1,13 @@
+[
+	{
+		"type": "db.kind",
+		"object": "com.palmdts.synergy.calendar:1",
+		"caller": "com.palmdts.synergy.service",
+		"operations": {
+			"read": "allow",
+			"create": "allow",
+			"delete": "allow",
+			"update": "allow"
+		}
+	}
+]

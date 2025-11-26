@@ -1,0 +1,14 @@
+{
+    "id": "com.palmdts.contact.testacct:1",
+    "owner": "com.palmdts.testacct.contacts.service",
+    "sync": true,
+    "indexes": [ { 
+       "name": "accountId", 
+       "props": [{ "name": "accountId"}]}, { 
+       "name": "remoteId", 
+       "props": [{ "name": "id"}]}, { 
+       "name": "updated", 
+       "props": [{ "name": "updated"}]}
+	   ], 
+    "extends": ["com.palm.contact:1"]
+}

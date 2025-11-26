@@ -1,0 +1,42 @@
+
+<div>
+	<!--
+		<div class="info-text">
+		Modify these parameters to change the curve:
+		</div>
+	-->
+	
+	X1:<input type="text" id="x1arg" style="width:100px;" />
+	X2:<input type="text" id="x2arg" style="width:100px;" /> 
+	<br />
+	Y1:<input type="text" id="y1arg" style="width:100px;" />
+	Y2:<input type="text" id="y2arg" style="width:100px;" /> 
+	<br />
+	Duration:<input type="text" id="durationInput" value="0.5" style="width:40px;" />
+	
+	<!--
+		<button id="plotButton">Plot</button>
+	-->
+	
+	<button id="easeButton"><span x-mojo-loc="">«Eàs»</span></button>
+	<button id="easeInButton"><span x-mojo-loc="">«EæséI»</span></button>
+	<button id="easeOutButton"><span x-mojo-loc="">«Eäs»</span></button>
+	<button id="easeIOButton"><span x-mojo-loc="">«EåsëIOE»</span></button>
+	<button id="overEasyButton"><span x-mojo-loc="">«OvèrEâ»</span></button>
+	<button id="linearButton"><span x-mojo-loc="">«Líñêæ»</span></button>
+
+	<button id="animateButton"><span x-mojo-loc="">«ÅñìmætëA»</span></button>
+	
+	<!--
+		UseX:<input id='useX' type="checkbox"></input>
+		UseNM:<input id='useNM' type="checkbox"></input>
+	-->
+	
+	<div id="plotDiv" style="background-color:#FFC; height:200px; width:200px;">
+	</div>
+	
+	<div id="animBG" style="background-color:#FFC; height:200px; width:100px; position:fixed; right:0px; bottom:30px;">
+		<div id="animDiv" style="background-color:#090; height:10px; width:90px; margin-left:5px; position:relative;"></div>
+	</div>
+
+</div>

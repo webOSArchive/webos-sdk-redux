@@ -1,0 +1,9 @@
+{
+	"id": "com.palmdts.app.zeroconfsample",
+	"version": "1.0.0",
+	"vendor": "Palm, Inc.",
+	"type": "web",
+	"main": "index.html",
+	"title": "Zero Conf Sample",
+	"icon": "icon.png"
+}

@@ -1,0 +1,25 @@
+<div class="palm-hasheader">
+	<div class="palm-header">
+		Hello, Audio Recoder!
+	</div>
+</div>
+<div id='audio'></div>
+
+<div class="palm-header-spacer"></div>
+<div x-mojo-element="ListSelector" id="listselectorId" class="listselectorClass" name="listselectorName"></div> 
+ 
+<table width="100%">
+	<tr>
+		<td width="50%"><div x-mojo-element="Button" id="startButton" class="buttonClass" name="startButton"></div> </td>
+		<td width="50%"><div x-mojo-element="Button" id="stopButton" class="buttonClass" name="stopButton"></div>  </td>
+	</tr>
+</table>
+ 
+
+<canvas width=300 height=80 style="z-index: 50; position: fixed; top: 160px; left: 10px; width: 300px; height: 50px; background: #000000" id="waveform-canvas"></canvas>
+<br /><br /><br />
+
+<div x-mojo-element="Button" id="playButton" class="buttonClass" name="playButton"></div>  
+<div class="palm-body-text" id='area-to-update1'>
+</div>
+<audio id="audio-a" x-palm-media-audio-class="media">

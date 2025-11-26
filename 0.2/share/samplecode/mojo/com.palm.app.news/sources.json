@@ -1,0 +1,41 @@
+[ 
+  {
+    "source": "app\/assistants\/app-assistant.js"
+  },
+  {
+    "source": "app\/assistants\/stage-assistant.js"
+  },
+  {
+    "source": "app\/assistants\/dashboard-assistant.js",
+	"scenes": "dashboard"
+  },
+  {
+    "source": "app\/assistants\/feedList-assistant.js",
+	"scenes": "feedList"
+  },
+  {
+    "source": "app\/assistants\/help-assistant.js",
+	"scenes": "help"
+  },
+  {
+    "source": "app\/assistants\/preferences-assistant.js",
+	"scenes": "preferences"
+  },
+  {
+    "source": "app\/assistants\/storyList-assistant.js",
+	"scenes": "storyList"
+  },
+  {
+    "source": "app\/assistants\/storyView-assistant.js",
+	"scenes": "storyView"
+  },
+  {
+	"source" : "app\/models\/cookie.js"
+  },
+  {
+	"source" : "app\/models\/feeds.js"
+  },
+  {
+	"source" : "app\/models\/helpTopics.js"
+  }
+]

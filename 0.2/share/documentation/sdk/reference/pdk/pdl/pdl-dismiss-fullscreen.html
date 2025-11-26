@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$if(pagetitle)$$pagetitle$$endif$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="_css/chrome.css" />
+		<link rel="stylesheet" href="../_css/chrome.css" />
+		<link rel="stylesheet" href="../../_css/chrome.css" />
+		<link rel="stylesheet" href="../../../_css/chrome.css" />
+		<script src="_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="../../../_js/jquery-1.4.2.min.js" type="text/javascript"></script>
+		<script src="_js/doc.js" type="text/javascript"></script>
+		<script src="../_js/doc.js" type="text/javascript"></script>
+		<script src="../../_js/doc.js" type="text/javascript"></script>
+		<script src="../../../_js/doc.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="content">
+    
+    <div style="width:900">
+      <h1 id="pdl_dismissfullscreen">
+        PDL_DismissFullscreen
+      </h1>
+      <h2 id="description">
+        Description
+      </h2>
+      <p>
+        Returns the plug-in from fullscreen mode back to being a component on a web page.
+      </p>
+      <p>
+        Your app can call this API any time after it has called <a href="/reference/pdk/pdl/pdl-set-fullscreen.html"><code>PDL_SetFullscreen</code></a>. It will result in a <code>SDL_VIDEORESIZE</code> event to be added to your event queue. You need to handle this resize event as you would any other resize event. Note that you cannot draw to the plug-in until you have called <a href="http://sdl.beuc.net/sdl.wiki/SDL_SetVideoMode" target="_blank">SDL_SetVideoMode</a> in response to the resize event.
+      </p>
+      <h2 id="syntax">
+        Syntax
+      </h2>
+      <blockquote>
+        <pre>
+<code>PDL_Err PDL_DismissFullscreen(void);   
+</code>
+</pre>
+      </blockquote>
+      <h2 id="returns">
+        Returns
+      </h2>
+      <blockquote>
+        <pre>
+<code>PDL_ESTATE - App is not fullscreen or was not launched as a plug-in.
+PDL_EOTHER - Failed to return to plug-in mode.
+PDL_NOERROR - Success.
+</code>
+</pre>
+      </blockquote>
+      <p>
+        <strong>Note</strong>: In all cases where an error is returned, your app can call <code>PDL_GetError</code> to get a plain-text error description. This is usually more informative than the returned error code.
+      </p><br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+    </div>
+		</div>
+	</body>
+</html>
