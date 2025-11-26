@@ -48,6 +48,19 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
+# Determine which user to run brew/package managers as (if running via sudo)
+if [ -n "$SUDO_USER" ]; then
+    PKG_USER="$SUDO_USER"
+    if [ "$PLATFORM" = "macos" ]; then
+        BREW_CMD="sudo -u $SUDO_USER brew"
+    fi
+else
+    PKG_USER="$USER"
+    if [ "$PLATFORM" = "macos" ]; then
+        BREW_CMD="brew"
+    fi
+fi
+
 echo ""
 echo "=========================================="
 echo "  webOS SDK Redux - Master Installer"
@@ -165,12 +178,13 @@ if [ "$PLATFORM" = "macos" ]; then
     log_success "make is available"
 
     # Check for libusb-compat (non-fatal warning)
-    if ! brew list libusb-compat >/dev/null 2>&1; then
+    # Use $BREW_CMD to run as the original user when running via sudo
+    if ! $BREW_CMD list --versions libusb-compat >/dev/null 2>&1; then
         log_warning "Unable to verify libusb-compat via Homebrew"
         log_info "If the build fails, install with: brew install libusb-compat"
         log_info "Continuing anyway - the build will fail if library is truly missing"
     else
-        log_success "libusb-compat is installed"
+        log_success "libusb-compat is installed ($($BREW_CMD list --versions libusb-compat))"
     fi
 else
     if ! command -v make >/dev/null 2>&1; then
