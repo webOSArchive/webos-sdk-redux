@@ -28,7 +28,7 @@ Build and install this first!
 
 This is optional, but useful for some SDK operations and device troubleshooting
 
-- Ensure you have novacomd built and installed -- the path for novacom will be the same as you selected for installing novacomd.
+- Ensure you have novacomd built and installed -- novacom will use the same path as novacomd.
 - Run `./build.sh` from the `novacom` folder. If the build succeeds it will offer to install.
 - If you need to troubleshoot, you can separately run `./install.sh`
 - See BUILD_SUMMARY.md in the novacom folder for troubleshooting.

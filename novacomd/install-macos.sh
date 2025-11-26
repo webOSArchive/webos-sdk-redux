@@ -31,7 +31,7 @@ fi
 # Check if binary exists
 if [ ! -f "$NOVACOMD_BIN" ]; then
     log_error "Binary not found at $NOVACOMD_BIN"
-    log_info "Run 'make host' first to build the binary"
+    log_info "Run './build.sh' or 'make host' first to build the binary"
     exit 1
 fi
 
