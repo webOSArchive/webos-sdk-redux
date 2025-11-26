@@ -22,26 +22,30 @@ log_warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
 NOVACOMD_BIN="./build-novacomd/novacomd"
 ARCH=$(uname -m)
 
-# Check if running as root
-if [ "$EUID" -ne 0 ]; then
-    log_error "Please run with sudo: sudo ./install-macos.sh"
-    exit 1
-fi
-
 # Check for required dependencies
+# If running via sudo, run brew commands as the original user
 log_info "Checking for required dependencies..."
 MISSING_DEPS=()
 HOMEBREW_MISSING=false
 
+# Determine which user to run brew as
+if [ -n "$SUDO_USER" ]; then
+    BREW_USER="$SUDO_USER"
+    BREW_CMD="sudo -u $SUDO_USER brew"
+else
+    BREW_USER="$USER"
+    BREW_CMD="brew"
+fi
+
 # Check if Homebrew is installed
-if ! command -v brew > /dev/null 2>&1; then
+if ! $BREW_CMD --version > /dev/null 2>&1; then
     HOMEBREW_MISSING=true
     log_error "Homebrew is not installed!"
     echo ""
     log_info "Homebrew is required to install libusb-compat dependency."
     log_info "To install Homebrew, visit: https://brew.sh"
     echo ""
-    log_info "Or run this command:"
+    log_info "Or run this command (as $BREW_USER):"
     echo ""
     echo '  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
     echo ""
@@ -51,8 +55,11 @@ else
     log_success "Homebrew is installed"
 
     # Check for libusb-compat
-    if ! brew list libusb-compat > /dev/null 2>&1; then
+    # Use 'brew list --versions' which is more reliable for checking if a package is installed
+    if ! $BREW_CMD list --versions libusb-compat > /dev/null 2>&1; then
         MISSING_DEPS+=("libusb-compat")
+    else
+        log_success "libusb-compat is installed ($($BREW_CMD list --versions libusb-compat))"
     fi
 fi
 
@@ -76,6 +83,12 @@ fi
 
 log_success "All required dependencies are installed"
 echo ""
+
+# Check if running as root (moved after dependency check)
+if [ "$EUID" -ne 0 ]; then
+    log_error "Please run with sudo: sudo ./install-macos.sh"
+    exit 1
+fi
 
 # Check if binary exists
 if [ ! -f "$NOVACOMD_BIN" ]; then
@@ -262,7 +275,6 @@ echo "  sudo ./test-novacomd.sh"
 echo ""
 
 # Offer to create launchd service
-echo ""
 read -p "Would you like to create a launchd service for automatic startup? [Y/n]: " create_service
 if [[ ! $create_service =~ ^[Nn]$ ]]; then
     PLIST="/Library/LaunchDaemons/com.palm.novacomd.plist"
