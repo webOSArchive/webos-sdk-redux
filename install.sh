@@ -108,7 +108,6 @@ if test "$JAVA_VERSION" -eq "$JAVA_VERSION" 2>/dev/null; then
     echo "Checking version number"
 else          
     log_error "Java version number not found - SDK tools require Java 8 or greater"
-    echo ""
     log_info "Please install Java before continuing:"
     if [ "$PLATFORM" = "macos" ]; then
         echo "  - Download from: https://www.oracle.com/java/technologies/downloads/"
