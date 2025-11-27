@@ -27,7 +27,7 @@ PREBUILT_MODE=false
 if [ -f "$NOVACOMD_BIN" ]; then
     PREBUILT_MODE=true
     log_success "Pre-built binary detected at $NOVACOMD_BIN"
-    log_info "Skipping build prerequisite checks"
+    log_info "Skipping build prerequisite checks (will still verify runtime dependencies)"
     echo ""
     log_info "To clean build output and rebuild from source:"
     echo "  ./build.sh clean"
@@ -38,71 +38,64 @@ else
     exit 1
 fi
 
-# Only check dependencies if we're not in prebuilt mode and user wants to verify runtime deps
-# For prebuilt binaries, we skip all dependency checks to allow installation on non-development systems
-if [ "$PREBUILT_MODE" = false ]; then
-    # Check for required dependencies
-    # If running via sudo, run brew commands as the original user
-    log_info "Checking for required dependencies..."
-    MISSING_DEPS=()
-    HOMEBREW_MISSING=false
+# Check for runtime dependencies (required for both built and pre-built binaries)
+log_info "Checking for runtime dependencies..."
+MISSING_DEPS=()
 
-    # Determine which user to run brew as
-    if [ -n "$SUDO_USER" ]; then
-        BREW_USER="$SUDO_USER"
-        BREW_CMD="sudo -u $SUDO_USER brew"
-    else
-        BREW_USER="$USER"
-        BREW_CMD="brew"
-    fi
-
-    # Check if Homebrew is installed
-    if ! $BREW_CMD --version > /dev/null 2>&1; then
-        HOMEBREW_MISSING=true
-        log_error "Homebrew is not installed!"
-        echo ""
-        log_info "Homebrew is required to install libusb-compat dependency."
-        log_info "To install Homebrew, visit: https://brew.sh"
-        echo ""
-        log_info "Or run this command (as $BREW_USER):"
-        echo ""
-        echo '  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
-        echo ""
-        log_error "Installation cancelled. Please install Homebrew and try again."
-        exit 1
-    else
-        log_success "Homebrew is installed"
-
-        # Check for libusb-compat
-        # Use 'brew list --versions' which is more reliable for checking if a package is installed
-        if ! $BREW_CMD list --versions libusb-compat > /dev/null 2>&1; then
-            MISSING_DEPS+=("libusb-compat")
-        else
-            log_success "libusb-compat is installed ($($BREW_CMD list --versions libusb-compat))"
-        fi
-    fi
-
-    # If dependencies are missing, show error and exit
-    if [ ${#MISSING_DEPS[@]} -gt 0 ]; then
-        echo ""
-        log_error "Missing required dependencies!"
-        echo ""
-        log_info "The following packages are required but not installed:"
-        for dep in "${MISSING_DEPS[@]}"; do
-            echo "  - $dep"
-        done
-        echo ""
-        log_info "To install the missing dependencies, run:"
-        echo ""
-        echo "  brew install ${MISSING_DEPS[@]}"
-        echo ""
-        log_error "Installation cancelled. Please install the dependencies and try again."
-        exit 1
-    fi
-
-    log_success "All required dependencies are installed"
-    echo ""
+# Determine which user to run brew as
+if [ -n "$SUDO_USER" ]; then
+    BREW_USER="$SUDO_USER"
+    BREW_CMD="sudo -u $SUDO_USER brew"
+else
+    BREW_USER="$USER"
+    BREW_CMD="brew"
 fi
+
+# Check if Homebrew is installed
+if ! $BREW_CMD --version > /dev/null 2>&1; then
+    log_error "Homebrew is not installed!"
+    echo ""
+    log_info "Homebrew is required to install libusb-compat runtime dependency."
+    log_info "To install Homebrew, visit: https://brew.sh"
+    echo ""
+    log_info "Or run this command (as $BREW_USER):"
+    echo ""
+    echo '  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
+    echo ""
+    log_error "Installation cancelled. Please install Homebrew and try again."
+    exit 1
+else
+    log_success "Homebrew is installed"
+
+    # Check for libusb-compat (runtime dependency - always required)
+    # Use 'brew list --versions' which is more reliable for checking if a package is installed
+    if ! $BREW_CMD list --versions libusb-compat > /dev/null 2>&1; then
+        MISSING_DEPS+=("libusb-compat")
+    else
+        log_success "libusb-compat is installed ($($BREW_CMD list --versions libusb-compat))"
+    fi
+fi
+
+# If dependencies are missing, show error and exit
+if [ ${#MISSING_DEPS[@]} -gt 0 ]; then
+    echo ""
+    log_error "Missing required runtime dependencies!"
+    echo ""
+    log_info "The following packages are required but not installed:"
+    for dep in "${MISSING_DEPS[@]}"; do
+        echo "  - $dep"
+    done
+    echo ""
+    log_info "To install the missing dependencies, run:"
+    echo ""
+    echo "  brew install ${MISSING_DEPS[@]}"
+    echo ""
+    log_error "Installation cancelled. Please install the dependencies and try again."
+    exit 1
+fi
+
+log_success "All required runtime dependencies are installed"
+echo ""
 
 # Check if running as root (moved after dependency check)
 if [ "$EUID" -ne 0 ]; then
