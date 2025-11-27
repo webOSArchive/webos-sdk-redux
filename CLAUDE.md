@@ -62,6 +62,15 @@ palm-launch com.example.app
 palm-log -f com.example.app
 ```
 
+## macOS Driver Installation
+
+The repository includes scripts for building macOS installer packages for the novacom/novacomd USB drivers:
+
+- `build-driver-installer-mac.sh` - Automated build script for creating architecture-specific installer packages (supports both Intel and Apple Silicon)
+- `BUILD-DRIVER-INSTALLER-MAC.md` - Complete guide to building, signing, and distributing the installer packages
+
+These tools automate the packaging of novacom/novacomd binaries and their libusb dependencies into a macOS .pkg installer with proper code signing and launchd service integration. See `BUILD-DRIVER-INSTALLER-MAC.md` for detailed build instructions.
+
 ## Application Frameworks
 
 ### Enyo Framework (Primary for webOS 3.0)
