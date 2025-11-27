@@ -104,7 +104,7 @@ fi
 
 # On macOS an "empty" java is present if no java is installed and answers with a string
 #   Check if the java version is numeric
-if test "$JAVA_VERSION" -eq "$JAVA_VERSION" 2&gt;/dev/null; then
+if test "$JAVA_VERSION" -eq "$JAVA_VERSION" 2>/dev/null; then
     echo "Checking version number"
 else          
     log_error "Java version number not found - SDK tools require Java 8 or greater"
