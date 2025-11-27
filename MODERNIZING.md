@@ -12,15 +12,6 @@ Cross-Platform Compatibility Confirmed ✓
   2. If found, uses it directly
   3. If not found, shows error
 
-  POSIX Compliance
-
-  All commands and syntax used are POSIX-compliant:
-  - command -v java (standard way to check for commands)
-  - uname -s (platform detection)
-  - sed with Basic Regular Expressions (BRE)
-  - grep -i (case-insensitive search)
-  - [ -lt ] (numeric comparison)
-
   Tested Version Formats
 
   Works with all Java version formats:
