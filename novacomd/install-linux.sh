@@ -30,93 +30,106 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
-# Check for required build dependencies
-log_info "Checking for required dependencies..."
-MISSING_DEPS=()
-
-# Detect package manager
-if command -v dpkg > /dev/null 2>&1; then
-    # Debian/Ubuntu-based (apt)
-    PKG_MANAGER="apt"
-
-    # Check for libusb development headers
-    if ! dpkg -l | grep -q "^ii.*libusb-dev"; then
-        MISSING_DEPS+=("libusb-dev")
-    fi
-
-    # Check for build-essential
-    if ! dpkg -l | grep -q "^ii.*build-essential"; then
-        MISSING_DEPS+=("build-essential")
-    fi
-
-    INSTALL_CMD="sudo apt update && sudo apt install"
-
-elif command -v rpm > /dev/null 2>&1; then
-    # RedHat/Fedora-based (dnf/yum)
-    PKG_MANAGER="rpm"
-
-    # Check for libusb development headers
-    if ! rpm -qa | grep -q "libusb-devel"; then
-        MISSING_DEPS+=("libusb-devel")
-    fi
-
-    # Check for development tools
-    if ! rpm -qa | grep -q "gcc\|make"; then
-        MISSING_DEPS+=("gcc" "make")
-    fi
-
-    if command -v dnf > /dev/null 2>&1; then
-        INSTALL_CMD="sudo dnf install"
-    else
-        INSTALL_CMD="sudo yum install"
-    fi
-
-elif command -v pacman > /dev/null 2>&1; then
-    # Arch-based
-    PKG_MANAGER="pacman"
-
-    # Check for libusb
-    if ! pacman -Q libusb > /dev/null 2>&1; then
-        MISSING_DEPS+=("libusb")
-    fi
-
-    # Check for base-devel
-    if ! pacman -Q base-devel > /dev/null 2>&1; then
-        MISSING_DEPS+=("base-devel")
-    fi
-
-    INSTALL_CMD="sudo pacman -S"
+# Check if binary exists first
+PREBUILT_MODE=false
+if [ -f "$NOVACOMD_BIN" ]; then
+    PREBUILT_MODE=true
+    log_success "Pre-built binary detected at $NOVACOMD_BIN"
+    log_info "Skipping build prerequisite checks"
+    echo ""
+    log_info "To clean build output and rebuild from source:"
+    echo "  ./build.sh clean"
+    echo ""
 else
-    log_warning "Unable to detect package manager. Skipping dependency check."
-    log_info "Please ensure libusb development headers and build tools are installed."
-fi
-
-# If dependencies are missing, show error and exit
-if [ ${#MISSING_DEPS[@]} -gt 0 ]; then
-    echo ""
-    log_error "Missing required dependencies!"
-    echo ""
-    log_info "The following packages are required but not installed:"
-    for dep in "${MISSING_DEPS[@]}"; do
-        echo "  - $dep"
-    done
-    echo ""
-    log_info "To install the missing dependencies, run:"
-    echo ""
-    echo "  $INSTALL_CMD ${MISSING_DEPS[@]}"
-    echo ""
-    log_error "Installation cancelled. Please install the dependencies and try again."
-    exit 1
-fi
-
-log_success "All required dependencies are installed"
-echo ""
-
-# Check if binary exists
-if [ ! -f "$NOVACOMD_BIN" ]; then
     log_error "Binary not found at $NOVACOMD_BIN"
-    log_info "Run './build.sh' or 'make host' first to build the binary"
+    log_info "Run './build.sh' first to build the binary"
     exit 1
+fi
+
+# Only check dependencies if we're not in prebuilt mode
+# For prebuilt binaries, we skip all dependency checks to allow installation on non-development systems
+if [ "$PREBUILT_MODE" = false ]; then
+    # Check for required build dependencies
+    log_info "Checking for required dependencies..."
+    MISSING_DEPS=()
+
+    # Detect package manager
+    if command -v dpkg > /dev/null 2>&1; then
+        # Debian/Ubuntu-based (apt)
+        PKG_MANAGER="apt"
+
+        # Check for libusb development headers
+        if ! dpkg -l | grep -q "^ii.*libusb-dev"; then
+            MISSING_DEPS+=("libusb-dev")
+        fi
+
+        # Check for build-essential
+        if ! dpkg -l | grep -q "^ii.*build-essential"; then
+            MISSING_DEPS+=("build-essential")
+        fi
+
+        INSTALL_CMD="sudo apt update && sudo apt install"
+
+    elif command -v rpm > /dev/null 2>&1; then
+        # RedHat/Fedora-based (dnf/yum)
+        PKG_MANAGER="rpm"
+
+        # Check for libusb development headers
+        if ! rpm -qa | grep -q "libusb-devel"; then
+            MISSING_DEPS+=("libusb-devel")
+        fi
+
+        # Check for development tools
+        if ! rpm -qa | grep -q "gcc\|make"; then
+            MISSING_DEPS+=("gcc" "make")
+        fi
+
+        if command -v dnf > /dev/null 2>&1; then
+            INSTALL_CMD="sudo dnf install"
+        else
+            INSTALL_CMD="sudo yum install"
+        fi
+
+    elif command -v pacman > /dev/null 2>&1; then
+        # Arch-based
+        PKG_MANAGER="pacman"
+
+        # Check for libusb
+        if ! pacman -Q libusb > /dev/null 2>&1; then
+            MISSING_DEPS+=("libusb")
+        fi
+
+        # Check for base-devel
+        if ! pacman -Q base-devel > /dev/null 2>&1; then
+            MISSING_DEPS+=("base-devel")
+        fi
+
+        INSTALL_CMD="sudo pacman -S"
+    else
+        log_warning "Unable to detect package manager. Skipping dependency check."
+        log_info "Please ensure libusb development headers and build tools are installed."
+    fi
+
+    # If dependencies are missing, show error and exit
+    if [ ${#MISSING_DEPS[@]} -gt 0 ]; then
+        echo ""
+        log_error "Missing required dependencies!"
+        echo ""
+        log_info "The following packages are required but not installed:"
+        for dep in "${MISSING_DEPS[@]}"; do
+            echo "  - $dep"
+        done
+        echo ""
+        log_info "To install the missing dependencies, run:"
+        echo ""
+        echo "  $INSTALL_CMD ${MISSING_DEPS[@]}"
+        echo ""
+        log_error "Installation cancelled. Please install the dependencies and try again."
+        exit 1
+    fi
+
+    log_success "All required dependencies are installed"
+    echo ""
 fi
 
 echo ""

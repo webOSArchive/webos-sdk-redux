@@ -348,8 +348,48 @@ verify_build() {
     return 0
 }
 
+# Clean build output
+clean_build() {
+    log_step "Cleaning build output..."
+
+    if [ -d "build-novacomd" ]; then
+        log_info "Removing build-novacomd directory..."
+        rm -rf build-novacomd
+        log_success "Build output cleaned"
+    else
+        log_info "No build output found (build-novacomd does not exist)"
+    fi
+
+    if [ -d "build-novacomd-device" ]; then
+        log_info "Removing build-novacomd-device directory..."
+        rm -rf build-novacomd-device
+        log_success "Device build output cleaned"
+    fi
+
+    echo ""
+    log_success "Clean complete!"
+    echo ""
+    log_info "To rebuild, run: ./build.sh"
+}
+
 # Main script
 main() {
+    # Handle clean command
+    if [ "$1" = "clean" ]; then
+        clean_build
+        exit 0
+    fi
+
+    # Show usage if unknown argument
+    if [ -n "$1" ]; then
+        echo "Usage: $0 [clean]"
+        echo ""
+        echo "Options:"
+        echo "  (no args)  Build novacomd"
+        echo "  clean      Remove build output directories"
+        exit 1
+    fi
+
     print_header "novacomd Automated Build Script"
 
     log_info "Detecting environment..."
