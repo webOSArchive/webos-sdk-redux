@@ -102,6 +102,26 @@ if [ "$JAVA_VERSION" = "1" ]; then
     JAVA_VERSION=$(java -version 2>&1 | head -n 1 | sed -E 's/.*version "1\.([0-9]+).*/\1/')
 fi
 
+# On macOS an "empty" java is present if no java is installed and answers with a string
+#   Check if the java version is numeric
+if test "$JAVA_VERSION" -eq "$JAVA_VERSION" 2&gt;/dev/null; then
+    echo "Checking version number"
+else          
+    log_error "Java version number not found - SDK tools require Java 8 or greater"
+    echo ""
+    log_info "Please install Java before continuing:"
+    if [ "$PLATFORM" = "macos" ]; then
+        echo "  - Download from: https://www.oracle.com/java/technologies/downloads/"
+        echo "  - Or install via Homebrew: brew install openjdk"
+    else
+        echo "  - Ubuntu/Debian: sudo apt-get install default-jdk"
+        echo "  - Fedora/RHEL:   sudo dnf install java-latest-openjdk"
+        echo "  - Arch:          sudo pacman -S jdk-openjdk"
+    fi
+    echo ""
+    exit 1
+fi
+
 if [ -z "$JAVA_VERSION" ] || [ "$JAVA_VERSION" -lt 8 ]; then
     echo ""
     log_error "Java version 8 or greater is required (found version $JAVA_VERSION)"
