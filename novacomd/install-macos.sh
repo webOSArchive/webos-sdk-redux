@@ -22,25 +22,11 @@ log_warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
 NOVACOMD_BIN="./build-novacomd/novacomd"
 ARCH=$(uname -m)
 
-# Check if binary exists first
-PREBUILT_MODE=false
-if [ -f "$NOVACOMD_BIN" ]; then
-    PREBUILT_MODE=true
-    log_success "Pre-built binary detected at $NOVACOMD_BIN"
-    log_info "Skipping build prerequisite checks (will still verify runtime dependencies)"
-    echo ""
-    log_info "To clean build output and rebuild from source:"
-    echo "  ./build.sh clean"
-    echo ""
-else
-    log_error "Binary not found at $NOVACOMD_BIN"
-    log_info "Run './build.sh' first to build the binary"
-    exit 1
-fi
-
-# Check for runtime dependencies (required for both built and pre-built binaries)
-log_info "Checking for runtime dependencies..."
+# Check for required dependencies
+# If running via sudo, run brew commands as the original user
+log_info "Checking for required dependencies..."
 MISSING_DEPS=()
+HOMEBREW_MISSING=false
 
 # Determine which user to run brew as
 if [ -n "$SUDO_USER" ]; then
@@ -53,9 +39,10 @@ fi
 
 # Check if Homebrew is installed
 if ! $BREW_CMD --version > /dev/null 2>&1; then
+    HOMEBREW_MISSING=true
     log_error "Homebrew is not installed!"
     echo ""
-    log_info "Homebrew is required to install libusb-compat runtime dependency."
+    log_info "Homebrew is required to install libusb-compat dependency."
     log_info "To install Homebrew, visit: https://brew.sh"
     echo ""
     log_info "Or run this command (as $BREW_USER):"
@@ -67,7 +54,7 @@ if ! $BREW_CMD --version > /dev/null 2>&1; then
 else
     log_success "Homebrew is installed"
 
-    # Check for libusb-compat (runtime dependency - always required)
+    # Check for libusb-compat
     # Use 'brew list --versions' which is more reliable for checking if a package is installed
     if ! $BREW_CMD list --versions libusb-compat > /dev/null 2>&1; then
         MISSING_DEPS+=("libusb-compat")
@@ -79,7 +66,7 @@ fi
 # If dependencies are missing, show error and exit
 if [ ${#MISSING_DEPS[@]} -gt 0 ]; then
     echo ""
-    log_error "Missing required runtime dependencies!"
+    log_error "Missing required dependencies!"
     echo ""
     log_info "The following packages are required but not installed:"
     for dep in "${MISSING_DEPS[@]}"; do
@@ -94,12 +81,20 @@ if [ ${#MISSING_DEPS[@]} -gt 0 ]; then
     exit 1
 fi
 
-log_success "All required runtime dependencies are installed"
+log_success "All required dependencies are installed"
 echo ""
 
 # Check if running as root (moved after dependency check)
 if [ "$EUID" -ne 0 ]; then
     log_error "Please run with sudo: sudo ./install-macos.sh"
+    exit 1
+fi
+
+# Check if binary exists
+if [ ! -f "$NOVACOMD_BIN" ]; then
+    log_error "Binary not found at $NOVACOMD_BIN"
+    log_info "Run './build.sh' first to build the binary"
+    log_info "To clean and rebuild: ./build.sh clean && ./build.sh"
     exit 1
 fi
 
