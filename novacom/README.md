@@ -1,19 +1,22 @@
-novacom
-=======
+# novacom
 
-Summary
--------
-Utility to communicate with an embedded device over USB
+Utility to communicate with an embedded device over USB.
 
-Description
------------
-_novacom_ and _novacomd_ provide a generic toolset to allow communication between a host
-and an embedded device using sockets over USB.
+## Description
+_novacom_ and _novacomd_ provide a generic toolset to allow communication between a host and an embedded device using sockets over USB.
 
-How to Build on Linux
-=====================
+## Install
 
-## Dependencies
+- Install novacomd
+- Run `./install-<yourplatform>.sh` in this directory
+
+## Uninstall
+
+- Run `/.uninstall-<yourplatform>.sh` in this directory
+
+## Build
+
+### Dependencies
 
 Below are the tools and library (and their minimum versions) required to
 build _novacom_:
@@ -24,24 +27,29 @@ build _novacom_:
 - openwebos/cmake-modules-webos 1.0.0 RC4
 - pkg-config 0.26
 
-## Building
+### Make
 
-Once you have downloaded the source, enter the following to build it (after
-changing into the directory under which it was downloaded):
+The easy path is to run `build.sh` in this folder
 
+If you prefer to build manually:
+
+```
 	$ mkdir BUILD
 	$ cd BUILD
 	$ cmake ..
 	$ make
 	$ sudo make install
+```
 
 The directory under which the files are installed defaults to `/usr/local/webos`.
 You can install them elsewhere by supplying a value for `WEBOS_INSTALL_ROOT`
 when invoking `cmake`. For example:
 
+```
 	$ cmake -D WEBOS_INSTALL_ROOT:PATH=$HOME/projects/openwebos ..
 	$ make
 	$ make install
+```
 
 will install the files in subdirectories of `$HOME/projects/openwebos`.
 
@@ -53,12 +61,16 @@ environment variable.
 If not specified, `WEBOS_INSTALL_ROOT` defaults to `/usr/local/webos`.
 
 To configure for a debug build, enter:
-
+```
 	$ cmake -D CMAKE_BUILD_TYPE:STRING=Debug ..
-
+```
 To see a list of the make targets that `cmake` has generated, enter:
-
+```
 	$ make help
+```
+## Running
+
+novacom requires novacomd
 
 ## Uninstalling
 
@@ -68,7 +80,7 @@ From the directory where you originally ran `make install`, enter:
 
 You will need to use `sudo` if you did not specify `WEBOS_INSTALL_ROOT`.
 
-# Copyright and License Information
+## Copyright and License Information
 
 Unless otherwise specified, all content, including all source code files and
 documentation files in this repository are:

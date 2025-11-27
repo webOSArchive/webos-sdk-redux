@@ -140,7 +140,7 @@ See [DEPENDENCIES.md](DEPENDENCIES.md) for detailed dependency information.
 
 # macOS Service registration
 
-Steps to set up an agent or daemon:
+This is performed automatically as part of the install. If you wish to do this manually, follow these steps to set up an agent or daemon:
 
     Create a program that you want to run in the background
     Create a .plist file describing the job to run (See below for how to author one)

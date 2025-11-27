@@ -105,13 +105,13 @@ For creating an installer, the following dependencies are required:
 - [x] Builds without warnings
 - [x] Binary runs and shows version
 - [x] Dependencies correctly linked
-- [ ] Builds on macOS Apple Silicon
-- [ ] Builds on Linux x86_64
+- [x] Builds on macOS Apple Silicon
+- [x] Builds on Linux x86_64
 - [ ] Builds on Linux ARM64
-- [ ] Connects to webOS device via USB
-- [ ] palm-install works with new binary
-- [ ] palm-log works with new binary
-- [ ] palm-launch works with new binary
+- [x] Connects to webOS device via USB
+- [x] palm-install works with new binary
+- [x] palm-log works with new binary
+- [x] palm-launch works with new binary
 
 ## License
 
