@@ -86,6 +86,7 @@ if ! command -v java >/dev/null 2>&1; then
         echo "  - Ubuntu/Debian: sudo apt-get install default-jdk"
         echo "  - Fedora/RHEL:   sudo dnf install java-latest-openjdk"
         echo "  - Arch:          sudo pacman -S jdk-openjdk"
+        echo "  - Void:          sudo xbps-install -S openjdk"
     fi
     echo ""
     exit 1
@@ -106,7 +107,7 @@ fi
 #   Check if the java version is numeric
 if test "$JAVA_VERSION" -eq "$JAVA_VERSION" 2>/dev/null; then
     echo "Checking version number"
-else          
+else
     log_error "Java version number not found - SDK tools require Java 8 or greater"
     log_info "Please install Java before continuing:"
     if [ "$PLATFORM" = "macos" ]; then
@@ -116,6 +117,7 @@ else
         echo "  - Ubuntu/Debian: sudo apt-get install default-jdk"
         echo "  - Fedora/RHEL:   sudo dnf install java-latest-openjdk"
         echo "  - Arch:          sudo pacman -S jdk-openjdk"
+        echo "  - Void:          sudo xbps-install -S openjdk"
     fi
     echo ""
     exit 1
@@ -213,8 +215,54 @@ else
     log_success "Build tools available"
 
     # Check for libusb development headers
-    if ! dpkg -l | grep -q "^ii.*libusb-dev"; then
-        log_error "libusb-dev not found - required for building"
+    HAVE_USB_HEADERS=false
+    if [ -f /usr/include/libusb-1.0/libusb.h ] || [ -f /usr/include/usb.h ]; then
+        HAVE_USB_HEADERS=true
+    fi
+
+    if [ "$HAVE_USB_HEADERS" != true ] && command -v pkg-config >/dev/null 2>&1; then
+        if pkg-config --exists libusb-1.0 2>/dev/null || pkg-config --exists libusb 2>/dev/null; then
+            HAVE_USB_HEADERS=true
+        fi
+    fi
+
+    if [ "$HAVE_USB_HEADERS" != true ] && command -v dpkg >/dev/null 2>&1; then
+        if dpkg -l 2>/dev/null | grep -q "^ii.*libusb-dev"; then
+            HAVE_USB_HEADERS=true
+        fi
+    fi
+
+    if [ "$HAVE_USB_HEADERS" != true ] && command -v rpm >/dev/null 2>&1; then
+        if rpm -q libusb1-devel >/dev/null 2>&1 || rpm -q libusb-devel >/dev/null 2>&1; then
+            HAVE_USB_HEADERS=true
+        fi
+    fi
+
+    if [ "$HAVE_USB_HEADERS" != true ] && command -v pacman >/dev/null 2>&1; then
+        if pacman -Q libusb >/dev/null 2>&1; then
+            HAVE_USB_HEADERS=true
+        fi
+    fi
+
+    if [ "$HAVE_USB_HEADERS" != true ] && command -v xbps-query >/dev/null 2>&1; then
+        if xbps-query -p pkgver libusb-devel >/dev/null 2>&1 || xbps-query -p pkgver libusb-compat-devel >/dev/null 2>&1; then
+            HAVE_USB_HEADERS=true
+        fi
+    fi
+
+    if [ "$HAVE_USB_HEADERS" != true ]; then
+        log_error "libusb development headers not found - required for building"
+        if command -v xbps-install >/dev/null 2>&1; then
+            log_info "Void: sudo xbps-install -S libusb-devel libusb-compat-devel"
+        elif command -v apt-get >/dev/null 2>&1; then
+            log_info "Ubuntu/Debian: sudo apt-get install libusb-dev"
+        elif command -v dnf >/dev/null 2>&1; then
+            log_info "Fedora/RHEL: sudo dnf install libusb1-devel"
+        elif command -v pacman >/dev/null 2>&1; then
+            log_info "Arch: sudo pacman -S libusb"
+        else
+            log_info "Install libusb development headers for your distro and retry"
+        fi
         exit 1
     fi
 fi
