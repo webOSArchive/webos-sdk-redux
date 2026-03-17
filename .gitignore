@@ -2,3 +2,4 @@
 novacomd/build-novacomd
 novacom/build-novacom
 installer-package
+set-apple-vars.sh

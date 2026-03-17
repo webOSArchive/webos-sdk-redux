@@ -150,39 +150,12 @@ if command -v novacom >/dev/null 2>&1; then
 fi
 
 if [ "$FOUND_OLD_SDK" = true ]; then
-    echo ""
-    log_warning "Found existing webOS SDK installation(s):"
+    log_info "Found existing webOS SDK installation(s) - will be updated:"
     for cmd in "${OLD_SDK_COMMANDS[@]}"; do
         echo "  - $cmd"
     done
-    echo ""
-    log_warning "Installing webOS SDK Redux alongside the legacy SDK may cause conflicts"
-    echo ""
-    log_info "Recommended actions:"
-    echo "  1. Manually remove the old SDK installation first"
-    echo "  2. Common legacy SDK locations:"
-    if [ "$PLATFORM" = "macos" ]; then
-        echo "     - /opt/Palm/SDK"
-        echo "     - /opt/PalmSDK (if previously installed this version)"
-        echo "     - Check PATH in ~/.bash_profile or ~/.zshrc"
-        echo "     - Disable and remove com.palm.novacomd.plist from launchctl"
-    else
-        echo "     - /opt/Palm/SDK"
-        echo "     - /opt/PalmSDK (if previously installed this version)"
-        echo "     - Check PATH in ~/.bashrc or ~/.profile"
-        echo "     - Disable and remove palm-novacomd from systemctl"
-    fi
-    echo "  3. Remove palm-* and novacom* commands from /usr/local/bin or similar"
-    echo ""
-    read -p "Continue anyway? [y/N]: " continue_anyway
-    if [[ ! $continue_anyway =~ ^[Yy]$ ]]; then
-        log_info "Installation cancelled"
-        log_info "Remove the old SDK and run this installer again"
-        exit 0
-    fi
-    log_warning "Proceeding with installation (conflicts may occur)"
 else
-    log_success "No conflicting SDK installations detected"
+    log_success "No existing SDK installations detected"
 fi
 
 # Check for required tools

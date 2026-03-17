@@ -67,6 +67,20 @@ if [ ! -f "$NOVACOMD_BIN" ]; then
 fi
 log_success "Found novacomd"
 
+# Verify binary architecture matches host — the bundled Homebrew libs must be the same arch
+BINARY_ARCH=$(file "$NOVACOMD_BIN" | grep -o 'arm64\|x86_64' | head -1)
+if [ -z "$BINARY_ARCH" ]; then
+    log_error "Could not determine architecture of novacomd binary"
+    exit 1
+fi
+if [ "$BINARY_ARCH" != "$ARCH" ]; then
+    log_error "Binary architecture ($BINARY_ARCH) does not match host architecture ($ARCH)"
+    log_info "The bundled libusb libraries must match the binary architecture"
+    log_info "Build novacomd on a $ARCH machine, then run this script there"
+    exit 1
+fi
+log_success "Binary architecture matches host: $ARCH"
+
 if [ ! -f "$NOVACOM_BIN" ]; then
     log_error "novacom binary not found at: $NOVACOM_BIN"
     log_info "Please build novacom first (cd novacom && ./build.sh)"
@@ -126,17 +140,28 @@ log_info "Relinking libraries for /usr/local/lib..."
 install_name_tool -id /usr/local/lib/libusb-1.0.0.dylib \
     "$PAYLOAD_DIR/usr/local/lib/libusb-1.0.0.dylib"
 
-# Update libusb-compat install name and dependency
+# Update libusb-compat install name and its dependency on libusb-1.0
+# Read the actual embedded path from the library rather than assuming it matches BREW_PREFIX
+# (the library may have been built on a different architecture with a different Homebrew prefix)
 install_name_tool -id /usr/local/lib/libusb-0.1.4.dylib \
     "$PAYLOAD_DIR/usr/local/lib/libusb-0.1.4.dylib"
-install_name_tool -change "$BREW_PREFIX/opt/libusb/lib/libusb-1.0.0.dylib" \
-    /usr/local/lib/libusb-1.0.0.dylib \
-    "$PAYLOAD_DIR/usr/local/lib/libusb-0.1.4.dylib"
+LIBUSB_COMPAT_LIBUSB_PATH=$(otool -L "$PAYLOAD_DIR/usr/local/lib/libusb-0.1.4.dylib" | awk '/libusb-1\.0\.0/{print $1}')
+if [ -n "$LIBUSB_COMPAT_LIBUSB_PATH" ] && [ "$LIBUSB_COMPAT_LIBUSB_PATH" != "/usr/local/lib/libusb-1.0.0.dylib" ]; then
+    install_name_tool -change "$LIBUSB_COMPAT_LIBUSB_PATH" \
+        /usr/local/lib/libusb-1.0.0.dylib \
+        "$PAYLOAD_DIR/usr/local/lib/libusb-0.1.4.dylib"
+fi
 
-# Update novacomd to use bundled libusb
-install_name_tool -change "$BREW_PREFIX/opt/libusb-compat/lib/libusb-0.1.4.dylib" \
-    /usr/local/lib/libusb-0.1.4.dylib \
-    "$PAYLOAD_DIR/usr/local/bin/novacomd"
+# Update novacomd to use bundled libusb-compat
+# Read the actual embedded path from the binary for the same reason
+NOVACOMD_LIBUSB_PATH=$(otool -L "$PAYLOAD_DIR/usr/local/bin/novacomd" | awk '/libusb-0\.1\.4/{print $1}')
+if [ -n "$NOVACOMD_LIBUSB_PATH" ] && [ "$NOVACOMD_LIBUSB_PATH" != "/usr/local/lib/libusb-0.1.4.dylib" ]; then
+    install_name_tool -change "$NOVACOMD_LIBUSB_PATH" \
+        /usr/local/lib/libusb-0.1.4.dylib \
+        "$PAYLOAD_DIR/usr/local/bin/novacomd"
+else
+    log_warning "novacomd already references /usr/local/lib/libusb-0.1.4.dylib or libusb not found in binary"
+fi
 
 log_success "Libraries relinked"
 
@@ -144,39 +169,34 @@ log_success "Libraries relinked"
 # After modifying with install_name_tool, signatures are invalidated and must be re-signed
 log_info "Signing binaries and libraries..."
 
-# Check if user has a signing identity
+# Detect Developer ID Application certificate (for signing binaries/dylibs)
 SIGNING_IDENTITY=""
 if security find-identity -v -p codesigning 2>/dev/null | grep -q "Developer ID Application"; then
     SIGNING_IDENTITY=$(security find-identity -v -p codesigning | grep "Developer ID Application" | head -1 | awk -F'"' '{print $2}')
-    log_info "Found Developer ID: $SIGNING_IDENTITY"
-    log_info "Using Developer ID for signing (recommended for distribution)"
+    log_info "Found Developer ID Application: $SIGNING_IDENTITY"
 else
-    log_warning "No Developer ID certificate found"
-    log_info "Using ad-hoc signing (will work but may show warnings on other Macs)"
+    log_warning "No Developer ID Application certificate found"
+    log_info "Using ad-hoc signing (will work but cannot be notarized)"
     SIGNING_IDENTITY="-"
 fi
 
+# Detect Developer ID Installer certificate (for signing the .pkg)
+PKG_SIGNING_IDENTITY=""
+if security find-identity -v -p basic 2>/dev/null | grep -q "Developer ID Installer"; then
+    PKG_SIGNING_IDENTITY=$(security find-identity -v -p basic | grep "Developer ID Installer" | head -1 | awk -F'"' '{print $2}')
+    log_info "Found Developer ID Installer: $PKG_SIGNING_IDENTITY"
+else
+    log_warning "No Developer ID Installer certificate found - package signing and notarization will be skipped"
+fi
+
 # Sign libraries first (dependencies must be signed before binaries that use them)
-codesign --force --sign "$SIGNING_IDENTITY" "$PAYLOAD_DIR/usr/local/lib/libusb-1.0.0.dylib" 2>/dev/null || {
-    log_warning "Failed to sign libusb-1.0.0.dylib, trying with --deep"
-    codesign --force --deep --sign "$SIGNING_IDENTITY" "$PAYLOAD_DIR/usr/local/lib/libusb-1.0.0.dylib"
-}
+# Dylibs do not need --options runtime
+codesign --force --sign "$SIGNING_IDENTITY" "$PAYLOAD_DIR/usr/local/lib/libusb-1.0.0.dylib"
+codesign --force --sign "$SIGNING_IDENTITY" "$PAYLOAD_DIR/usr/local/lib/libusb-0.1.4.dylib"
 
-codesign --force --sign "$SIGNING_IDENTITY" "$PAYLOAD_DIR/usr/local/lib/libusb-0.1.4.dylib" 2>/dev/null || {
-    log_warning "Failed to sign libusb-0.1.4.dylib, trying with --deep"
-    codesign --force --deep --sign "$SIGNING_IDENTITY" "$PAYLOAD_DIR/usr/local/lib/libusb-0.1.4.dylib"
-}
-
-# Sign binaries
-codesign --force --sign "$SIGNING_IDENTITY" --options runtime --entitlements /dev/null "$PAYLOAD_DIR/usr/local/bin/novacomd" 2>/dev/null || {
-    log_warning "Failed to sign with runtime option, trying without"
-    codesign --force --sign "$SIGNING_IDENTITY" "$PAYLOAD_DIR/usr/local/bin/novacomd"
-}
-
-codesign --force --sign "$SIGNING_IDENTITY" "$PAYLOAD_DIR/usr/local/bin/novacom" 2>/dev/null || {
-    log_warning "Failed to sign novacom"
-    codesign --force --sign "$SIGNING_IDENTITY" "$PAYLOAD_DIR/usr/local/bin/novacom"
-}
+# Sign executables with hardened runtime (--options runtime is required for notarization)
+codesign --force --sign "$SIGNING_IDENTITY" --options runtime "$PAYLOAD_DIR/usr/local/bin/novacomd"
+codesign --force --sign "$SIGNING_IDENTITY" --options runtime "$PAYLOAD_DIR/usr/local/bin/novacom"
 
 log_success "Binaries and libraries signed"
 
@@ -357,6 +377,84 @@ if [ ! -f "$OUTPUT_PKG" ]; then
 fi
 
 log_success "Package built successfully!"
+
+# Sign the installer package with Developer ID Installer
+# This is a separate certificate from Developer ID Application and is required for notarization
+if [ -n "$PKG_SIGNING_IDENTITY" ]; then
+    log_info "Signing installer package with Developer ID Installer..."
+    SIGNED_PKG="${OUTPUT_PKG%.pkg}-signed.pkg"
+    if productsign --sign "$PKG_SIGNING_IDENTITY" "$OUTPUT_PKG" "$SIGNED_PKG"; then
+        mv "$SIGNED_PKG" "$OUTPUT_PKG"
+        log_success "Package signed: $PKG_SIGNING_IDENTITY"
+    else
+        log_error "Package signing failed"
+        rm -f "$SIGNED_PKG"
+        exit 1
+    fi
+else
+    log_warning "Skipping package signing (no Developer ID Installer certificate)"
+fi
+
+# Notarize the package
+# Credentials can be supplied two ways:
+#   1. Keychain profile (recommended): set NOTARYTOOL_PROFILE to the profile name
+#      Set up once with: xcrun notarytool store-credentials "notarytool" \
+#        --apple-id YOUR_APPLE_ID --team-id YOUR_TEAM_ID --password YOUR_APP_SPECIFIC_PASSWORD
+#   2. Environment variables in set-apple-vars.sh (gitignored): APPLE_ID, APPLE_TEAM_ID, APPLE_APP_PASSWORD
+if [ -f "$SCRIPT_DIR/set-apple-vars.sh" ]; then
+    log_info "Loading Apple credentials from set-apple-vars.sh..."
+    # shellcheck source=/dev/null
+    source "$SCRIPT_DIR/set-apple-vars.sh"
+fi
+
+NOTARIZE=false
+NOTARYTOOL_ARGS=()
+
+if [ -n "${NOTARYTOOL_PROFILE:-}" ]; then
+    NOTARIZE=true
+    NOTARYTOOL_ARGS=(--keychain-profile "$NOTARYTOOL_PROFILE")
+    log_info "Notarization: using keychain profile '$NOTARYTOOL_PROFILE'"
+elif [ -n "${APPLE_ID:-}" ] && [ -n "${APPLE_TEAM_ID:-}" ] && [ -n "${APPLE_APP_SPECIFIC_PASSWORD:-}" ]; then
+    NOTARIZE=true
+    NOTARYTOOL_ARGS=(--apple-id "$APPLE_ID" --team-id "$APPLE_TEAM_ID" --password "$APPLE_APP_SPECIFIC_PASSWORD")
+    log_info "Notarization: using Apple ID credentials"
+fi
+
+if [ "$NOTARIZE" = true ] && [ -z "$PKG_SIGNING_IDENTITY" ]; then
+    log_warning "Skipping notarization: package must be signed with Developer ID Installer first"
+    NOTARIZE=false
+fi
+
+if [ "$NOTARIZE" = true ]; then
+    log_info "Submitting package for notarization (this may take a few minutes)..."
+    if xcrun notarytool submit "$OUTPUT_PKG" "${NOTARYTOOL_ARGS[@]}" --wait; then
+        log_success "Notarization approved"
+        log_info "Stapling notarization ticket to package..."
+        if xcrun stapler staple "$OUTPUT_PKG"; then
+            log_success "Notarization ticket stapled - package is ready for distribution"
+        else
+            log_warning "Stapling failed - package is notarized but the ticket is not embedded"
+            log_info "Users will need an internet connection on first install to verify notarization"
+        fi
+    else
+        log_error "Notarization failed - check output above for details"
+        exit 1
+    fi
+else
+    if [ -n "$PKG_SIGNING_IDENTITY" ]; then
+        log_info "Notarization skipped - provide credentials via set-apple-vars.sh or env vars:"
+        echo "  NOTARYTOOL_PROFILE=<profile> ./build-driver-installer-mac.sh"
+        echo "  APPLE_ID=... APPLE_TEAM_ID=... APPLE_APP_SPECIFIC_PASSWORD=... ./build-driver-installer-mac.sh"
+        echo ""
+        log_info "Or create set-apple-vars.sh (gitignored) exporting those variables"
+        echo ""
+        log_info "To store credentials in keychain (recommended):"
+        echo "  xcrun notarytool store-credentials \"notarytool\" \\"
+        echo "    --apple-id YOUR_APPLE_ID \\"
+        echo "    --team-id YOUR_TEAM_ID \\"
+        echo "    --password YOUR_APP_SPECIFIC_PASSWORD"
+    fi
+fi
 
 # Show package info
 echo ""
