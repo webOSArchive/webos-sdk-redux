@@ -19,6 +19,65 @@ log_success() { echo -e "${GREEN}[SUCCESS]${NC} $1"; }
 log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 log_warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
 
+usage() {
+    echo "Usage: $0 [--notarize] [--keychain-profile <profile>]"
+    echo ""
+    echo "  --notarize                 Sign the .pkg with a Developer ID Installer"
+    echo "                             certificate, submit it to Apple for notarization,"
+    echo "                             and staple the ticket to the package."
+    echo "  --keychain-profile <name>  notarytool credential profile, created once with:"
+    echo "                               xcrun notarytool store-credentials <name> \\"
+    echo "                                 --apple-id <apple-id> --team-id <team-id> \\"
+    echo "                                 --password <app-specific-password>"
+    echo ""
+    echo "  --notarize needs Apple credentials from one of these sources:"
+    echo "    - APPLE_ID / APPLE_TEAM_ID / APPLE_APP_SPECIFIC_PASSWORD env vars"
+    echo "      (auto-loaded from set-apple-vars.sh next to this script, if present)"
+    echo "    - --keychain-profile <name>, if you'd rather use notarytool's keychain storage"
+    exit 1
+}
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+# Parse arguments
+NOTARIZE=false
+KEYCHAIN_PROFILE=""
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --notarize)
+            NOTARIZE=true
+            shift
+            ;;
+        --keychain-profile)
+            KEYCHAIN_PROFILE="$2"
+            shift 2
+            ;;
+        -h|--help)
+            usage
+            ;;
+        *)
+            log_error "Unknown argument: $1"
+            usage
+            ;;
+    esac
+done
+
+if [ "$NOTARIZE" = true ] && [ -z "$KEYCHAIN_PROFILE" ]; then
+    APPLE_VARS_FILE="$SCRIPT_DIR/set-apple-vars.sh"
+    if [ -f "$APPLE_VARS_FILE" ]; then
+        log_info "Loading Apple credentials from set-apple-vars.sh"
+        source "$APPLE_VARS_FILE"
+    fi
+fi
+
+if [ "$NOTARIZE" = true ] && [ -z "$KEYCHAIN_PROFILE" ] \
+   && { [ -z "$APPLE_ID" ] || [ -z "$APPLE_TEAM_ID" ] || [ -z "$APPLE_APP_SPECIFIC_PASSWORD" ]; }; then
+    log_error "--notarize requires Apple credentials"
+    log_info "Either create $SCRIPT_DIR/set-apple-vars.sh exporting APPLE_ID, APPLE_TEAM_ID, and APPLE_APP_SPECIFIC_PASSWORD,"
+    log_info "or pass --keychain-profile <name> (see: xcrun notarytool store-credentials --help)"
+    exit 1
+fi
+
 echo ""
 echo "=========================================="
 echo "  novacom/novacomd Installer Builder"
@@ -43,20 +102,25 @@ if [ ! -d "$BREW_PREFIX" ]; then
 fi
 log_success "Homebrew found at $BREW_PREFIX"
 
+# When notarizing, the .pkg itself must be signed with a "Developer ID
+# Installer" certificate -- a different identity than the "Developer ID
+# Application" one used to sign the binaries. Check for it up front so we
+# fail fast instead of after doing the whole build.
+INSTALLER_IDENTITY=""
+if [ "$NOTARIZE" = true ]; then
+    log_info "Checking for Developer ID Installer certificate..."
+    if security find-identity -v 2>/dev/null | grep -q "Developer ID Installer"; then
+        INSTALLER_IDENTITY=$(security find-identity -v | grep "Developer ID Installer" | head -1 | awk -F'"' '{print $2}')
+        log_success "Found Developer ID Installer: $INSTALLER_IDENTITY"
+    else
+        log_error "No Developer ID Installer certificate found (required for --notarize)"
+        log_info "This is separate from the 'Developer ID Application' certificate used to sign binaries."
+        log_info "Create one at: https://developer.apple.com/account/resources/certificates"
+        exit 1
+    fi
+fi
+
 # Configuration
-
-# Package identity. PKG_VERSION tracks the webOS release these drivers are
-# published alongside (webOS CE 3.1.0), rather than the driver source itself --
-# the community asks "which novacom do I need for CE 3.1.0?", and this makes the
-# answer obvious. Note the drivers are not actually OS-specific: they work with
-# webOS 1.x/2.x/3.0.5 devices too. Bump this whenever the payload changes, even
-# if the OS has not moved -- macOS keys upgrade behaviour off it, and shipping
-# two different payloads under one version makes an installed package
-# indistinguishable from an older one via `pkgutil --pkg-info`.
-PKG_IDENTIFIER="com.palm.novacom"
-PKG_VERSION="3.1.0"
-
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 NOVACOMD_BIN="$SCRIPT_DIR/novacomd/build-novacomd/novacomd"
 NOVACOM_BIN="$SCRIPT_DIR/novacom/build-novacom/novacom"
 NOVATERM_SCRIPT="$SCRIPT_DIR/novacom/scripts/novaterm"
@@ -70,35 +134,6 @@ SCRIPTS_DIR="$PKG_DIR/scripts"
 
 OUTPUT_PKG="$SCRIPT_DIR/novacom-installer-${ARCH}.pkg"
 
-# Rebuild both binaries from clean, stamped with the package version.
-#
-# This is a release build, so it must not depend on whatever happens to be
-# sitting in the build directories. Two problems it avoids:
-#
-#   1. Identity leakage. The makefiles' default BUILDVERSION is
-#        "..local..$(whoami)@$(hostname)..$(date)"
-#      which bakes the builder's username and machine name into a binary that
-#      gets published. Setting BUILDVERSION replaces that with
-#      "novacomd-<version>". It must be passed through the ENVIRONMENT, not as
-#      "make BUILDVERSION=x": a command-line assignment overrides the makefile's
-#      own quoting of the value and the build fails to compile.
-#
-#   2. Stale stamps. BUILDVERSION is compiled into main.o, which an incremental
-#      build will not recompile if main.c is unchanged -- so the version string
-#      records when main.o was last built, not what is in the binary.
-log_info "Rebuilding novacomd and novacom from clean (version $PKG_VERSION)..."
-for component in novacomd novacom; do
-    [ "$component" = "novacomd" ] && target="host" || target=""
-    if ! ( cd "$SCRIPT_DIR/$component" \
-           && make spotless >/dev/null 2>&1 \
-           && BUILDVERSION="$PKG_VERSION" make $target >/dev/null 2>&1 ); then
-        log_error "Failed to build $component"
-        log_info "Build it manually to see the error: cd $component && make $target"
-        exit 1
-    fi
-    log_success "Built $component"
-done
-
 # Verify binaries exist
 log_info "Checking for required binaries..."
 if [ ! -f "$NOVACOMD_BIN" ]; then
@@ -107,20 +142,6 @@ if [ ! -f "$NOVACOMD_BIN" ]; then
     exit 1
 fi
 log_success "Found novacomd"
-
-# Verify binary architecture matches host — the bundled Homebrew libs must be the same arch
-BINARY_ARCH=$(file "$NOVACOMD_BIN" | grep -o 'arm64\|x86_64' | head -1)
-if [ -z "$BINARY_ARCH" ]; then
-    log_error "Could not determine architecture of novacomd binary"
-    exit 1
-fi
-if [ "$BINARY_ARCH" != "$ARCH" ]; then
-    log_error "Binary architecture ($BINARY_ARCH) does not match host architecture ($ARCH)"
-    log_info "The bundled libusb libraries must match the binary architecture"
-    log_info "Build novacomd on a $ARCH machine, then run this script there"
-    exit 1
-fi
-log_success "Binary architecture matches host: $ARCH"
 
 if [ ! -f "$NOVACOM_BIN" ]; then
     log_error "novacom binary not found at: $NOVACOM_BIN"
@@ -181,28 +202,17 @@ log_info "Relinking libraries for /usr/local/lib..."
 install_name_tool -id /usr/local/lib/libusb-1.0.0.dylib \
     "$PAYLOAD_DIR/usr/local/lib/libusb-1.0.0.dylib"
 
-# Update libusb-compat install name and its dependency on libusb-1.0
-# Read the actual embedded path from the library rather than assuming it matches BREW_PREFIX
-# (the library may have been built on a different architecture with a different Homebrew prefix)
+# Update libusb-compat install name and dependency
 install_name_tool -id /usr/local/lib/libusb-0.1.4.dylib \
     "$PAYLOAD_DIR/usr/local/lib/libusb-0.1.4.dylib"
-LIBUSB_COMPAT_LIBUSB_PATH=$(otool -L "$PAYLOAD_DIR/usr/local/lib/libusb-0.1.4.dylib" | awk '/libusb-1\.0\.0/{print $1}')
-if [ -n "$LIBUSB_COMPAT_LIBUSB_PATH" ] && [ "$LIBUSB_COMPAT_LIBUSB_PATH" != "/usr/local/lib/libusb-1.0.0.dylib" ]; then
-    install_name_tool -change "$LIBUSB_COMPAT_LIBUSB_PATH" \
-        /usr/local/lib/libusb-1.0.0.dylib \
-        "$PAYLOAD_DIR/usr/local/lib/libusb-0.1.4.dylib"
-fi
+install_name_tool -change "$BREW_PREFIX/opt/libusb/lib/libusb-1.0.0.dylib" \
+    /usr/local/lib/libusb-1.0.0.dylib \
+    "$PAYLOAD_DIR/usr/local/lib/libusb-0.1.4.dylib"
 
-# Update novacomd to use bundled libusb-compat
-# Read the actual embedded path from the binary for the same reason
-NOVACOMD_LIBUSB_PATH=$(otool -L "$PAYLOAD_DIR/usr/local/bin/novacomd" | awk '/libusb-0\.1\.4/{print $1}')
-if [ -n "$NOVACOMD_LIBUSB_PATH" ] && [ "$NOVACOMD_LIBUSB_PATH" != "/usr/local/lib/libusb-0.1.4.dylib" ]; then
-    install_name_tool -change "$NOVACOMD_LIBUSB_PATH" \
-        /usr/local/lib/libusb-0.1.4.dylib \
-        "$PAYLOAD_DIR/usr/local/bin/novacomd"
-else
-    log_warning "novacomd already references /usr/local/lib/libusb-0.1.4.dylib or libusb not found in binary"
-fi
+# Update novacomd to use bundled libusb
+install_name_tool -change "$BREW_PREFIX/opt/libusb-compat/lib/libusb-0.1.4.dylib" \
+    /usr/local/lib/libusb-0.1.4.dylib \
+    "$PAYLOAD_DIR/usr/local/bin/novacomd"
 
 log_success "Libraries relinked"
 
@@ -210,34 +220,48 @@ log_success "Libraries relinked"
 # After modifying with install_name_tool, signatures are invalidated and must be re-signed
 log_info "Signing binaries and libraries..."
 
-# Detect Developer ID Application certificate (for signing binaries/dylibs)
+# Check if user has a signing identity
 SIGNING_IDENTITY=""
 if security find-identity -v -p codesigning 2>/dev/null | grep -q "Developer ID Application"; then
     SIGNING_IDENTITY=$(security find-identity -v -p codesigning | grep "Developer ID Application" | head -1 | awk -F'"' '{print $2}')
-    log_info "Found Developer ID Application: $SIGNING_IDENTITY"
+    log_info "Found Developer ID: $SIGNING_IDENTITY"
+    log_info "Using Developer ID for signing (recommended for distribution)"
 else
-    log_warning "No Developer ID Application certificate found"
-    log_info "Using ad-hoc signing (will work but cannot be notarized)"
+    log_warning "No Developer ID certificate found"
+    log_info "Using ad-hoc signing (will work but may show warnings on other Macs)"
     SIGNING_IDENTITY="-"
 fi
 
-# Detect Developer ID Installer certificate (for signing the .pkg)
-PKG_SIGNING_IDENTITY=""
-if security find-identity -v -p basic 2>/dev/null | grep -q "Developer ID Installer"; then
-    PKG_SIGNING_IDENTITY=$(security find-identity -v -p basic | grep "Developer ID Installer" | head -1 | awk -F'"' '{print $2}')
-    log_info "Found Developer ID Installer: $PKG_SIGNING_IDENTITY"
-else
-    log_warning "No Developer ID Installer certificate found - package signing and notarization will be skipped"
-fi
-
 # Sign libraries first (dependencies must be signed before binaries that use them)
-# Dylibs do not need --options runtime
-codesign --force --sign "$SIGNING_IDENTITY" "$PAYLOAD_DIR/usr/local/lib/libusb-1.0.0.dylib"
-codesign --force --sign "$SIGNING_IDENTITY" "$PAYLOAD_DIR/usr/local/lib/libusb-0.1.4.dylib"
+codesign --force --sign "$SIGNING_IDENTITY" "$PAYLOAD_DIR/usr/local/lib/libusb-1.0.0.dylib" 2>/dev/null || {
+    log_warning "Failed to sign libusb-1.0.0.dylib, trying with --deep"
+    codesign --force --deep --sign "$SIGNING_IDENTITY" "$PAYLOAD_DIR/usr/local/lib/libusb-1.0.0.dylib"
+}
 
-# Sign executables with hardened runtime (--options runtime is required for notarization)
-codesign --force --sign "$SIGNING_IDENTITY" --options runtime "$PAYLOAD_DIR/usr/local/bin/novacomd"
-codesign --force --sign "$SIGNING_IDENTITY" --options runtime "$PAYLOAD_DIR/usr/local/bin/novacom"
+codesign --force --sign "$SIGNING_IDENTITY" "$PAYLOAD_DIR/usr/local/lib/libusb-0.1.4.dylib" 2>/dev/null || {
+    log_warning "Failed to sign libusb-0.1.4.dylib, trying with --deep"
+    codesign --force --deep --sign "$SIGNING_IDENTITY" "$PAYLOAD_DIR/usr/local/lib/libusb-0.1.4.dylib"
+}
+
+# Sign binaries with hardened runtime enabled (required for notarization).
+# Note: no --entitlements flag is passed -- "/dev/null" as an empty
+# entitlements plist fails on newer codesign ("cannot read entitlement
+# data"), and neither binary needs any special entitlements anyway.
+sign_binary() {
+    local bin="$1"
+    if codesign --force --sign "$SIGNING_IDENTITY" --options runtime "$bin"; then
+        return 0
+    fi
+    if [ "$NOTARIZE" = true ]; then
+        log_error "Failed to sign $(basename "$bin") with hardened runtime (required for notarization)"
+        exit 1
+    fi
+    log_warning "Failed to sign $(basename "$bin") with hardened runtime, falling back to a plain signature (this build will not be notarizable)"
+    codesign --force --sign "$SIGNING_IDENTITY" "$bin"
+}
+
+sign_binary "$PAYLOAD_DIR/usr/local/bin/novacomd"
+sign_binary "$PAYLOAD_DIR/usr/local/bin/novacom"
 
 log_success "Binaries and libraries signed"
 
@@ -402,28 +426,13 @@ log_success "Postinstall script created"
 
 # Build the package
 log_info "Building installer package..."
-
-# Echo the version strings actually compiled into the payload. A wrong stamp is
-# then visible in the build log rather than discovered after release, and any
-# "..local..user@host.." here means the BUILDVERSION override above did not take
-# and the package would publish the builder's identity.
-log_info "Payload version strings:"
-for b in "$PAYLOAD_DIR/usr/local/bin/novacomd" "$PAYLOAD_DIR/usr/local/bin/novacom"; do
-    [ -f "$b" ] || continue
-    stamp=$(strings "$b" 2>/dev/null | grep -oE '(novacomd?-[0-9][^ "]*|\.\.local\.\.[^ "]*)' | head -1)
-    printf '    %-10s %s\n' "$(basename "$b")" "${stamp:-<none found>}"
-    case "$stamp" in
-        ..local..*) log_warning "$(basename "$b") carries a local build stamp with user@host" ;;
-    esac
-done
-
 rm -f "$OUTPUT_PKG"
 
 pkgbuild \
     --root "$PAYLOAD_DIR" \
     --scripts "$SCRIPTS_DIR" \
-    --identifier "$PKG_IDENTIFIER" \
-    --version "$PKG_VERSION" \
+    --identifier "com.palm.novacom" \
+    --version "1.0.0" \
     --install-location "/" \
     "$OUTPUT_PKG"
 
@@ -434,88 +443,58 @@ fi
 
 log_success "Package built successfully!"
 
-# Sign the installer package with Developer ID Installer
-# This is a separate certificate from Developer ID Application and is required for notarization
-if [ -n "$PKG_SIGNING_IDENTITY" ]; then
-    log_info "Signing installer package with Developer ID Installer..."
-    SIGNED_PKG="${OUTPUT_PKG%.pkg}-signed.pkg"
-    if productsign --sign "$PKG_SIGNING_IDENTITY" "$OUTPUT_PKG" "$SIGNED_PKG"; then
-        mv "$SIGNED_PKG" "$OUTPUT_PKG"
-        log_success "Package signed: $PKG_SIGNING_IDENTITY"
-    else
-        log_error "Package signing failed"
-        rm -f "$SIGNED_PKG"
-        exit 1
-    fi
-else
-    log_warning "Skipping package signing (no Developer ID Installer certificate)"
-fi
-
-# Notarize the package
-# Credentials can be supplied two ways:
-#   1. Keychain profile (recommended): set NOTARYTOOL_PROFILE to the profile name
-#      Set up once with: xcrun notarytool store-credentials "notarytool" \
-#        --apple-id YOUR_APPLE_ID --team-id YOUR_TEAM_ID --password YOUR_APP_SPECIFIC_PASSWORD
-#   2. Environment variables in set-apple-vars.sh (gitignored):
-#        APPLE_ID, APPLE_TEAM_ID, APPLE_APP_SPECIFIC_PASSWORD
-#      All three must be set. If any is missing, notarization is skipped and the
-#      build still exits 0 -- it reports why, but only when the package was
-#      signed. An unsigned build says nothing about notarization at all.
-#
-# Note the keychain profile is checked FIRST -- if NOTARYTOOL_PROFILE is set,
-# the environment variables below are ignored entirely.
-if [ -f "$SCRIPT_DIR/set-apple-vars.sh" ]; then
-    log_info "Loading Apple credentials from set-apple-vars.sh..."
-    # shellcheck source=/dev/null
-    source "$SCRIPT_DIR/set-apple-vars.sh"
-fi
-
-NOTARIZE=false
-NOTARYTOOL_ARGS=()
-
-if [ -n "${NOTARYTOOL_PROFILE:-}" ]; then
-    NOTARIZE=true
-    NOTARYTOOL_ARGS=(--keychain-profile "$NOTARYTOOL_PROFILE")
-    log_info "Notarization: using keychain profile '$NOTARYTOOL_PROFILE'"
-elif [ -n "${APPLE_ID:-}" ] && [ -n "${APPLE_TEAM_ID:-}" ] && [ -n "${APPLE_APP_SPECIFIC_PASSWORD:-}" ]; then
-    NOTARIZE=true
-    NOTARYTOOL_ARGS=(--apple-id "$APPLE_ID" --team-id "$APPLE_TEAM_ID" --password "$APPLE_APP_SPECIFIC_PASSWORD")
-    log_info "Notarization: using Apple ID credentials"
-fi
-
-if [ "$NOTARIZE" = true ] && [ -z "$PKG_SIGNING_IDENTITY" ]; then
-    log_warning "Skipping notarization: package must be signed with Developer ID Installer first"
-    NOTARIZE=false
-fi
-
+# Sign, notarize, and staple the installer package
 if [ "$NOTARIZE" = true ]; then
-    log_info "Submitting package for notarization (this may take a few minutes)..."
-    if xcrun notarytool submit "$OUTPUT_PKG" "${NOTARYTOOL_ARGS[@]}" --wait; then
-        log_success "Notarization approved"
-        log_info "Stapling notarization ticket to package..."
-        if xcrun stapler staple "$OUTPUT_PKG"; then
-            log_success "Notarization ticket stapled - package is ready for distribution"
-        else
-            log_warning "Stapling failed - package is notarized but the ticket is not embedded"
-            log_info "Users will need an internet connection on first install to verify notarization"
-        fi
+    log_info "Signing package with Developer ID Installer..."
+    SIGNED_PKG="${OUTPUT_PKG%.pkg}-signed.pkg"
+    rm -f "$SIGNED_PKG"
+    productsign --sign "$INSTALLER_IDENTITY" "$OUTPUT_PKG" "$SIGNED_PKG"
+    mv "$SIGNED_PKG" "$OUTPUT_PKG"
+    log_success "Package signed"
+
+    if [ -n "$KEYCHAIN_PROFILE" ]; then
+        NOTARY_AUTH=(--keychain-profile "$KEYCHAIN_PROFILE")
+        NOTARY_AUTH_DESC="--keychain-profile $KEYCHAIN_PROFILE"
     else
-        log_error "Notarization failed - check output above for details"
+        NOTARY_AUTH=(--apple-id "$APPLE_ID" --team-id "$APPLE_TEAM_ID" --password "$APPLE_APP_SPECIFIC_PASSWORD")
+        NOTARY_AUTH_DESC="--apple-id $APPLE_ID --team-id $APPLE_TEAM_ID --password <redacted>"
+    fi
+
+    log_info "Submitting package to Apple notary service (this can take several minutes)..."
+    if xcrun notarytool submit "$OUTPUT_PKG" "${NOTARY_AUTH[@]}" --wait; then
+        log_success "Notarization accepted"
+    else
+        log_error "Notarization failed"
+        log_info "View the log with: xcrun notarytool log $NOTARY_AUTH_DESC <submission-id>"
+        log_info "List recent submissions with: xcrun notarytool history $NOTARY_AUTH_DESC"
         exit 1
     fi
-else
-    if [ -n "$PKG_SIGNING_IDENTITY" ]; then
-        log_info "Notarization skipped - provide credentials via set-apple-vars.sh or env vars:"
-        echo "  NOTARYTOOL_PROFILE=<profile> ./build-driver-installer-mac.sh"
-        echo "  APPLE_ID=... APPLE_TEAM_ID=... APPLE_APP_SPECIFIC_PASSWORD=... ./build-driver-installer-mac.sh"
-        echo ""
-        log_info "Or create set-apple-vars.sh (gitignored) exporting those variables"
-        echo ""
-        log_info "To store credentials in keychain (recommended):"
-        echo "  xcrun notarytool store-credentials \"notarytool\" \\"
-        echo "    --apple-id YOUR_APPLE_ID \\"
-        echo "    --team-id YOUR_TEAM_ID \\"
-        echo "    --password YOUR_APP_SPECIFIC_PASSWORD"
+
+    # Even after notarytool reports the submission Accepted, the ticket can
+    # take a short while to propagate to Apple's CloudKit-backed lookup
+    # service, so an immediate staple attempt can fail with "Record not
+    # found". Retry with a backoff rather than treating that as fatal.
+    log_info "Stapling notarization ticket to package..."
+    STAPLE_ATTEMPTS=5
+    STAPLE_DELAY=15
+    staple_ok=false
+    for attempt in $(seq 1 "$STAPLE_ATTEMPTS"); do
+        if xcrun stapler staple "$OUTPUT_PKG"; then
+            staple_ok=true
+            break
+        fi
+        if [ "$attempt" -lt "$STAPLE_ATTEMPTS" ]; then
+            log_warning "Staple attempt $attempt/$STAPLE_ATTEMPTS failed (ticket may not have propagated yet), retrying in ${STAPLE_DELAY}s..."
+            sleep "$STAPLE_DELAY"
+        fi
+    done
+
+    if [ "$staple_ok" = true ]; then
+        log_success "Package notarized and stapled"
+    else
+        log_warning "Notarization succeeded, but stapling failed after $STAPLE_ATTEMPTS attempts"
+        log_info "The package is still notarized (Gatekeeper can check online); retry stapling later with:"
+        log_info "  xcrun stapler staple $OUTPUT_PKG"
     fi
 fi
 
@@ -539,5 +518,12 @@ echo ""
 log_info "To verify package:"
 echo "  pkgutil --check-signature $OUTPUT_PKG"
 echo "  pkgutil --payload-files $OUTPUT_PKG"
+if [ "$NOTARIZE" = true ]; then
+    echo "  xcrun stapler validate $OUTPUT_PKG"
+    echo "  spctl -a -vvv -t install $OUTPUT_PKG"
+else
+    echo ""
+    log_info "Package was not notarized. Re-run with --notarize --keychain-profile <name> for a fully trusted, gatekeeper-clean installer."
+fi
 echo ""
 log_success "Done!"

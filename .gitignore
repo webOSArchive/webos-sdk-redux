@@ -1,8 +1,6 @@
 .DS_Store
-__pycache__/
-*.pyc
 novacomd/build-novacomd
 novacom/build-novacom
 installer-package
-novacom-installer-*.pkg
 set-apple-vars.sh
+*.pkg
