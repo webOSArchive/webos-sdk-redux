@@ -73,8 +73,16 @@ if not defined JAVA_CMD (
     echo         Install from https://adoptium.net/ and re-run.
     exit /b 1
 )
+rem No findstr here on purpose: piping through it would put four quote
+rem characters in the for /f 'command' (the %JAVA_CMD% pair plus its own
+rem "version" pair), and cmd.exe's /c only leaves a quoted command alone at
+rem exactly two - past that it strips the line's first and last quote
+rem instead, mangling "java" into java" and failing for every Java, any
+rem version. The first line of "-version" output is always the version
+rem line anyway, so the loop just takes that and skips the rest via
+rem "if not defined" - no filtering needed.
 set "JAVA_VER_RAW="
-for /f tokens^=3 %%v in ('"%JAVA_CMD%" -version 2^>^&1 ^| findstr /i "version"') do (
+for /f tokens^=3 %%v in ('"%JAVA_CMD%" -version 2^>^&1') do (
     if not defined JAVA_VER_RAW set "JAVA_VER_RAW=%%~v"
 )
 set "JAVA_MAJOR="
