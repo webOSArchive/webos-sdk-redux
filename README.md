@@ -28,7 +28,7 @@ The easiest, and most common deployment will use all four parts, but you can als
 
 ## Pre-requisites
 
-- This SDK targets macOS (Intel or Apple Silicon) and 64-bit Linux. Windows is supported via a batch installer — see [Windows](#windows) below. On 32-bit Linux or very old OSX, the legacy SDK will likely work for you.
+- This SDK targets macOS (Intel or Apple Silicon) and 64-bit Linux. Windows is supported via a batch installer — see [Windows](#windows) below. On 32-bit Linux or very old OSX, the [legacy SDK](https://sdk.webosarchive.org) will likely work for you.
 - You will need some version of Java. This version of the toolchain is very tolerant of different versions of Java, but make sure you have at least Java 8 working!
 - You will need build tools for your platform. On Linux these are installed with your package manager and called `build-essential` or `Development Tools`. On macOS this means XCode Command Line tools and [Homebrew](https://brew.sh/).
 - You will need libusb. On Linux this is `libusb-dev` or `libusb-devel`. On macOS, this is `libusb-compat` from Homebrew.
