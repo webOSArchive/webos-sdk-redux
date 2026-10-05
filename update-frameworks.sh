@@ -67,11 +67,26 @@ for name in 0003-scene-fills-its-scroller; do
         { echo "update-frameworks: $name does not apply to the SDK's Mojo" >&2; exit 1; }
     echo "mojo: applied $name"
 done
+# The desktop forms of Lunacy's Mojo patches (LunaRuntimes/mojo/sdk-patches): a fix to the
+# builtins a device loads, made again in the SDK's javascripts/, which is what a desktop page
+# loads. These files aren't refreshed from the device on each run, so a patch already in
+# place is left alone.
+for p in "$LUNACY"/LunaRuntimes/mojo/sdk-patches/*.patch; do
+    [ -e "$p" ] || continue
+    if (cd "$M" && patch -p1 -R --dry-run --silent --fuzz=0 < "$p" >/dev/null 2>&1); then
+        echo "mojo: $(basename "$p") already applied"
+        continue
+    fi
+    (cd "$M" && patch -p1 --forward --silent --fuzz=0 --no-backup-if-mismatch < "$p") ||
+        { echo "update-frameworks: $(basename "$p") does not apply to the SDK's Mojo" >&2; exit 1; }
+    echo "mojo: applied $(basename "$p")"
+done
 cat > "$M/NOTICE" <<NOTICE
 Palm's Mojo framework, submission 506, as HP's 3.0.5 SDK shipped it for desktop browsers. The
 files a device links into /usr/palm/frameworks/mojocommon (stylesheets, images, templates and
 localized resources) are copied from the reference TouchPad (webOS CE 3.1.0), and Lunacy's
-patch 0003-scene-fills-its-scroller is applied (Lunacy $LUNACY_REV,
+patch 0003-scene-fills-its-scroller is applied, with the desktop forms of its other Mojo
+patches (LunaRuntimes/mojo/sdk-patches) in javascripts/ (Lunacy $LUNACY_REV,
 github.com/webOSArchive/Lunacy). Palm's code, distributed as abandonware.
 NOTICE
 

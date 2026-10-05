@@ -1,5 +1,5 @@
 Enyo 1.0 as it is on the reference TouchPad (webOS CE 3.1.0), /usr/palm/frameworks/enyo/0.10,
-with Lunacy's patches applied (LunaRuntimes/enyo-1.0/patches at Lunacy c8bb0e2,
+with Lunacy's patches applied (LunaRuntimes/enyo-1.0/patches at Lunacy e5fb13d,
 github.com/webOSArchive/Lunacy). Enyo itself is Apache 2.0 (Hewlett-Packard;
 github.com/enyojs/enyo-1.0). The libraries and localized resources HP shipped on the device and
 never released with the source (lib/networkproxy among them) are Palm/HP's, distributed as

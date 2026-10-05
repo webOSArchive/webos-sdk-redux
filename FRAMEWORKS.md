@@ -58,9 +58,23 @@ have, where the device's browser had the framework compiled in. What changed:
   card, which a modern engine needs because it has no `-webkit-palm-overflow`. Lunacy's 0001
   and 0002 change the compiled-in builtins, which a desktop page never loads, so they aren't
   applied.
+- **The desktop forms of Lunacy's other Mojo patches** (`LunaRuntimes/mojo/sdk-patches` there):
+  a fix Lunacy makes to the builtins, made again in `javascripts/`. The first is 0004
+  (`whole-pixel-dimensions`, in `javascripts/view.js`): `Mojo.View.getDimensions` is
+  `offsetWidth`, which a modern engine rounds up from fractional layout, and a TextField fixed
+  at the rounded width drops below its label, so a labelled field comes out double height. A
+  size that rounded up by under a pixel now comes back as the element's whole pixels, as the
+  TouchPad's integer layout gave it. These files aren't refreshed from the device, so
+  `update-frameworks.sh` leaves a patch that is already in place alone.
+
+Every Enyo or Mojo patch Lunacy makes comes here too: Lunacy's rule 4 says so, and each Mojo
+entry in its [CHANGES.md](https://github.com/webOSArchive/Lunacy/blob/main/LunaRuntimes/mojo/CHANGES.md)
+says how it reaches the SDK.
 
 **Not done:** Mojo samples still don't open in a current desktop browser, in 0.3 or 0.4. They
 close their `mojo.js` script tag XHTML-style (`<script … />`), which an HTML parser reads as an
 unclosed tag that swallows the rest of the head, and they load the framework from the device
 path `/usr/palm/frameworks/mojo/mojo.js`. Lunacy handles both with serve-time transforms; a
-preview server for the SDK would have to do the same.
+preview server for the SDK would have to do the same. A current browser also fires no DOM mutation events, and Mojo
+cleans a widget up on `DOMNodeRemovedFromDocument`; Lunacy recreates it in its compat layer,
+which a desktop preview doesn't have, so there a closed dialog's focus guard stays behind.
