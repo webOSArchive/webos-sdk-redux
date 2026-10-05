@@ -66,6 +66,13 @@ have, where the device's browser had the framework compiled in. What changed:
   size that rounded up by under a pixel now comes back as the element's whole pixels, as the
   TouchPad's integer layout gave it. These files aren't refreshed from the device, so
   `update-frameworks.sh` leaves a patch that is already in place alone.
+- **Widgets are cleaned up again** (`compat-mutation-events`, at the top of
+  `javascripts/framework.js`). Mojo cleans a widget up when its element gets
+  `DOMNodeRemovedFromDocument`, and a current browser fires no DOM mutation events, so no widget
+  was ever cleaned up: every closed dialog left the focus guard it puts on its scene, which
+  blurs any field taking focus. Where the browser lacks them, a `MutationObserver` sends
+  `DOMNodeRemovedFromDocument` and `DOMNodeInsertedIntoDocument` as webOS's WebKit did. In
+  Lunacy the same code is in its compat layer, which a desktop preview doesn't have.
 
 Every Enyo or Mojo patch Lunacy makes comes here too: Lunacy's rule 4 says so, and each Mojo
 entry in its [CHANGES.md](https://github.com/webOSArchive/Lunacy/blob/main/LunaRuntimes/mojo/CHANGES.md)
@@ -75,6 +82,4 @@ says how it reaches the SDK.
 close their `mojo.js` script tag XHTML-style (`<script … />`), which an HTML parser reads as an
 unclosed tag that swallows the rest of the head, and they load the framework from the device
 path `/usr/palm/frameworks/mojo/mojo.js`. Lunacy handles both with serve-time transforms; a
-preview server for the SDK would have to do the same. A current browser also fires no DOM mutation events, and Mojo
-cleans a widget up on `DOMNodeRemovedFromDocument`; Lunacy recreates it in its compat layer,
-which a desktop preview doesn't have, so there a closed dialog's focus guard stays behind.
+preview server for the SDK would have to do the same.
