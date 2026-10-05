@@ -1,1 +1,11 @@
-../../../../../mojocommon/templates/toggle-button/toggle-button.html
+<div class="sliding-toggle-container">
+	<div class="sliding-toggle">  
+		<div class="sliding-toggle-wrapper">
+			<div class="toggle-text">           
+				<div class="toggle-button #{state}" id="#{divPrefix}-toggleDiv"></div>
+				<span x-mojo-loc='' id="#{divPrefix}-labelDiv">#{label}</span>
+			</div>      
+		</div>
+		<input type="hidden" id="#{fieldId}" name="#{fieldName}" value="#{value}"/>
+	</div>
+</div>

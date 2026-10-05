@@ -67,7 +67,7 @@ enyo.kind({
 		{name: "DeleteProfile", kind: "WiFiService", method: "deleteprofile", onFailure: "handleDeleteProfileFailure"},
 		{content: "", name: "headerInfoText", style: "font-size: 18px; margin-bottom: 5px;" },
 		{kind: "Group", name: "wifiHelp", showing: false, components: [
-			{kind: "Scroller", height: "290px", flex: 1, components: [
+			{kind: "Scroller", height: "405px", flex: 1, components: [
 				{kind: "HtmlContent", name: "helpText", style: "font-size: 16px; margin: 10px 10px 10px 10px;", allowHtml: true, content: ""}
 			]}
 		]},
@@ -232,7 +232,7 @@ enyo.kind({
 		{name: "wifiOff", content: WiFiG11nResources.$L("Wi-Fi is turned off."), style: "font-size: 18px;", showing: false},
 
 		{kind: "RowGroup", name: "wifiNetworkList", caption: WiFiG11nResources.$L("Choose a network"), showing: false, components: [
-			{kind: "Scroller", height: "290px", flex: 1, components: [
+			{kind: "Scroller", height: "405px", flex: 1, components: [
 				{kind: "Item", className: "enyo-first", layoutKind: "HFlexLayout", name: "searchMsg", pack: "center", showing: false, flex: 1, components: [
 					{content: WiFiG11nResources.$L("Searching for networks..."), style: "font-size: 18px;", flex: 1},
 					{kind: "Spinner", name: "searchSpinner", style: "margin: -3px 0;", showing: false}
@@ -1382,7 +1382,7 @@ enyo.kind({
 		}
 
 		if (editable) {
-			this.$.ipField.forceBlur();
+			this.$.ipField.forceFocus();
 		} else {
 			this.$.ipDoneButton.setDisabled(false);
 		}
@@ -1390,9 +1390,6 @@ enyo.kind({
 
 	handleDhcpToggleButton: function (inSender, inState) {
 		this.displayIpInfo(!inState);
-		if (!inState) {
-			this.$.ipField.forceFocus();
-		}
 	},
 
 	handleForgetNetworkButton: function () {
@@ -1535,15 +1532,9 @@ enyo.kind({
 			}
 		} else {
 			if (true === this.useStaticIp && valid) {
-				// old:static, new:static, reconnect if not the same
-				if (profileInfo.ipInfo.ip !== ipInfo.ip ||
-						profileInfo.ipInfo.subnet !== ipInfo.subnet ||
-						profileInfo.ipInfo.gateway !== ipInfo.gateway ||
-						profileInfo.ipInfo.dns1 !== ipInfo.dns1 ||
-						profileInfo.ipInfo.dns2 !== ipInfo.dns2) {
-					reconnect = true;
-					profileInfo.ipInfo = ipInfo;
-				}
+				// old:static, new:static, reconnect
+				reconnect = true;
+				profileInfo.ipInfo = ipInfo;
 			} else {
 				// old:static, new:dhcp
 				reconnect = true;

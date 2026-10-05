@@ -1,0 +1,10 @@
+{
+	"1#Incorrect password. One try remaining.|#Incorrect password. #{tries} tries remaining.": "1#Code secret incorrect. Une tentative restante.|#Code secret incorrect. #{tries} tentatives restantes.",
+	"A security policy has been implemented for your Exchange ActiveSync account. You must set a password or PIN in order to use it.": "Une politique de sécurité a été mise en place pour votre compte Exchange ActiveSync. Vous devez définir un mot de passe ou un code NIP afin de l’utiliser.",
+	"Device Password Upgrade Required": "Mise à jour requise du mot de passe de l’appareil",
+	"Enter new PIN": "Entrer le nouveau NIP",
+	"If you enter an incorrect PIN now your phone will be erased.": "Si vous entrez un code NIP incorrect maintenant, le contenu de votre téléphone sera effacé.",
+	"PIN incorrect": "Code NIP incorrect",
+	"PIN numbers don't match": "Les numéros NIP ne concordent pas",
+	"Try Again Later": "Veuillez réessayer ultérieurement"
+}

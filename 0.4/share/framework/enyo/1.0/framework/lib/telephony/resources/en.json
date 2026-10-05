@@ -1,0 +1,6 @@
+{
+	"Fixed dialing is enabled": "Fixed dialling is enabled",
+	"PIN doesn't match": "PIN does not match",
+	"Unable to change PIN2: enable PIN2 first.": "Unable to change PIN2: Enable PIN2 first.",
+	"We cannot connect to your cellular network. Make sure you have a valid SIM with active data service and that cellular service is available. Otherwise, use Wi-Fi": "We cannot connect to your mobile network. Make sure you have a valid SIM with active data service and that mobile service is available. Otherwise, use Wi-Fi"
+}

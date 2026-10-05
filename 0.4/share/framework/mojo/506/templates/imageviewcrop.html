@@ -1,1 +1,24 @@
-../../../../mojocommon/templates/imageviewcrop.html
+<div x-mojo-element="ImageView" id="palm-image-cropper"></div>
+<div class='palm-button palm-image-cropper' x-mojo-touch-feedback="persistent">
+	#{title}
+</div>
+<table border="0" cellspacing="0" cellpadding="0" class="imagecropper">
+	<tr>
+		<td colspan="3" class="imagecropper">
+		</td>
+	</tr>
+	<tr class="change-height">
+		<td class="imagecropper-left imagecropper">
+		</td>
+		<td class="imagecropper-middle" id="#{divPrefix}ViewportHeight">
+			<div class="imagecropper-viewport" id="#{divPrefix}ViewportWidth">
+			</div>
+		</td>
+		<td class="imagecropper-right imagecropper">
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3" class="imagecropper">
+		</td>
+	</tr>
+</table>

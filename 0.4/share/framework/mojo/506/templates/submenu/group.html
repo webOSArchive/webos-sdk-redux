@@ -1,1 +1,14 @@
-../../../../../mojocommon/templates/submenu/group.html
+<div x-mojo-submenu-group="">
+	<div class="palm-row submenu-group #{listClass}" x-mojo-tap-highlight="momentary" x-mojo-popup-row="" x-mojo-menu-cmd="">
+		<div class="palm-row-wrapper" x-mojo-submenu-toggle="">
+		    <div class="palm-submenu-drawer-handle"></div>
+		    #{-secondaryIconFormattedHTML}
+			<div class="title truncating-text">
+			    #{label} 
+			</div>     
+		</div>
+	</div>         	
+	<div x-mojo-element="Drawer">
+		#{-groupItems}
+	</div>
+</div>

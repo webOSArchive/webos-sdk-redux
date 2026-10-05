@@ -1,0 +1,16 @@
+{
+	"Airplane Mode Is On": "Flugzeitmodus ist ausgeschaltet",
+	"Bluetooth Is Off": "Bluetooth ist ausgeschaltet",
+	"DON'T SWITCH": "NICHT WECHSELN",
+	"Dismiss": "Schließen",
+	"Manual Network": "Manuelles Netzwerk",
+	"No Internet Connection": "Keine Internetverbindung",
+	"No devices connected.": "Keine Geräte angeschlossen.",
+	"SELECT NEW": "NEUE WAHL TREFFEN",
+	"Turn Bluetooth On": "Bluetooth einschalten",
+	"Turn Off": "Ausschalten",
+	"Turn Wi-Fi On": "WLAN aktivieren",
+	"Turn Wi-Fi on to automatically connect to a known network.": "Aktivieren Sie WLAN, um automatisch eine Verbindung zu einem bekannten Netzwerk herzustellen.",
+	"Turn off Airplane Mode for network access?": "Flugzeugmodus für Netzwerkzugriff ausschalten?",
+	"Wireless network unavailable.<br/>Select different one?": "WLAN-Netzwerk nicht verfügbar.<br/>Möchten Sie ein anderes Netzwerk wählen?"
+}

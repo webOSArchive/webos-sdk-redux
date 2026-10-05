@@ -1,1 +1,199 @@
-../../../../mojocommon/stylesheets/global-buttons.css
+/*
+   Button Styling
+   Mojo Application Framework
+   Copyright (c) 2007-2009, Palm Inc.
+   All rights reserved.
+
+*/
+
+.palm-button-wrapper {
+  margin: 0 -17px;
+  padding-left: 10px;
+  padding-right: 10px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.palm-button-wrapper.left {
+	text-align: left;
+}
+
+/* standard button */
+
+.palm-button,
+#palm-dialog-box .palm-button {
+  clear: both;
+  margin: 5px 6px 5px 6px;
+  height: 52px;
+  padding: 0;
+  font-size: 20px;
+  text-align: center;
+  text-transform: capitalize;
+  color: #fff;
+  line-height: 52px;
+  background: none;
+  border-width: 0 17px;
+  -webkit-box-sizing: border-box;
+  -webkit-border-image: url(../images/palm-button-medium.png) 0 17 104 17;
+}
+
+#palm-dialog-box .palm-button {
+  margin: 3px 0 0 0;
+}
+
+.palm-button.selected.primary,
+.palm-button.selected,
+#palm-dialog-box .palm-button.selected.primary,
+#palm-dialog-box .palm-button.selected {
+  -webkit-border-image: url(../images/palm-button-medium.png) 52 17 52 17;
+}
+
+.palm-button.disabled.primary,
+.palm-button.disabled,
+#palm-dialog-box .palm-button.disabled.primary,
+#palm-dialog-box .palm-button.disabled {
+  -webkit-border-image: url(../images/palm-button-medium.png) 104 17 0 17;
+}
+
+/* light, dismissal button */
+
+.palm-button.secondary,
+.palm-button.dismiss,
+#palm-dialog-box .palm-button.secondary,
+#palm-dialog-box .palm-button.dismiss {
+  color: #332;
+  -webkit-border-image: url(../images/palm-button-light.png) 0 17 104 17;
+}
+
+.palm-button.secondary.selected,
+.palm-button.dismiss.selected,
+#palm-dialog-box .palm-button.secondary.selected,
+#palm-dialog-box .palm-button.dismiss.selected {
+  -webkit-border-image: url(../images/palm-button-light.png) 52 17 52 17;
+}
+
+.palm-button.secondary.disabled,
+.palm-button.dismiss.disabled,
+#palm-dialog-box .palm-button.secondary.disabled,
+#palm-dialog-box .palm-button.dismiss.disabled {
+  color: #777;
+  -webkit-border-image: url(../images/palm-button-light.png) 104 17 0 17;
+}
+
+/* negative button */
+
+.palm-button.negative,
+#palm-dialog-box .palm-button.negative {
+  color: #fff;
+  -webkit-border-image: url(../images/palm-button-negative.png) 0 17 104 17;
+}
+
+.palm-button.negative.selected,
+#palm-dialog-box .palm-button.negative.selected {
+  -webkit-border-image: url(../images/palm-button-negative.png) 52 17 52 17;
+}
+
+.palm-button.negative.disabled,
+#palm-dialog-box .palm-button.negative.disabled {
+  -webkit-border-image: url(../images/palm-button-negative.png) 104 17 0 17;
+}
+
+/* affirmative button */
+
+.palm-button.affirmative,
+#palm-dialog-box .palm-button.affirmative {
+  color: #fff;
+  -webkit-border-image: url(../images/palm-button-affirmative.png) 0 17 104 17;
+}
+
+.palm-button.affirmative.selected,
+#palm-dialog-box .palm-button.affirmative.selected {
+  -webkit-border-image: url(../images/palm-button-affirmative.png) 52 17 52 17;
+}
+
+.palm-button.affirmative.disabled,
+#palm-dialog-box .palm-button.affirmative.disabled {
+  -webkit-border-image: url(../images/palm-button-affirmative.png) 104 17 0 17;
+}
+
+/* flat button */
+
+.palm-button.flat,
+.palm-button.flat.light,
+.palm-drawer-contents > .palm-button {
+  color: #332;
+  -webkit-border-image: url(../images/palm-button-flat-light.png) 0 17 104 17;
+}
+
+.palm-button.flat.selected,
+.palm-button.flat.primary.selected,
+.palm-drawer-contents > .palm-button.selected {
+  color: #fff;
+  -webkit-border-image: url(../images/palm-button-flat-light.png) 52 17 52 17;
+}
+
+.palm-button.flat.disabled,
+.palm-button.flat.primary.disabled,
+.palm-drawer-contents > .palm-button.disabled {
+  -webkit-border-image: url(../images/palm-button-flat-light.png) 104 17 0 17;
+}
+
+/* swipe-to-delete button */
+
+.palm-swipe-delete-button {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 8px 0 -2px;
+  width: 126px;
+  height: 37px;
+  line-height: 37px;
+  border-width: 0 14px;
+  -webkit-border-image: url(../images/swipe-delete-button-down.png) 0 14 0 14;
+  -webkit-border-image: url(../images/swipe-delete-button-up.png) 0 14 0 14;
+}
+
+.palm-swipe-delete-button.selected {
+  -webkit-border-image: url(../images/swipe-delete-button-down.png) 0 14 0 14;
+}
+
+.palm-swipe-undo-button {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 0 0 8px;
+  width: 126px;
+  height: 37px;
+  line-height: 37px;
+  border-width: 0 14px;
+  -webkit-border-image: url(../images/swipe-undo-button-down.png) 0 14 0 14;
+  -webkit-border-image: url(../images/swipe-undo-button-up.png) 0 14 0 14;
+}
+
+.palm-swipe-undo-button.selected {
+  -webkit-border-image: url(../images/swipe-undo-button-down.png) 0 14 0 14;
+}
+
+/* small button */
+
+.palm-button.small-button {
+  margin: 3px 10px;
+  height: 34px;
+  padding: 0;
+  font-size: 16px;
+  text-align: center;
+  text-transform: capitalize;
+  color: #554;
+  line-height: 36px;
+  background: none;
+  border-width: 0 16px;
+  -webkit-box-sizing: border-box;
+  -webkit-border-image: url(../images/palm-button-small.png) 0 16 68 16;
+}
+
+.palm-button.selected.small-button {
+  -webkit-border-image: url(../images/palm-button-small.png) 34 16 34 16;
+}
+
+.palm-button.disabled.small-button {
+  -webkit-border-image: url(../images/palm-button-small.png) 68 16 0 16;
+}

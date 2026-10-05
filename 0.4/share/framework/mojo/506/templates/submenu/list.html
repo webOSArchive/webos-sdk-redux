@@ -1,1 +1,27 @@
-../../../../../mojocommon/templates/submenu/list.html
+<div id="palm-scrim" class="palm-scrim #{scrimClass}" x-mojo-popup-scrim="">
+</div>
+
+
+<div class="palm-popup-container palm-touch-rows-#{touchableRows} #{popupClass}" id="#{popupId}" x-mojo-popup-container="">
+
+	<div class="palm-popup-wrapper">   
+
+		<div x-mojo-scroll-fade='top' class="palm-popup-fade-top">  
+			<div class="fade-background"></div>                     
+			<div class="fade-arrow"></div>          
+		</div>
+		<div x-mojo-scroll-fade='bottom' class="palm-popup-fade-bottom">   
+			<div class="fade-background"></div>                           
+			<div class="fade-arrow"></div>
+		</div>   
+
+		<div class="palm-popup-content" x-mojo-element="Scroller" x-mojo-popup-content="">   
+
+			<div class="palm-list">                       
+				#{-listElements}
+			</div>
+			
+		</div>
+		
+	</div>    
+</div>

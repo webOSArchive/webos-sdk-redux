@@ -1,0 +1,5 @@
+{
+	"OK": "Aceptar",
+	"The server {$serverName} requires a username and password": "Debes introducir un nombre de usuario y contraseña para el servidor {$serverName}",
+	"Username...": "Nombre de usuario..."
+}

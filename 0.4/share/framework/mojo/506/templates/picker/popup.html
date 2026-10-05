@@ -1,1 +1,11 @@
-../../../../../mojocommon/templates/picker/popup.html
+<div class="mv-picker-container" style="position:fixed;" x-mojo-submenu-group='' x-mojo-picker-popup=''>
+	<div class="mv-picker-wrapper">
+		<div class="mv-value-list">
+			<div x-mojo-element='Scroller'>
+				<div x-mojo-items-parent=''>#{-itemsHTML}</div>
+			</div>
+			<div x-mojo-scroll-fade="top" class="mv-top-fade"></div>
+			<div x-mojo-scroll-fade="bottom" class="mv-bottom-fade"></div>
+		</div>
+	</div>
+</div>

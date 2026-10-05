@@ -347,6 +347,10 @@ var AccountsUtil = (function () {
 		TEXT_OR_ADD_NEW_ACCOUNT:	accountsRb.$L("Or add a new account:"),
 		TEXT_FIND_MORE:				accountsRb.$L("Find More ..."),
 		TEXT_REMOVE_CONFIRM:		accountsRb.$L("Are you sure you want to remove this account and all associated data from your device? Data from this account will be erased from all applications."),
+		// Shown in place of TEXT_REMOVE_CONFIRM when the "keep data" box is ticked: the account is
+		// unlinked but its on-device data (messages, contacts, media) is preserved.
+		TEXT_REMOVE_CONFIRM_KEEP:	accountsRb.$L("Are you sure you want to remove this account from your device? Its messages, contacts and media will be kept on this device."),
+		CHECKBOX_KEEP_DATA:			accountsRb.$L("Keep this account's data on this device"),
 		TEXT_REMOVE_CAP_CONFIRM:	accountsRb.$L("Are you sure you want to remove this account and all associated data from this application? To remove the account from the device completely, use the accounts application."),
 		TEXT_NO_SIM_WIFI_ONLY:		accountsRb.$L("The contacts are on your #{device}, but can't be edited.  You can only edit data on devices that have SIM support."),
 		TEXT_NO_SIM_HAS_SIM_SLOT:	accountsRb.$L("The contacts are on your #{device}, but can't be edited.  You can edit data and add new contacts after you re-insert the SIM."),

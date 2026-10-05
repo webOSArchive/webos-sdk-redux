@@ -1,4 +1,4 @@
-# PalmSDK 0.3 (Redux)
+# PalmSDK 0.4 (Redux)
 
 This folder contains the SDK itself: command line tools and sample code.
 

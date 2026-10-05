@@ -1,0 +1,13 @@
+{
+	"Auto-detect from network": "Détecter automatiquement à partir du réseau",
+	"Automatic Proxy Configuration URL": "URL de configuration de proxy automatique",
+	"Automatic Proxy configuration url": "URL de configuration de proxy automatique",
+	"Cancel": "Annuler",
+	"HTTP/HTTPS Proxy Port": "Port proxy HTTP/HTTPS",
+	"HTTP/HTTPS Proxy Server": "Serveur proxy HTTP/HTTPS",
+	"Manual Proxy": "Proxy manuel",
+	"Network Proxy Configuration": "Configuration du proxy réseau",
+	"No Proxy": "Pas de proxy",
+	"Proxy Configuration": "Configuration du proxy",
+	"Submit": "Envoyer"
+}

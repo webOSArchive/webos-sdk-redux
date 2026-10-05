@@ -1,0 +1,16 @@
+{
+	"Airplane Mode Is On": "Le mode avion est activé",
+	"Bluetooth Is Off": "Bluetooth est désactivé",
+	"DON'T SWITCH": "NE PAS CHANGER",
+	"Dismiss": "Annuler",
+	"Manual Network": "Réseau manuel",
+	"No Internet Connection": "Pas de connexion Internet",
+	"No devices connected.": "Aucun appareil connecté.",
+	"SELECT NEW": "SÉLECTIONNER NOUVEAU",
+	"Turn Bluetooth On": "Activer Bluetooth",
+	"Turn Off": "Désactiver",
+	"Turn Wi-Fi On": "Activer le mode Wi-Fi",
+	"Turn Wi-Fi on to automatically connect to a known network.": "Activez le mode Wi-Fi pour vous connecter automatiquement à un réseau connu.",
+	"Turn off Airplane Mode for network access?": "Désactiver le mode avion pour accéder au réseau ?",
+	"Wireless network unavailable.<br/>Select different one?": "Réseau sans fil non disponible.<br/>Sélectionner un autre ?"
+}

@@ -1,0 +1,10 @@
+{
+	"#{vendor} Website": "#{vendor} Web Site",
+	"AM": "am",
+	"Change Login Settings": "Change Log‑in Settings",
+	"PM": "pm",
+	"Sign In": "Sign-in",
+	"Support Website": "Support Web Site",
+	"The security certificate #{websiteName} sent is expired. Connecting to this site might put your confidential information at risk.": "The security certificate #{websiteName} sent has expired. Connecting to this site might put your confidential information at risk.",
+	"The website #{websiteName} didn't send a security certificate to identify itself. Connecting to this site might put your confidential information at risk.": "The website #{websiteName} did not send a security certificate to identify itself. Connecting to this site might put your confidential information at risk."
+}

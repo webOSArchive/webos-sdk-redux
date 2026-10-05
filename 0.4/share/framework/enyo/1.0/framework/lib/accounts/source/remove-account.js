@@ -35,7 +35,14 @@ enyo.kind({
 	components: [
 		{kind: "ActivityButton", name: "removeAccountButton", className: "enyo-button-negative accounts-btn", onclick: "confirmAccountRemoval"},
 		{name: "removeConfirmDialog", kind: "ModalDialog", caption: AccountsUtil.BUTTON_REMOVE_ACCOUNT, components: [
-			{name: "removeDialogText", className:"enyo-paragraph"},
+			{name: "removeDialogText", className:"enyo-paragraph", style:"white-space:normal; word-wrap:break-word;"},
+			// "Keep data" opt-out. Default unchecked = remove account AND wipe its on-device data
+			// (the historical behaviour). Ticked = unlink the account but keep messages/contacts/media.
+			// Only shown for a full account removal (deleteAccount), not a per-capability disable.
+			{name: "keepDataRow", kind:"HFlexBox", align:"start", style:"padding:12px 4px 18px;", showing:true, components:[
+				{name: "keepDataCheck", kind: "CheckBox", checked:false, onChange:"keepDataChanged"},
+				{name: "keepDataLabel", flex:1, className:"enyo-paragraph", style:"padding-left:8px; margin:0; white-space:normal; word-wrap:break-word;", content: AccountsUtil.CHECKBOX_KEEP_DATA}
+			]},
 			{kind:"HFlexBox", components:[
 				{kind: "Button", caption: AccountsUtil.BUTTON_KEEP_ACCOUNT, id:"button-entrymodify-keep", flex:0.8, className:"enyo-button-light", onclick: "keepAccount"},
 				{kind: "Button", caption: AccountsUtil.BUTTON_REMOVE_ACCOUNT, id:"button-entrymodify-remove", flex:1, className: "enyo-button-negative", onclick: "removeAccount"}
@@ -73,12 +80,25 @@ enyo.kind({
 	},
 
 	confirmAccountRemoval: function() {
-		// Open the "remove confirm" dialog
+		var fullRemoval = (this.removeMethod !== "modifyAccount");
+		// The removeConfirmDialog is a ModalDialog (enyo.Popup), which creates its content lazily on open -
+		// so this.$.keepDataCheck / keepDataRow / removeDialogText only exist AFTER openAtCenter(). (The
+		// stock code sets removeDialogText post-open for the same reason.) Open first, then configure.
 		this.$.removeConfirmDialog.openAtCenter();
-		if (this.removeMethod === "modifyAccount")
+		// Reset the keep-data opt-out each time, and only offer it for a full account removal
+		// (deleteAccount) - a per-capability disable has no separate "keep" meaning.
+		this.$.keepDataCheck.setChecked(false);
+		this.$.keepDataRow.setShowing(fullRemoval);
+		if (!fullRemoval)
 			this.$.removeDialogText.setContent(AccountsUtil.TEXT_REMOVE_CAP_CONFIRM);
 		else
 			this.$.removeDialogText.setContent(AccountsUtil.TEXT_REMOVE_CONFIRM);
+	},
+
+	// The "keep data" box toggled - swap the confirm wording so it matches what will happen.
+	keepDataChanged: function() {
+		this.$.removeDialogText.setContent(this.$.keepDataCheck.getChecked() ?
+			AccountsUtil.TEXT_REMOVE_CONFIRM_KEEP : AccountsUtil.TEXT_REMOVE_CONFIRM);
 	},
 	
 	keepAccount: function() {
@@ -140,8 +160,15 @@ enyo.kind({
 		// Let the caller know that the account is being deleted so that controls can be disabled
 		this.doAccountsRemove_Removing();
 		
+		// Thread the user's keep-data choice through to the account's onDelete handler. Only
+		// meaningful for a full account removal; a capability-disable (modifyAccount) never carries it.
+		// Default false = wipe on-device data (historical behaviour); true = unlink but keep it.
+		if (this.removeMethod === "deleteAccount") {
+			this.removeParams.keepData = this.$.keepDataCheck.getChecked();
+		}
+
 		// Delete the capability / account
-		console.log("Calling " + this.removeMethod + " on account " + this.account._id);
+		console.log("Calling " + this.removeMethod + " on account " + this.account._id + " keepData=" + (this.removeParams.keepData === true));
 		this.$.removeAccount.method = this.removeMethod;
 		this.$.removeAccount.call(this.removeParams);
 	},

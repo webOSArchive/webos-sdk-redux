@@ -174,7 +174,7 @@ and no restart. There are only two copies that matter:
 
 | | Path |
 |---|---|
-| **This repo** (patched) | `Current/share/jars/webos-tools.jar` → `0.3/share/jars/webos-tools.jar` |
+| **This repo** (patched) | `Current/share/jars/webos-tools.jar` → `0.4/share/jars/webos-tools.jar` |
 | **Installed SDK** | `<SDK_INSTALL_DIR>/Current/share/jars/webos-tools.jar` |
 
 `<SDK_INSTALL_DIR>` is whatever was chosen at install time — `/opt/PalmSDK`

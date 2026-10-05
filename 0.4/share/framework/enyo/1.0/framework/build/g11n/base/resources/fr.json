@@ -1,0 +1,19 @@
+{
+	"daysFormatFull": "1#1 jour|1>##{num} jours",
+	"daysFormatLong": "1#1 jr|1>##{num} jrs",
+	"daysFormatMedium": "##{num} jr",
+	"daysFormatShort": "##{num}j",
+	"finalSeparatorFull": " et ",
+	"hoursFormatFull": "0#|1#1 heure|1>##{num} heures",
+	"monthsFormatFull": "##{num} mois",
+	"monthsFormatLong": "1#1 moi|1>##{num} moi",
+	"secondsFormatFull": "0#|1#1 seconde|1>##{num} secondes",
+	"weeksFormatFull": "1#1 semaine|1>##{num} semaines",
+	"weeksFormatLong": "1#1 sem|1>##{num} sem",
+	"weeksFormatMedium": "##{num} sm",
+	"weeksFormatShort": "##{num}s",
+	"yearsFormatFull": "1#1 an|1>##{num} ans",
+	"yearsFormatLong": "1#1 an|1>##{num} ans",
+	"yearsFormatMedium": "##{num} an",
+	"yearsFormatShort": "##{num}a"
+}

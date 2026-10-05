@@ -1,1 +1,5 @@
-../../../../../mojocommon/templates/textfield/textfield-single.html
+
+<div id="#{hintTextName}" style="#{showHint}" class="hint-text oblique truncating-text"></div>
+<div tabindex="0" id="#{divPrefix}-read" style="#{showRead}" class="truncating-text"></div>
+<input id="#{divPrefix}-write" name="#{textFieldName}" style="#{showWrite}" type="text" maxLength="#{maxLength}" x-palm-text-entry="#{mode}" #{txtReplace} #{autoCaps}/>
+

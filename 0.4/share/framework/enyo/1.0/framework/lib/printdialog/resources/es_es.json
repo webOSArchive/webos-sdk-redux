@@ -1,0 +1,13 @@
+{
+	"10x15cm": "10x15cm",
+	"13x18cm": "13x18cm",
+	"13x18cm (Main Tray)": "13x18cm (bandeja principal)",
+	"Plain": "Normal",
+	"The IP address for the printer is not valid. Check the address, then re-enter it.": "La dirección IP de la impresora no es válida. Comprueba la dirección y vuelve a introducirla.",
+	"The printer queue is currently full. Please wait for a print job to finish before you start a new one. (error #{error})": "La cola de la impresora está llena. Espera a que acabe el trabajo de impresión antes de comenzar uno nuevo. (error #{error})",
+	"This printer is currently not supported.  Please select or add another printer.": "Esta impresora no es compatible actualmente.  Selecciona o añade otra impresora.",
+	"This printer was automatically discovered and is already available.": "Esta impresora se ha detectado automáticamente y ya está disponible.",
+	"Unable to communicate with the printer. Please check the address, make sure the printer is online, and try again.": "No es posible establecer comunicación con la impresora. Comprueba la dirección, asegúrate de que la impresora esté conectada e inténtalo de nuevo.",
+	"Unable to communicate with the printer. Please make sure the printer is online and try again.": "No se ha podido comunicar con la impresora. Comprueba que está encendida e inténtalo de nuevo.",
+	"You have entered an invalid page range. ('#{input}')": "Has introducido un intervalo de páginas no válido. ('#{input}')"
+}

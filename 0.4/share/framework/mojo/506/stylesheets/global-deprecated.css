@@ -1,1 +1,984 @@
-../../../../mojocommon/stylesheets/global-deprecated.css
+/*
+   Deprecated Styling
+   Mojo Application Framework
+   Copyright (c) 2007-2009, Palm Inc.
+   All rights reserved.
+
+*/
+
+/* These are styles that will be removed from the framework */
+
+div.info-text {
+  font-size: 16px;
+  margin: 15px;
+}
+
+/* Toggle On-Off Switch */
+
+.palm-toggle,
+.palm-toggle.glass {
+  display: block;
+  width: 80px;
+  height: 40px;
+  margin-top: 10px;
+  float: right;
+  background: url(../images/palm-toggle.png) bottom left no-repeat;
+}
+
+.palm-toggle.on,
+.palm-toggle.glass.on {
+  background: url(../images/palm-toggle.png) top left no-repeat;
+}
+
+.palm-toggle.glass {
+  padding-right: 27px;
+  margin-top: 3px;
+  background: url(../images/palm-toggle-glass.png) bottom left no-repeat;
+}
+
+.palm-toggle.glass.on {
+  background: url(../images/palm-toggle-glass.png) top left no-repeat;
+}
+
+.toggle {
+  width: 78px;
+  height: 38px;
+  float: right;
+  margin: -30px 10px 0px 0px;
+}
+
+.toggle.true {
+  background: url(../images/toggle-on-off.png) top no-repeat;
+}
+
+.toggle.false {
+  margin-top: -32px;
+  background: url(../images/toggle-on-off.png) bottom no-repeat;
+}
+
+.palm-header.left .toggle {
+  margin: -42px 28px 0px 0px;
+}
+
+.palm-header.left .toggle.false {
+  margin-top: -44px;
+}
+
+/* Rows */
+
+.palm-list .row {
+  background: url(../images/list-separator-1.png) bottom left repeat-x;
+  margin: 0;
+  width: auto;
+  padding: 15px 0 13px 0;
+  border-bottom: 1px transparent;
+}
+
+.palm-list .row.selected {
+  margin-top: -1px;
+  margin-bottom: 1px;
+  background: #999 url(../images/selection-gradient.png) top left repeat-x;
+}
+
+.palm-list .row.selected > .title,
+.palm-list .row.selected > .subtitle,
+.palm-list .row.selected > .preview,
+.palm-list .row.selected > .label {
+  color: #FFF;
+}
+
+.palm-group .palm-list .row,
+.palm-group .palm-list .row.selected {
+  /* inv */
+  margin-right: 1px;
+}
+.palm-group .palm-list .row.selected.first {
+  background: none;
+  border-width: 0 13px 0 13px;
+  -webkit-border-image: url(../images/selection-gradient-first.png) 0 13 0 13 stretch stretch;
+}
+
+.palm-group .palm-list .row.selected.single {
+  background: none;
+  border-width: 0 13px 0 13px;
+  -webkit-border-image: url(../images/selection-gradient-single.png) 0 13 0 13 stretch stretch;
+}
+
+.palm-group .palm-list .row.selected.last {
+  background: none;
+  border-width: 0 13px 0 13px;
+  -webkit-border-image: url(../images/selection-gradient-last.png) 0 13 0 13 stretch stretch;
+}
+
+/* static text rows can be non-clickable without being disabled */
+
+.palm-list .row.static {
+  color: #444;
+}
+
+.palm-list .row.static.selected {
+  background: url(../images/list-separator-dark.png) bottom left repeat-x;
+  border-bottom: 1px solid rgba(255,255,255,0.5);
+}
+
+.palm-list .row.first {
+  
+}
+
+.palm-list .row.last {
+  background: none;
+  border-bottom: 1px solid transparent;
+}
+
+.palm-list .row.single {
+  background: none;
+  border-bottom: 0px solid transparent;
+}
+
+.palm-list .row.last.selected {
+  background: #888 url(../images/selection-gradient.png) top left repeat-x;
+  border-bottom: 1px solid transparent;
+}
+
+.palm-list .row.single.selected {
+  background: #888 url(../images/selection-gradient.png) top left repeat-x;
+  border-bottom: 0px solid transparent;
+}
+
+.palm-list .row.disabled.last,
+.palm-list .row.disabled.last.selected,
+.palm-list .row.static.last.selected {
+  background: none;
+  border-bottom: 1px transparent;
+}
+
+.palm-list .row.multi-line.disabled.selected {
+  padding-bottom: 8px;
+}
+
+.palm-list .row.multi-line {
+  padding: 8px 0 8px 0;
+}
+
+.palm-list .row.disabled div {
+  color: #AAA;
+}
+
+.palm-list .row.disabled.selected {
+  background: none;
+  background: url(../images/list-separator-1.png) bottom left repeat-x;
+}
+
+.palm-list .row.disabled.selected div.title,
+.palm-list .row.disabled.selected div.subtitle {
+  color: #000000;
+  text-shadow: none;
+}
+
+.palm-list .row.disabled.selected div.preview {
+  color: #000000;
+  text-shadow: none;
+}
+
+.palm-list.no-lines	.row {
+  background: transparent;
+  border-color: transparent;
+}
+.palm-group .palm-list .row.last.selected {  /* 11/3 DS changed div to .row */
+  border-bottom: 0px;
+}
+
+.palm-group .palm-list .row.single.selected {
+  border-bottom: 0px;
+}
+
+.palm-group .palm-list .row.last {  /* 11/3 DS added .row */
+  background: none;
+  border-bottom: 0px solid transparent;
+}
+.palm-list.composeview div.row.email-to input {
+  font-size: 16px;
+  padding-left: 52px;
+  width: 238px;
+}
+
+/* activity indicator */
+
+.palm-group .row .palm-activity-indicator-large {
+  float: right;
+  margin-right: 10px;
+  margin-top: -3px;
+}
+
+/* text fields */
+
+/* Editable text areas, in regular lists and in groups, and labels
+ * This is a first pass. Need to optimize the css today.
+ */
+
+.palm-list .row.textfield {
+  padding: 0;
+  height: 50px;
+}
+
+.palm-list .row.textfield  label {
+  padding-top: 12px;
+  width: auto;
+}
+
+.palm-list label {
+  width: 100px;
+  overflow: hidden;
+  text-align: right;
+  margin-top: 5px;
+  position: absolute;
+  right: 15px;
+  color: #1f75bf;
+  -webkit-user-select: none;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.palm-list div.row input[type=text],
+.palm-list div.row input[type=password] {
+  background: transparent;
+  margin: -2px 0 0 0;
+  padding: 2px 0 0 0;
+  vertical-align: middle;
+  border: none;
+  outline: none;
+  height: 50px;
+  width: 290px;
+}
+
+.palm-list div.row input[type=text]:focus,
+.palm-list div.row input[type=password]:focus {
+  margin: -3px -15px 0 -15px;
+  padding: 4px 0 0 0;
+  outline: none;
+  height: 20px;
+  width: 290px;
+  border-width: 15px;
+  -webkit-border-image: url(../images/textfield-shadow.png) 17 15 15 15 stretch stretch;
+}
+
+.palm-group .palm-list div.row input[type=text],
+.palm-group .palm-list div.row input[type=password] {
+  background: transparent;
+  margin: -2px 0 0 0;
+  padding: 2px 0 0 0;
+  vertical-align: middle;
+  border: none;
+  outline: none;
+  height: 50px;
+  width: 290px;
+}
+
+.palm-group .palm-list div.row input[type=text]:focus,
+.palm-group .palm-list div.row input[type=password]:focus {
+  /*background: #fff;*/
+  margin: -3px -10px 0 -10px;
+  padding: 3px 0 0 0;
+  outline: none;
+  height: 31px;
+  width: 266px;
+  border-width: 10px;
+  -webkit-border-image: url(../images/textfield-shadow.png) 10 10 10 10 stretch stretch;
+}
+
+.palm-group .palm-list .row.first input[type=text],
+.palm-group .palm-list .row.first input[type=password] {
+  background: transparent;
+  margin: 0;
+  padding: 2px 0 0 0;
+  vertical-align: middle;
+  border: none;
+  outline: none;
+  height: 49px;
+  width: 290px;
+}
+
+.palm-group .palm-list .row.first input[type=text]:focus,
+.palm-group .palm-list .row.first input[type=password]:focus {
+  margin: 0 -10px 0 -10px;
+  padding: 3px 0 0 0;
+  outline: none;
+  height: 28px;
+  width: 266px;
+  border-width: 10px;
+  -webkit-border-image: url(../images/group-textfield-shadow-first.png) 10 10 10 10 stretch stretch;
+}
+
+.palm-group .palm-list .row.last input[type=text],
+.palm-group .palm-list .row.last input[type=password] {
+  background: transparent;
+  margin: -2px 0 0 0;
+  padding: 2px 0 0 0;
+  vertical-align: middle;
+  border: none;
+  outline: none;
+  height: 48px;
+  width: 290px;
+}
+
+.palm-group .palm-list .row.last input[type=text]:focus,
+.palm-group .palm-list .row.last input[type=password]:focus {
+  margin: -4px -10px 0 -10px;
+  padding: 3px 0 0 0;
+  outline: none;
+  height: 32px;
+  width: 266px;
+  border-width: 10px;
+  -webkit-border-image: url(../images/group-textfield-shadow-last.png) 10 10 10 10 stretch stretch;
+}
+
+.palm-group .palm-list .row.single input[type=text]:focus,
+.palm-group .palm-list .row.single input[type=password]:focus {
+  margin: -2px -10px 0 -10px;
+  padding: 3px 0 0 0;
+  outline: none;
+  height: 30px;
+  width: 266px;
+  border-width: 10px;
+  -webkit-border-image: url(../images/group-textfield-shadow-single.png) 10 10 10 10 stretch stretch;
+}
+
+.palm-list .row.textarea {
+  height: auto;
+}
+
+.palm-group .palm-list .row.textfield.removable input,
+.palm-group .palm-list .row.textfield.removable input:focus {
+  padding-left: 30px;
+  width: 236px;
+}
+#contact_list .row.last {
+  padding-bottom: 0px;
+}
+
+.palm-list .row .textfield-group {
+  margin: -16px 0 -13px 0;
+  border-width: 15px;
+  -webkit-border-image: url(../images/textfield-noshadow.png) 15 15 15 15 stretch stretch;
+}
+.palm-list .row .textfield-group.focused {
+  border-width: 15px;
+  -webkit-border-image: url(../images/group-textfield-shadow-52.png) 15 15 15 15 stretch stretch;
+}
+
+.palm-group .palm-list .row.first .textfield-group.focused {
+  border-width: 15px;
+  -webkit-border-image: url(../images/group-textfield-shadow-52-first.png) 15 15 15 15 stretch stretch;
+}
+.palm-group .palm-list .row.last .textfield-group.focused {
+  border-width: 15px;
+  -webkit-border-image: url(../images/group-textfield-shadow-52-last.png) 15 15 15 15 stretch stretch;
+}
+.palm-group .palm-list .row.single .textfield-group.focused {
+  border-width: 15px;
+  -webkit-border-image: url(../images/group-textfield-shadow-52-single.png) 15 15 15 15 stretch stretch;
+}
+
+.palm-list .row .textfield-group .title {  
+  margin: 0 -15px;
+}
+/* temporary overriding of these 24 styles  */
+.palm-list div.row .textfield-group input[type=text],
+.palm-list div.row .textfield-group input[type=password],
+.palm-list div.row .textfield-group input[type=text]:focus,
+.palm-list div.row .textfield-group input[type=password]:focus,
+.palm-list div.row .textfield-group input[type=text],
+.palm-list div.row .textfield-group input[type=password],
+.palm-list div.row .textfield-group input[type=text]:focus,
+.palm-list div.row .textfield-group input[type=password]:focus,
+.palm-list .row .textfield-group input[type=text],
+.palm-list .row .textfield-group input[type=password],
+.palm-list .row .textfield-group input[type=text]:focus,
+.palm-list .row .textfield-group input[type=password]:focus,
+.palm-list .row.single .textfield-group input[type=text],
+.palm-list .row.single .textfield-group input[type=password],
+.palm-list .row.single .textfield-group input[type=text]:focus,
+.palm-list .row.single .textfield-group input[type=password]:focus,
+.palm-list .row.first .textfield-group input[type=text],
+.palm-list .row.first .textfield-group input[type=password],
+.palm-list .row.first .textfield-group input[type=text]:focus,
+.palm-list .row.first .textfield-group input[type=password]:focus,
+.palm-list .row.last .textfield-group input[type=text],
+.palm-list .row.last .textfield-group input[type=password],
+.palm-list .row.last .textfield-group input[type=text]:focus,
+.palm-list .row.last .textfield-group input[type=password]:focus {
+  background: none;
+  width: 100%;
+  height: 52px;
+  font-size: 20px;
+  text-overflow: ellipsis;
+  margin: -2px 0 0 -1px;
+  padding: 0px;
+  border: 0px;
+  border-width: 0px;
+  -webkit-border-image: none;
+  outline: none;
+}
+
+.palm-list div.row input[type=text].framework-textfield {
+  font-size: 20px;
+  background: transparent;
+  margin: -3px -15px 0 -15px;
+  padding: 4px 0px 0 5px;
+  vertical-align: middle;
+  border: none;
+  outline: none;
+  min-height: 25px;
+  border-width: 15px;
+  -webkit-border-image: url(../images/textfield-noshadow.png) 17 15 15 15 stretch stretch;
+  width: 300px;
+  height: 20px;
+}
+
+.palm-list div.row input[type=text]:focus.framework-textfield {
+  background: #fff;
+  margin: -3px -15px 0 -15px;
+  padding: 4px 0 0 5px;
+  outline: none;
+  height: 20px;
+  width: 300px;
+  border-width: 15px;
+  -webkit-border-image: url(../images/textfield-shadow.png) 17 15 15 15 stretch stretch;
+}
+
+.palm-group .palm-list div.row input[type=text].framework-textfield {
+  font-size: 20px;
+  background: transparent;
+  margin: -3px -15px 0 -15px;
+  padding: 4px 0px 0 5px;
+  vertical-align: middle;
+  border: none;
+  outline: none;
+  min-height: 25px;
+  border-width: 15px;
+  -webkit-border-image: url(../images/textfield-noshadow.png) 17 15 15 15 stretch stretch;
+  width: 318px;
+}
+
+.palm-group .palm-list .row.first input[type=text].framework-textfield {
+  font-size: 20px;
+  background: transparent;
+  margin: -3px -15px 0 -15px;
+  padding: 4px 0px 0 5px;
+  vertical-align: middle;
+  border: none;
+  outline: none;
+  min-height: 25px;
+  border-width: 15px;
+  -webkit-border-image: url(../images/textfield-noshadow.png) 17 15 15 15 stretch stretch;
+  width: 318px;
+}
+
+.palm-group .palm-list .row.first input[type=text]:focus.framework-textfield {
+  background: #fff;
+  margin: -3px -15px 0 -15px;
+  padding: 4px 0 0 5px;
+  outline: none;
+  height: 20px;
+  width: 318px;
+  border-width: 15px;
+  -webkit-border-image: url(../images/textfield-shadow.png) 17 15 15 15 stretch stretch;
+}
+
+.palm-group .palm-list .row.last input[type=text].framework-textfield {
+  font-size: 20px;
+  background: transparent;
+  margin: -3px -15px 0 -15px;
+  padding: 4px 0px 0 5px;
+  vertical-align: middle;
+  border: none;
+  outline: none;
+  min-height: 25px;
+  border-width: 15px;
+  -webkit-border-image: url(../images/textfield-noshadow.png) 17 15 15 15 stretch stretch;
+  width: 318px;
+}
+
+.palm-group .palm-list .row.last input[type=text]:focus.framework-textfield {
+  background: #fff;
+  margin: -3px -15px 0 -15px;
+  padding: 4px 0 0 5px;
+  outline: none;
+  height: 20px;
+  width: 318px;
+  border-width: 15px;
+  -webkit-border-image: url(../images/textfield-shadow.png) 17 15 15 15 stretch stretch;
+}
+
+.palm-group .palm-list .row.single input[type=text]:focus.framework-textfield {
+  background: #fff;
+  margin: -3px -15px 0 -15px;
+  padding: 4px 0 0 5px;
+  outline: none;
+  height: 20px;
+  width: 318px;
+  border-width: 15px;
+  -webkit-border-image: url(../images/textfield-shadow.png) 17 15 15 15 stretch stretch;
+}
+
+input.framework-textfield {
+  font-size: 20px;
+  background: transparent;
+  margin: -3px -15px 0 -15px;
+  padding: 4px 0px 0 5px;
+  vertical-align: middle;
+  border: none;
+  outline: none;
+  min-height: 25px;
+  border-width: 15px;
+  -webkit-border-image: url(../images/textfield-noshadow.png) 17 15 15 15 stretch stretch;
+  /*width: 318px;*/
+}
+
+input:focus.framework-textfield{
+  background: #fff;
+  margin: -3px -15px 0 -15px;
+  padding: 4px 0 0 5px;
+  outline: none;
+  height: 20px;
+  width: 300px;
+  border-width: 15px;
+  -webkit-border-image: url(../images/textfield-shadow.png) 17 15 15 15 stretch stretch;
+}
+
+ textarea.framework-textfield, .frameworkUnfocusedTextfield {
+  font-size: 20px;
+  background: transparent;
+  margin: -3px -15px 0 -15px;
+  padding: 4px 0px 0 5px;
+  vertical-align: middle;
+  border: none;
+  outline: none;
+  min-height: 25px;
+  border-width: 15px;
+  -webkit-border-image: url(../images/textfield-noshadow.png) 17 15 15 15 stretch stretch;
+}
+
+textarea:focus.framework-textfield, .frameworkFocusedTextfield {
+  font-size: 20px;
+  background: #fff;
+  margin: -3px -15px 0 -15px;
+  padding: 4px 0px 0 5px;
+  vertical-align: middle;
+  outline: none;
+  min-height: 25px;
+  border-width: 15px;
+  -webkit-border-image: url(../images/textfield-shadow.png) 17 15 15 15 stretch stretch;
+}
+
+.framework-textfield.hinttext, .hinttext {
+  -webkit-user-select: none;
+  left: 11px;
+  margin-top: 20px;
+  position: absolute;
+  color: gray;
+  z-index: 1000;
+}
+
+.framework-textfield.hinttextpassword {
+  -webkit-user-select: none;
+  left: 9px;
+  margin-top: 12px;
+  position: absolute;
+  color: gray;
+}
+
+label.framework-textfield {
+  width: 100px;
+  overflow: hidden;
+  text-align: right;
+  margin-top: 10px;
+  position: absolute;
+  right: 15px;
+  color: #1879cd;
+  -webkit-user-select: none;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+label.framework-textfield {
+  padding-top: 12px;
+  width: auto;
+}
+
+/* toggle */
+
+.row .sliding-toggle {
+  margin-top: -4px;
+}
+
+/* HTML Buttons. These styles may or may not become deprecated */
+
+/* standard button */
+
+/* if you make a change to the style below, please remember to mirror it in the localized stylesheets */
+/* (to be found under /resources/xx_xx/stylesheets/) */
+button.palm-button,
+input[type=button].palm-button {
+  margin: 5px 10px 5px 10px;
+  height: 52px;
+  padding: 0;
+  font-size: 20px;
+  text-align: center;
+  text-transform: capitalize;
+  color: #ffffff;
+  line-height: 55px;
+  background: none;
+  border-width: 0 17px;
+  min-width: 300px;
+  -webkit-box-sizing: border-box;
+  -webkit-border-image: url(../images/palm-button-medium.png) 0 17 104 17;
+}
+
+button.palm-button:active,
+input[type=button].palm-button:active{
+  -webkit-border-image: url(../images/palm-button-medium.png) 52 17 52 17;
+}
+
+button[disabled].palm-button,
+input[type=button][disabled].palm-button,
+button[disabled].palm-button:active,
+input[type=button][disabled].palm-button:active {
+  -webkit-border-image: url(../images/palm-button-medium.png) 104 17 0 17;
+}
+
+/* dissmiss button */
+
+button.palm-button.dismiss,
+input[type=button].palm-button.dismiss,
+button.palm-button.secondary,
+input[type=button].palm-button.secondary {
+  color: #332;
+  -webkit-border-image: url(../images/palm-button-light.png) 0 17 104 17;
+}
+
+button.palm-button.dismiss:active,
+input[type=button].palm-button.dismiss:active,
+button.palm-button.secondary:active,
+input[type=button].palm-button.secondary:active {
+  -webkit-border-image: url(../images/palm-button-light.png) 52 17 52 17;
+}
+
+button[disabled].palm-button.dismiss,
+input[type=button][disabled].palm-button.dismiss,
+button[disabled].palm-button.dismiss:active,
+input[type=button][disabled].palm-button.dismiss:active,
+button[disabled].palm-button.secondary,
+input[type=button][disabled].palm-button.secondary,
+button[disabled].palm-button.secondary:active,
+input[type=button][disabled].palm-button.secondary:active {
+  -webkit-border-image: url(../images/palm-button-light.png) 104 17 0 17;
+}
+
+/* negative button */
+
+button.palm-button.negative,
+input[type=button].palm-button.negative {
+  color: #ffffff;
+  -webkit-border-image: url(../images/palm-button-negative.png) 0 17 104 17;
+}
+
+button.palm-button.negative:active,
+input[type=button].palm-button.negative:active {
+  -webkit-border-image: url(../images/palm-button-negative.png) 52 17 52 17;
+}
+
+button[disabled].palm-button.negative,
+input[type=button][disabled].palm-button.negative,				              
+button[disabled].palm-button.negative:active,
+input[type=button][disabled].palm-button.negative:active {
+  -webkit-border-image: url(../images/palm-button-negative.png) 104 17 0 17;
+}
+
+/* affirmative button */
+
+button.palm-button.affirmative,
+input[type=button].palm-button.affirmative{
+  color: #ffffff;
+  -webkit-border-image: url(../images/palm-button-affirmative.png) 0 17 104 17;
+}
+
+button.palm-button.affirmative:active,
+input[type=button].palm-button.affirmative:active {
+  -webkit-border-image: url(../images/palm-button-affirmative.png) 52 17 52 17;
+}
+
+button[disabled].palm-button.affirmative,
+input[type=button][disabled].palm-button.affirmative,				              
+button[disabled].palm-button.affirmative:active,
+input[type=button][disabled].palm-button.affirmative:active {
+  -webkit-border-image: url(../images/palm-button-affirmative.png) 104 17 0 17;
+}
+
+/* Rounded corners for the stage
+ * This is being drawn natively at this point. This is deprecated.
+ */
+
+.top-left-corner,
+.top-right-corner,
+.bottom-left-corner,
+.bottom-right-corner {
+  position: fixed;
+  z-index: 9900;
+  width: 24px;
+  height: 24px;
+  background: url(../images/stage-corners.png) no-repeat;
+}
+
+.top-left-corner {
+  top: 0px;
+  left: 0px;
+  background-position: top left;
+}
+
+.top-right-corner {
+  top: 0px;
+  left: 296px;
+  background-position: top right;
+}
+
+.bottom-left-corner {
+  bottom: 0px;
+  left: 0px;
+  background-position: bottom left;
+}
+
+.bottom-right-corner {
+  bottom: 0px;
+  left: 296px;
+  background-position: bottom right;
+}
+
+/* moved to email */
+
+  .palm-page-header .header-icon.gmail {
+  background: url(../images/header-icon-gmail.png) no-repeat;
+  }
+  .palm-page-header .header-icon.exchange {
+  background: url(../images/header-icon-exchange.png) no-repeat;
+  }
+  .palm-page-header .header-icon.move-to,
+  .palm-page-header .icon.move-to {
+  background: url(../images/header-icon-move-to.png) no-repeat;
+  }
+
+/* List Section Labels
+ */
+
+  .palm-list-section-label {
+  border-collapse: collapse;
+  height: 32px;
+  border: none;
+  width: 100%;
+  }
+
+  .palm-list-section-label td {
+  height: 32px;
+  vertical-align: middle;
+  }
+
+  .palm-list-section-label .left {
+  width: 10px;
+  white-space: nowrap;
+  background: url(../images/palm-divider-line.png) right no-repeat;
+  padding-left: 8px;
+  }
+
+  .palm-dark .palm-list-section-label .left {
+  background: url(../images/palm-divider-line-dark.png) right no-repeat;
+  }
+
+  .palm-list-section-label .label {
+  font-size: 16px;
+  line-height: 32px;
+  text-transform: uppercase;
+  color: #5289b2;
+  text-shadow: #ffffff 0px 1px 0px;
+  font-weight: bold;
+  padding: 0px 7px 0px 7px;
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  }
+
+  .palm-dark .palm-list-section-label .label {
+  color: #AAA;
+  text-shadow: #222 0px -1px 0px;
+  }
+
+  .palm-list-section-label .right {
+  width: 100%;
+  padding-right: 8px;
+  background: url(../images/palm-divider-line.png) left no-repeat;
+  }
+  .palm-list-section-label-solid {
+  height: 12px;
+  background: url(../images/palm-divider-label-solid.png) left center repeat-x;
+  }
+  .palm-dark .palm-list-section-label-solid {
+  height: 12px;
+  background: url(../images/palm-divider-label-solid-dark.png) left center repeat-x;
+  }
+
+  .palm-dark .palm-list-section-label .right {
+  background: url(../images/palm-divider-line-dark.png) left no-repeat;
+  }
+
+   /*Alternative Splitter - no left line*/
+
+  .palm-list-section-label.alt .right {
+  background: url(../images/palm-divider-separator-alt.png) left repeat-x;
+  }
+
+  .palm-dark .palm-list-section-label.alt .right {
+  background-image: url(../images/palm-divider-separator-alt-dark.png);
+  }
+
+  /* Collapsible List Section Labels */
+
+  .palm-list-section-label td {
+  border-spacing: 0;
+  padding: 0;
+  }
+  
+  .palm-list-section-label.collapsible {
+  margin-top: 8px;
+  margin-bottom: 2px;
+  }
+  
+  .palm-list-section-label.collapsible .right {
+  height: 32px;
+  padding-right: 5px;
+  background: url(../images/list-section-collapse-middle.png) right center no-repeat;
+  display: table-cell;
+  vertical-align: middle;
+  }
+
+  .palm-list-section-label.collapsible .line {
+  display: block;
+  height: 32px;
+  background: url(../images/list-section-collapse-left.png) left center no-repeat;
+  display: table-cell;
+  vertical-align: middle;
+  }
+
+  .collapsible {
+  border-collapse: collapse;
+  }
+
+  .collapsible.playground {
+  height: 48px;
+  }
+
+  .collapsible .left-line {
+  height: 32px;
+  width: 7px;
+  background: url(../images/list-section-collapse-left.png) center 11px;
+  }
+
+  .collapsible .middle-line {
+  width: 72%;
+  position: absolute;
+  height: 32px;
+  background: url(../images/list-section-collapse-middle.png) center 11px repeat-x;
+  }
+
+  /* Alphabetical List Dividers
+   * Typically used in alphabetically sorted lists. The divider holds one character.
+   * A regular list would immediately follow this divider. Group boxes could follow, but are not encouraged.
+   */
+
+  .palm-alpha-divider {
+  background: url(../images/alpha-divider.png) center left no-repeat;
+  height: 30px;
+  margin: 3px 0 3px 0;
+  padding-top: 7px;
+  }
+
+  .palm-dark .palm-alpha-divider {
+  background: url(../images/alpha-divider-dark.png) center left no-repeat;
+  }
+
+  .palm-alpha-divider div {
+  color: #ffffff;
+  width: 20px;
+  text-shadow: #646454 0px 1px 0px;
+  font-size: 16px;
+  text-align: center;
+  font-weight: bold;
+  position: relative;
+  left: 19px;
+  text-transform: uppercase;
+  }
+
+  /* List Section
+   * There is no label, used to separate sections without labels. Currently used in palm-list.
+   */
+
+  .palm-list-section-no-label {
+  height: 30px;
+  background: url(../images/list-separator-dark.png) left repeat-x;
+  }
+  
+
+  .palm-popup-content .palm-list-section-label {
+  margin-top: -7px;
+  margin-bottom: -6px;
+  }
+
+  .palm-popup-content .palm-list-section-label .label {
+  font-size: 14px;
+  line-height: 28px;
+  height: 28px;
+  margin: 3px -2px 0 -2px;
+  text-transform: none;
+  }
+  
+  
+  
+.palm-page-header {
+  min-height: 50px;
+  background: url(../images/header-background.png) repeat-x; /* deprecated */
+  padding-bottom: 16px;
+  padding: 0;
+}
+
+.palm-page-header > .header-icon {
+  float: left;
+  width: 39px;
+  height: 32px;
+  background: url(../images/header-icon-prefs.png) no-repeat;
+  margin-left: -10px;
+  margin-top: -24px;
+  margin-bottom: -24px;
+}
+
+.palm-page-header > .header-text {
+  margin-top: -22px;
+  margin-left: 30px;
+  color: #444;
+  text-transform: capitalize;
+  text-shadow: #f2f2f2 0px 1px 0px;
+}
+.palm-page-header > .header-text.left {
+  text-align: left;
+  margin-left: -10px;
+}
+.palm-page-header > .header-text.center {
+  text-align: center;
+}
+  
+.palm-page-header > .sliding-toggle-container,
+.palm-page-header > .header-sliding-toggle {
+  position: absolute;
+  right: 0;
+  top: 0;
+}

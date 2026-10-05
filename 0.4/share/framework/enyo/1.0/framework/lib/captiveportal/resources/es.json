@@ -1,0 +1,11 @@
+{
+	"Cancel": "Cancelar",
+	"Choose a different network": "Elegir otra red",
+	"Dismiss": "Descartar",
+	"Network Has Been Connected to the Internet": "La red se ha conectado a Internet",
+	"Network Login": "Inicio de sesión de red",
+	"Network has been disconnected": "La red se ha desconectado",
+	"Password...": "Contraseña...",
+	"The server {$serverName} requires a username and password": "Para acceder al servidor {$serverName} necesitas un nombre de usuario y una contraseña.",
+	"Username...": "Usuario..."
+}

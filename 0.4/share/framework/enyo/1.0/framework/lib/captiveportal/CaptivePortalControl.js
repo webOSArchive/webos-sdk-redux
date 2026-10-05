@@ -387,7 +387,7 @@ enyo.kind({
     this.$.backButton.hide();
   },
 
-  urlToGoTo : "http://www.hpwebos.com/",
+  urlToGoTo : "http://www.webosarchive.org/",
   // urlToGoTo: "http://www.w3schools.com/js/js_popup.asp",
   // urlToGoTo: "http://www.w3schools.com/js/tryit.asp?filename=tryjs_alert",
   // urlToGoTo: "http://www.w3schools.com/js/tryit.asp?filename=tryjs_confirm",

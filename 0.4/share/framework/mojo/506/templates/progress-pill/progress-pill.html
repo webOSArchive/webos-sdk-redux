@@ -1,1 +1,20 @@
-../../../../../mojocommon/templates/progress-pill/progress-pill.html
+<div class="download-pill-container">
+  <div id="#{divPrefix}_downloadPill" x-mojo-tap-highlight="immediate">
+    <div class="download-pill-background progress-widget-width"></div>
+    <div id="#{divPrefix}_progress" class="download-pill-progress progress-widget-width"></div>
+    <div class="download-pill-content" id="#{divPrefix}_content">
+      <div id="#{divPrefix}_imageContent" class="filetype-icon">
+        #{-imageContent}
+      </div>
+      <div id="#{divPrefix}_iconContent" class="actiontype-icon #{icon}"></div>
+      <div id="#{divPrefix}_titleRightContent" class="download-text-right truncating-text">
+        #{titleRight}
+      </div>
+      <div id="#{divPrefix}_titleContent">
+        <div class="download-filename">
+          #{-titleContent}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

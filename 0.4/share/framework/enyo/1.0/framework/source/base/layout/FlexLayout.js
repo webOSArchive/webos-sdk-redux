@@ -75,7 +75,18 @@ enyo.kind({
 				// we redefine flex to mean 'be exactly the left over space'
 				// as opposed to 'natural size plus the left over space'
 				if (!s[inExtent]) {
-					s[inExtent] = "0px";
+					// Lunacy: a width is said with flex-basis where the engine counts a 0
+					// width (see enyo.FlexLayout.zeroWidthCounts below). Heights are left be.
+					if (inExtent == "width" && enyo.FlexLayout.zeroWidthCounts()) {
+						// Lunacy: an engine that takes the basis literally would split a box
+						// sized to its content evenly; there each child keeps its natural
+						// width, as every engine before did (enyo.FlexLayout.basisSplitsContent).
+						if (!(enyo.FlexLayout.basisSplitsContent() && this._container && enyo.FlexLayout.contentSized(this._container))) {
+							s["flex-basis"] = "0px";
+						}
+					} else {
+						s[inExtent] = "0px";
+					}
 				}
 				// Mozilla doesn't seem to 'stretch' correctly on this axis
 				if (enyo.isMoz && inExtent == "height" && this.align == "stretch") {
@@ -89,6 +100,8 @@ enyo.kind({
 		s[this.prefix + "-box-pack"] = inContainer.pack || this.pack;
 		s[this.prefix + "-box-align"] = inContainer.align || this.align;
 		inContainer.addClass(this.flexClass);
+		// Lunacy: flowExtent needs to know whose children it is laying out.
+		this._container = inContainer;
 		this._flow(inContainer.children);
 	}
 });
@@ -116,6 +129,42 @@ this creates a a set of horizontally-centered buttons positioned at the bottom o
 	]}
 
 */
+// Lunacy: whether this engine lets a flexed child's 0 width count when its box is sized to its
+// content.
+//
+// Enyo says "take exactly a share of the leftover space" with width 0 plus a box-flex. The
+// WebKit of 2011 ignored a fixed width of 0 when it worked out how wide a box's content wanted
+// to be, so a box sized to its content (a RadioGroup between two Spacers in a Toolbar) came out
+// as wide as its buttons' content and then split that evenly. Chromium's later -webkit-box
+// counts the 0: the same group comes out as wide as its buttons' borders, and Palm's Clock drew
+// its clock/alarm switch as two squashed icons. On such an engine the share is said with
+// flex-basis instead, which it honours in -webkit-box and which leaves the content counted.
+// Only widths: the old engine worked out a box's content height by laying it out, where a 0
+// height stays 0, so heights came out the same then as now.
+// Checked once, on a throwaway box: the engines that need this are the ones that answer 0.
+enyo.FlexLayout.zeroWidthCounts = function() {
+	var f = enyo.FlexLayout, root = document.body || document.documentElement;
+	if (f._zeroWidthCounts === undefined && root) {
+		var box = document.createElement("div"), child = document.createElement("div");
+		box.style.cssText = "position:absolute;visibility:hidden;display:-webkit-inline-box";
+		child.style.cssText = "-webkit-box-flex:1;width:0px";
+		child.textContent = "xx";
+		box.appendChild(child);
+		root.appendChild(box);
+		var counts = box.offsetWidth === 0;
+		// And that flex-basis does share a fixed box out evenly, or there is nothing to gain.
+		var wide = document.createElement("div");
+		wide.style.cssText = "-webkit-box-flex:1;flex-basis:0px";
+		wide.textContent = "xxxxxxxxxxxxxxxxxxxx";
+		child.style.cssText = "-webkit-box-flex:1;flex-basis:0px";
+		box.appendChild(wide);
+		box.style.cssText = "position:absolute;visibility:hidden;display:-webkit-box;width:400px";
+		f._zeroWidthCounts = counts && Math.abs(child.offsetWidth - wide.offsetWidth) <= 1;
+		root.removeChild(box);
+	}
+	return Boolean(f._zeroWidthCounts);
+};
+
 enyo.kind({
 	name: "enyo.HFlexLayout", 
 	//* @protected
@@ -181,3 +230,43 @@ enyo.kind({
 	kind: enyo.Control,
 	layoutKind: enyo.VFlexLayout
 });
+
+// Lunacy: whether this engine takes flex-basis literally inside a -webkit-box. Chromium 37 to
+// 131 laid -webkit-box out with the old flexible-box code, which never read flex-basis: a
+// flexed child kept its natural width and grew by its share of what was left, as the WebKit
+// of 2011 did. WebView 149 builds -webkit-box on flexbox and honours the basis, so a box sized
+// to its content - the sort buttons at the top of App Catalog's category lists - is split
+// evenly among its children, and the widest child's caption is cut off. Checked once, on a
+// hidden box: two children with flex-basis 0 and very different text come out the same width.
+enyo.FlexLayout.basisSplitsContent = function() {
+	var f = enyo.FlexLayout, root = document.body || document.documentElement;
+	if (f._basisSplitsContent === undefined && root) {
+		var box = document.createElement("div"), a = document.createElement("div"), b = document.createElement("div");
+		box.style.cssText = "position:absolute;visibility:hidden;display:-webkit-inline-box";
+		a.style.cssText = b.style.cssText = "-webkit-box-flex:1;flex-basis:0px;white-space:nowrap";
+		a.textContent = "xx";
+		b.textContent = "xxxxxxxxxxxxxxxxxxxx";
+		box.appendChild(a);
+		box.appendChild(b);
+		root.appendChild(box);
+		f._basisSplitsContent = Math.abs(a.offsetWidth - b.offsetWidth) <= 1;
+		root.removeChild(box);
+	}
+	return Boolean(f._basisSplitsContent);
+};
+
+// Lunacy: whether a container's width comes from its content rather than from its parent or
+// from a style of its own: nothing sets its width, it isn't flexed, and it sits in a horizontal
+// box (whose children are as wide as their content) or in a vertical box that doesn't stretch
+// its children. Anything else - a plain block's child, a stretched one - is as wide as its
+// parent, and there every engine splits the children evenly. This is what Enyo knows at
+// layout time; a width given by a stylesheet it can't see.
+enyo.FlexLayout.contentSized = function(inContainer) {
+	var s = inContainer.domStyles || {};
+	if (s.width || inContainer.width || inContainer.flex) { return false; }
+	var p = inContainer.parent, l = p && p.layout;
+	if (!l) { return false; }
+	if (l instanceof enyo.HFlexLayout) { return true; }
+	if (l instanceof enyo.VFlexLayout) { return (p.align || l.align) != "stretch"; }
+	return false;
+};

@@ -1,6 +1,6 @@
 /*jslint white: true, onevar: true, undef: true, eqeqeq: true, plusplus: true, bitwise: true, 
 regexp: true, newcap: true, immed: true, nomen: false, maxerr: 500 */
-/*global ContactsLib, enyo, console, $L, com, $contactsui_path, PalmSystem, crb */
+/*global ContactsLib, enyo, console, $L, com, $contactsui_path, PalmSystem, crb, PalmCall */
 
 /*
 
@@ -32,7 +32,7 @@ enyo.kind({
 		]},
 		{name: "AllDetails", layoutKind: "VFlexLayout", showing: false, components: [
 			{kind: "Control", components: [
-				{kind: "HFlexBox", components: [
+				{kind: "HFlexBox", align: "center", components: [
 					{name: "photo", kind: "Control", className: "icon", components: [
 						{name: "photoImage", className: "img", kind: "Control"},
 						{kind: "Control", className: "mask"}
@@ -56,10 +56,10 @@ enyo.kind({
 		]},
 		{name: "skypeMenu", kind: "PopupSelect", onSelect: "onSkypeMenuSelect", onBeforeOpen: "onSkypeMenuBeforeOpen", onClose: "onSkypeMenuClose"},
 		{kind: "Control", layoutKind: "VFlexLayout", className: "group", flex: 1, components: [
-			{name: "SomeDetails", kind: "Scroller", flex: 1,  horizontal: false, autoHorizontal: false, components: [
+			{name: "SomeDetails", kind: "Scroller", flex: 1, horizontal: false, autoHorizontal: false, components: [
 				{name: "phoneGroup", kind: "com.palm.library.contactsui.FieldGroup", onFieldClick: "phoneFieldClick", onGetActionIcon: "phoneGetActionIcon", onActionIconClick: "phoneActionIconClick"},
 				{name: "emailGroup", kind: "com.palm.library.contactsui.FieldGroup", onFieldClick: "emailFieldClick"},
-				{name: "imGroup", kind: "com.palm.library.contactsui.FieldGroup", onFieldClick: "imFieldClick", onShowArrow: "showImDropdownArrow"},
+				{name: "imGroup", kind: "com.palm.library.contactsui.FieldGroup", onFieldClick: "imFieldClick", onGetFieldValue: "getImFieldValue", onShowArrow: "showImDropdownArrow"},
 				{name: "addressGroup", kind: "com.palm.library.contactsui.FieldGroup", onGetFieldValue: "getAddressFieldValue", onFieldClick: "addressFieldClick"},
 				{name: "urlGroup", kind: "com.palm.library.contactsui.FieldGroup", onFieldClick: "urlFieldClick"},
 				{name: "notesGroup", kind: "com.palm.library.contactsui.FieldGroup", onGetFieldValue: "getNotesFieldValue"},
@@ -138,7 +138,7 @@ enyo.kind({
 		 //inline buttons mode
 		this.$.addToNewButtonInline.hide();
 		this.$.addToExistingButtonInline.hide();
-		this.$.editButtonInline.show();
+		this.$.editButtonInline.hide();   // webOS: Edit Contact now lives in the dialog chrome (DetailsDialog), not inline
 		
 
 		this.$.linkCounter.setDepressed(false);
@@ -185,7 +185,9 @@ enyo.kind({
 		this.$.moreDetailsGroup.setFields(this.getMoreDetailsFields());
 		this.$.emailGroup.setFields(this.person.getEmails().getArray());
 		this.$.phoneGroup.setFields(this.person.getPhoneNumbers().getArray());
+		this.$.imGroup.getFieldTypeDisplay = this.imTypeDisplay;
 		this.$.imGroup.setFields(this.person.getIms().getArray());
+		this.refreshImLabelsWhenReady();
 		this.$.addressGroup.setFields(this.person.getAddresses().getArray());
 		this.$.urlGroup.setFields(this.person.getUrls().getArray());
 		this.$.notesGroup.setFields(this.addTypeToNotes(this.person.getNotes().getArray()));
@@ -198,6 +200,50 @@ enyo.kind({
 //		this.$.favoriteBtn.setState("down", this.person.isFavorite() ? true : false);
 		this.$.favIndicator.addRemoveClass("true", this.person.isFavorite() ? true : false);
 		this.showDetails(true);
+		this.adaptHeight();
+	},
+	// webOS: size the Contact Detail popup to its content instead of a fixed 520px. The flex chain
+	// (contentBox -> wrapper -> detailsInDialog -> group -> Scroller) stays intact so nothing collapses;
+	// we just set the contentBox height = header + min(rows, MAX). The flex:1 Scroller then fills exactly
+	// that, so short contacts get a compact popup and long ones cap + scroll. Finally we re-center, since
+	// Popup memoizes its size/position at open time (Popup.calcSize) and won't re-center on its own.
+	// Fully guarded: any failure leaves the default fixed-height layout intact.
+	adaptHeight: function () {
+		var self = this;
+		enyo.asyncMethod(this, function () { self.doAdaptHeight(0); });
+	},
+	doAdaptHeight: function (attempt) {
+		var self = this;
+		try {
+			// contentBox is the fixed-height box in DetailsDialog (this.owner) that we shrink/grow.
+			var dlg = this.owner;
+			var box = dlg && dlg.$ && dlg.$.contentBox;
+			if (!box || !box.applyStyle || !box.hasNode || !box.hasNode()) { return; }
+			// Natural height of the rows = sum of the rendered FieldGroup nodes (each row is its own
+			// natural height inside the scroller, unaffected by the scroller's flex fill).
+			var groups = ["phoneGroup", "emailGroup", "imGroup", "addressGroup", "urlGroup", "notesGroup", "moreDetailsGroup"];
+			var rows = 0, i, g, n;
+			for (i = 0; i < groups.length; i += 1) {
+				g = this.$[groups[i]];
+				n = g && g.hasNode && g.hasNode();
+				if (n) { rows += n.offsetHeight; }
+			}
+			var hdrNode = this.$.AllDetails && this.$.AllDetails.hasNode && this.$.AllDetails.hasNode();
+			var header = (hdrNode && hdrNode.offsetHeight) || 0;
+			// DOM not laid out yet -> retry a couple of times before giving up.
+			if (rows <= 0 || header <= 0) {
+				if (attempt < 4) { setTimeout(function () { self.doAdaptHeight(attempt + 1); }, 70); }
+				return;
+			}
+			var MIN_ROWS = 60, MAX_ROWS = 380, PAD = 20;
+			var scroller = Math.max(MIN_ROWS, Math.min(rows, MAX_ROWS));
+			var boxH = header + scroller + PAD;
+			box.applyStyle("height", boxH + "px");
+			// Re-center the dialog now its content changed size (dlg is the DetailsDialog/ModalDialog).
+			if (dlg.applyBoundsInfo) {
+				enyo.asyncMethod(dlg, function () { this.applyBoundsInfo(); });
+			}
+		} catch (e) { /* never break the details view */ }
 	},
 	addTypeToNotes: function (array)
 	{
@@ -326,7 +372,120 @@ enyo.kind({
 	phoneFieldClick: function (inSender, inEvent, inField) {
 		this.openPhoneApp(inSender.getFieldValue(inField), "com.palm.telephony");
 	},
-	showImDropdownArrow: function (inSender, inType) 
+	// webOS: label each IM row with its real service (WhatsApp/Telegram/Signal/...) instead of the
+	// generic "IM". FieldGroup renders inField.x_displayType; the framework leaves it "IM" for the
+	// webOS "type_*" IM services, so resolve it here from the field's serviceName/type. Mirrors the
+	// per-service labels the Contacts app card shows.
+	// webOS: label each IM row by its real service (WhatsApp/Telegram/Signal/...) instead of the
+	// generic "IM". FieldGroup renders whatever getFieldTypeDisplay returns; the stock version reads
+	// the field's x_displayType, which the framework leaves "IM" for the webOS "type_*" IM services
+	// (and IMAddress.x_displayType is a read-only getter, so it can't be overridden on the field).
+	// So we override the imGroup's getFieldTypeDisplay to resolve the service from the field's type.
+	// Fully guarded so it can never break the IM list (falls back to the original "IM" label).
+	// webOS: format the IM row's VALUE like the Contacts card. WhatsApp/Signal IM ids are routable
+	// phone forms (a WhatsApp JID "<phone>@s.whatsapp.net" or a bare +E164) -> show a formatted phone;
+	// Telegram's "id<digits>" -> show the bare number. Display-only; the stored value is unchanged.
+	// Mirrors com.palm.app.contacts PseudoDetailsInApp.getImFieldValue / phoneFromImAddress.
+	getImFieldValue: function (inSender, inField) {
+		var value = (inField && inField.value) || (inField && inField.getDisplayValue && inField.getDisplayValue()) || "";
+		var dbo = (inField && inField.getDBObject && inField.getDBObject()) || null;
+		var type = (dbo && dbo.type) || (inField && inField.getType && inField.getType()) || "";
+		if (type === "type_telegram" && (/^id[0-9]+$/).test(value)) {
+			return value.substring(2);
+		}
+		var phone = this.phoneFromImAddress(value, type);
+		return phone || value;
+	},
+	phoneFromImAddress: function (address, serviceName) {
+		var raw = String(address || "");
+		if (serviceName === "type_gometa") { return ""; }
+		var s = raw.toLowerCase();
+		var at = s.indexOf("@");
+		var isWaJid = (at !== -1) && (s.substring(at) === "@s.whatsapp.net");
+		if (at !== -1 && !isWaJid) { return ""; }
+		var bare = isWaJid ? s.substring(0, at) : s;
+		if (/[a-z\-]/.test(bare)) { return ""; }
+		var digits = bare.replace(/[^0-9]/g, "");
+		if (digits.length < 7 || digits.length > 15) { return ""; }
+		var phoneService = (serviceName === "type_whatsapp" || serviceName === "type_signal");
+		var phoneShaped = isWaJid || /^\+?[0-9]{7,15}$/.test(raw);
+		if (!phoneService && !phoneShaped) { return ""; }
+		var e164 = "+" + digits;
+		try {
+			var numberObj = new enyo.g11n.PhoneNumber(e164);
+			if (numberObj.subscriberNumber) {
+				return (new enyo.g11n.PhoneFmt({style: "default"})).format(numberObj);
+			}
+		} catch (e) { /* fall through to plain e164 */ }
+		return e164;
+	},
+	// The label comes from the SAME account-template data every messaging service already publishes
+	// (loc_shortName/loc_name via listAccountTemplates) -- see refreshImLabelsWhenReady below --
+	// rather than a hand-maintained map that has to be extended by hand for every new IM service.
+	// The tiny static map is only a same-tick fallback for the instant before that fetch resolves.
+	imTypeDisplay: function (inField) {
+		var fallback = {
+			type_whatsapp: "WhatsApp", type_telegram: "Telegram", type_signal: "Signal",
+			type_gometa: "Facebook", type_discord: "Discord", type_teams: "Teams",
+			type_googlechat: "Google Chat", type_irc: "IRC"
+		};
+		try {
+			var dbo = (inField && inField.getDBObject && inField.getDBObject()) || {};
+			var svc = dbo.serviceName || dbo.type;
+			var dynamic = ContactsLib.IMAddress && ContactsLib.IMAddress._dynamicLabels;
+			if (svc && ("" + svc).indexOf("type_") === 0) {
+				return (dynamic && dynamic[svc]) || fallback[svc] || ("" + svc).replace(/^type_/, "");
+			}
+		} catch (e) { /* fall through to the stock label */ }
+		return (inField && inField.x_displayType) || "";
+	},
+	// This dialog is shared framework code used from Phone/Messaging's own contact-lookup popups,
+	// not just the Contacts app -- each app is a separate process/JS context, so whichever app opens
+	// this dialog first needs to trigger its own copy of this fetch (com.palm.app.contacts'
+	// ContactsApp.installDynamicIMLabels does the same thing for its own context, and both write to
+	// the same ContactsLib.IMAddress fields, so whichever runs first "wins" and the other just
+	// queues a callback). Re-renders this dialog's IM rows once the fetch resolves, guarded on
+	// personId so a stale response can't overwrite whatever contact is showing by then.
+	refreshImLabelsWhenReady: function () {
+		var IMAddress = ContactsLib.IMAddress, self = this, personId;
+		if (!IMAddress || IMAddress._dynamicLabelsReady) {
+			return;
+		}
+		personId = this.person && this.person.getId && this.person.getId();
+		IMAddress._dynamicLabelsCallbacks = IMAddress._dynamicLabelsCallbacks || [];
+		IMAddress._dynamicLabelsCallbacks.push(function () {
+			if (self.person && self.$.imGroup && self.person.getId && self.person.getId() === personId) {
+				self.$.imGroup.setFields(self.person.getIms().getArray());
+			}
+		});
+		if (IMAddress._dynamicLabelsInstalled) {
+			return;
+		}
+		IMAddress._dynamicLabelsInstalled = true;
+		IMAddress._dynamicLabels = IMAddress._dynamicLabels || {};
+		PalmCall.call("palm://com.palm.service.accounts/", "listAccountTemplates", {"capability": "MESSAGING"}).then(this, function (future) {
+			var results, map = {}, seen = {}, callbacks;
+			try {
+				results = future.result && future.result.results;
+			} catch (e) { /* leave map empty, still mark ready so queued callbacks stop waiting */ }
+			(results || []).forEach(function (tmpl) {
+				(tmpl.capabilityProviders || []).forEach(function (cp) {
+					if (cp && cp.capability === "MESSAGING" && cp.serviceName && !seen[cp.serviceName]) {
+						seen[cp.serviceName] = true;
+						map[cp.serviceName] = cp.loc_shortName || cp.loc_name || tmpl.loc_name || cp.serviceName;
+					}
+				});
+			});
+			IMAddress._dynamicLabels = map;
+			IMAddress._dynamicLabelsReady = true;
+			callbacks = IMAddress._dynamicLabelsCallbacks || [];
+			IMAddress._dynamicLabelsCallbacks = [];
+			callbacks.forEach(function (cb) {
+				try { cb(); } catch (e2) { /* one bad callback shouldn't break the rest */ }
+			});
+		});
+	},
+	showImDropdownArrow: function (inSender, inType)
 	{
 		return (inType === ContactsLib.IMAddress.TYPE.SKYPE);
 	},

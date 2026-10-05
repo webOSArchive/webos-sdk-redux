@@ -1,1 +1,176 @@
-../../../../mojocommon/stylesheets/global-dividers.css
+/*
+   List Dividers Styling
+   Mojo Application Framework
+   Copyright (c) 2007-2009, Palm Inc.
+   All rights reserved.
+
+*/
+
+/* Common Divider Styling
+ */
+
+.palm-divider,
+.palm-divider td {
+  border-collapse: collapse;
+  border-spacing: 0;
+  border: 0;
+  padding: 0;
+  height: 32px;
+}
+
+/* Solid Dividers
+ */
+
+.palm-divider.solid {
+  height: 12px;
+  background: url(../images/palm-divider-label-solid.png) left center repeat-x;
+}
+
+/* Labeled Dividers
+ */
+
+.palm-divider.labeled {
+  height: 32px;
+  border: none;
+  width: 100%;
+}
+
+.palm-divider.labeled .left {
+  width: 10px;
+  white-space: nowrap;
+  background: url(../images/palm-divider-line.png) right center no-repeat;
+  padding-left: 8px;
+}
+
+.palm-divider.labeled .right {
+  width: 100%;
+  padding-right: 8px;
+  background: url(../images/palm-divider-line.png) left center no-repeat;
+}
+
+.palm-divider .label {
+  font-size: 16px;
+  line-height: 32px;
+  text-transform: uppercase;
+  color: #6385b0;
+  text-shadow: #ffffff 0px 1px 0px;
+  font-weight: bold;
+  padding: 0px 7px 0px 7px;
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.palm-divider.labeled.thin {
+  height: 16px;
+  border: none;
+  width: 100%;
+}
+
+.palm-divider.labeled.thin td {
+  height: 16px;
+}
+
+.palm-divider.labeled.thin .left {
+background: url(../images/palm-divider-line-thin.png) right center no-repeat;
+}
+
+.palm-divider.labeled.thin .right {
+  background: url(../images/palm-divider-line-thin.png) left center no-repeat;
+}
+
+.palm-divider.thin .label {
+  color: #858585;
+  font-size: 14px;
+  text-shadow: #cfcfcf 0px 1px 0px;
+}
+
+/* Alternative Divider - no left line */
+
+.palm-divider.labeled.alt .right {
+  background: url(../images/palm-divider-separator-alt.png) left repeat-x;
+}
+
+/* Collapsible Dividers */
+
+.palm-divider.collapsible {
+  margin-top: 8px;
+  margin-bottom: 2px;
+}
+
+.palm-divider.collapsible .right {
+  height: 32px;
+  max-width: 4px;
+  background: url(../images/palm-divider-collapse-middle.png) left 12px repeat-x;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.palm-divider.collapsible .line {
+  width: 100%;
+  display: block;
+  height: 32px;
+  background: url(../images/palm-divider-collapse-left.png) left -1px no-repeat;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.palm-arrow-closed {
+  height: 32px;
+  width: 56px;
+  background: url(../images/palm-divider-arrow.png) center 0px repeat-x;
+}
+
+.palm-arrow-expanded {
+  height: 32px;
+  width: 56px;
+  background: url(../images/palm-divider-arrow.png) center -64px repeat-x;
+}
+
+.selected .palm-arrow-closed {
+  background-position: right -32px;
+}
+
+.selected .palm-arrow-expanded {
+  background-position: right -96px;
+}
+
+.palm-divider.collapsible .label {
+  padding: 0px 7px 0px 9px;
+  max-width: 190px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: bold;
+}
+
+.palm-divider.collapsible .palm-account-icon {
+  width: 32px;
+  height: 32px;
+  padding: 0px 5px;
+  float: left;
+  margin-right: -7px;
+}
+
+/* Alphabetical Dividers
+ */
+
+.palm-divider.alpha {
+  background: url(../images/alpha-divider.png) center left no-repeat;
+  height: 24px;
+  margin: 2px 0;
+}
+
+.palm-divider.alpha div {
+  color: #ffffff;
+  width: 20px;
+  text-shadow: #646454 0px 1px 0px;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: center;
+  font-weight: bold;
+  position: relative;
+  left: 19px;
+  text-transform: uppercase;
+}

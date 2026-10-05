@@ -38,7 +38,7 @@ everything:
 
 ## The `palm-*.bat` launchers
 
-`0.3/bin/palm-*.bat` sit alongside their bash equivalents. Each one is a
+`0.4/bin/palm-*.bat` sit alongside their bash equivalents. Each one is a
 wrapper around a single command:
 
 ```bat

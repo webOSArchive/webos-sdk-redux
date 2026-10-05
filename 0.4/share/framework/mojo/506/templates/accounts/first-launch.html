@@ -1,1 +1,25 @@
-../../../../../mojocommon/templates/accounts/first-launch.html
+<div>
+	<div id='account-header-placeholder'></div>
+
+	<div id='account-first-launch-existing-accounts'>
+		<div class="accounts-drawer" x-mojo-element="Scroller">
+			<div id='account-first-launch-list' class="first-launch-account-list palm-list" x-mojo-element='List'></div>
+		</div>
+		<div class="palm-drawer-shadow"></div>
+	</div>
+
+	<div id='account-first-launch-no-accounts'>
+		<div class="accounts-drawer add-account" x-mojo-element="Scroller">
+			<div id='account-add-list' class="first-launch-account-list palm-list" x-mojo-element='List'></div>
+		</div>
+		<div class="palm-drawer-shadow add-account"></div>
+	</div>
+	
+	<div class="synergy-accounts-footer">
+		<div class="synergy-accounts-footer-wrapper">
+			<div id='account-add-button' x-mojo-element='Button'></div>
+			<div id='account-done-button' x-mojo-element='Button'></div>				
+		</div>
+	</div>
+	
+</div>

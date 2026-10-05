@@ -1,1 +1,8 @@
-../../../../../mojocommon/templates/progress-inline/progress-pill.html
+<div class="inline-progress-bar" x-mojo-tap-highlight="momentary">
+	<div class="stream-background progress-widget-width" id="#{divPrefix}_downloadPill"></div>
+	<div class="stream-buffered progress-widget-width" id="#{divPrefix}_progress"></div>
+	<div class="progress-content progress-widget-width">
+  		<div id="#{divPrefix}_imageContent" class="file-icon">#{-imageContent}</div><div id="#{divPrefix}_iconContent" class="#{icon}"></div> 
+		<div id="#{divPrefix}_titleContent"> #{-titleContent}</div>
+	</div>
+</div>

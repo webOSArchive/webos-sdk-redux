@@ -1,0 +1,12 @@
+{
+	"1#1 retry remaining|##{tries} retries remaining": "1#1 reintento restante|##{tries} reintentos restantes",
+	"Contact carrier for PUK code": "Ponte en contacto con tu operador de telefonía móvil para solicitar el código PUK",
+	"Contact carrier for PUK2 code": "Ponte en contacto con tu operador de telefonía móvil para solicitar el código PUK2",
+	"Contact carrier for new SIM": "Ponte en contacto con tu operador de telefonía móvil para obtener otra SIM",
+	"Contact your carrier for the unblock code": "Contacta con tu operador para obtenerlo",
+	"Contact your carrier for the unlock code": "Ponte en contacto con  tu operador para obtenerlo",
+	"Done": "Aceptar",
+	"Please insert a valid SIM with active data service": "Inserta una tarjeta SIM válida con un servicio de datos activo",
+	"SIM Card Locked": "Tarjeta SIM protegida",
+	"We cannot connect to your cellular network. Make sure you have a valid SIM with active data service and that cellular service is available. Otherwise, use Wi-Fi": "No podemos conectar con tu red móvil. Comprueba que tienes una tarjeta SIM válida con un servicio de datos activo y que el servicio móvil está disponible. En caso contrario, utiliza la red Wi-Fi"
+}
