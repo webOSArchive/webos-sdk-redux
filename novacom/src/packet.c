@@ -17,6 +17,7 @@
 * LICENSE@@@ */
 
 #include <stdio.h>
+#include <errno.h>
 #include <sys/types.h>
 #include <string.h>
 #include <assert.h>
@@ -122,7 +123,7 @@ enum packet_recv_code packet_recv_something(int fd, char **outbuf, size_t *outsi
 		ptr = (char *)&h;
 		readsize = recv(fd, &ptr[headercounter], sizeof(h) - headercounter,0);
 		if (readsize <= 0) 
-			goto conn_fail;
+			goto recv_fail;
 
 		headercounter += readsize;
 		// Don't wait around for the header to fill in
@@ -151,7 +152,7 @@ enum packet_recv_code packet_recv_something(int fd, char **outbuf, size_t *outsi
 			// stdout or stderr, return the data
 			readsize = recv(fd, packet_buf, MIN(h.size - bodycounter, sizeof(packet_buf)),0);
 			if (readsize <= 0) 
-				goto conn_fail;
+				goto recv_fail;
 
 			bodycounter += readsize;
 
@@ -175,7 +176,7 @@ enum packet_recv_code packet_recv_something(int fd, char **outbuf, size_t *outsi
 				ptr = (char *)&m;
 				readsize = recv(fd, &ptr[bodycounter], readsize,0);
 				if (readsize <= 0) 
-					goto conn_fail;
+					goto recv_fail;
 
 				bodycounter += readsize;
 
@@ -216,7 +217,7 @@ enum packet_recv_code packet_recv_something(int fd, char **outbuf, size_t *outsi
 				fprintf(stderr, "oversized oob message. sizeof(m) = %zd, h.size = %d, current pos = %zd\n", sizeof(m), h.size, bodycounter);
 				readsize = recv(fd, packet_buf, MIN(h.size - bodycounter, sizeof(packet_buf)),0);
 				if (readsize <= 0) 
-					goto conn_fail;
+					goto recv_fail;
 
 				bodycounter += readsize;
 
@@ -232,7 +233,7 @@ enum packet_recv_code packet_recv_something(int fd, char **outbuf, size_t *outsi
 			fprintf(stderr, "unknown packet, discarding data\n");
 			readsize = recv(fd, packet_buf, MIN(h.size - bodycounter, sizeof(packet_buf)),0);
 				if (readsize <= 0) 
-					goto conn_fail;
+					goto recv_fail;
 
 			bodycounter += readsize;
 
@@ -247,6 +248,13 @@ enum packet_recv_code packet_recv_something(int fd, char **outbuf, size_t *outsi
 	fprintf(stderr, "fell through the packet receive logic somehow\n");
 	return RECV_ERR_BAD_DATA;
 
-conn_fail:
+recv_fail:
+	/*
+	 * The socket is non-blocking: a packet's payload that hasn't arrived yet is not the
+	 * connection closing. It arrives with the header on a USB device, but a relay (Lunacy's,
+	 * through adb) can deliver the two separately; the counters pick up where they left off.
+	 */
+	if (readsize < 0 && (errno == EAGAIN || errno == EWOULDBLOCK || errno == EINTR))
+		return RECV_RESULT_NODATA;
 	return RECV_ERR_CLOSED_SOCKET;
 }

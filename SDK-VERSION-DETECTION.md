@@ -115,6 +115,32 @@ ones:
 Garbage is still rejected, so a genuinely unreadable device still produces the
 original error rather than a bogus 0.0.0.
 
+## Lunacy, by name
+
+[Lunacy](https://github.com/webOSArchive/Lunacy) runs webOS apps on Android and
+reaches these tools through novacomd ([LUNACY.md](LUNACY.md)). It says what it is
+rather than posing as a webOS device:
+
+```
+PRODUCT_VERSION_STRING=Lunacy 0.5.5
+```
+
+Its version is Lunacy's, not webOS's, and parsing it as one would be wrong in the
+one way that matters: `0.5.5` is older than 1.5.0, which would send every tool
+down the pre-Blowfish paths. So the product regex recognises Lunacy by name and
+lets group 2 (the "version") take the word `Lunacy` itself:
+
+| | |
+|---|---|
+| **Product string, 0.3** | `^(.*?\bwebOS(?:\s+CE)?)\s+v?([^\s]+)\s*(SDK)?` |
+| **Product string, now** | `^(.*?\bwebOS(?:\s+CE)?\s+v?\|(?=Lunacy\b))([^\s]+)\s*(SDK)?` |
+
+`Lunacy` doesn't parse as a number, and `readProductVersion()` already answers
+1.5.0 for a recognised product whose version doesn't parse. Every webOS string in
+the table above parses exactly as before; `LunacyX 1.0` and garbage are still
+unrecognized. Still two string constants, no bytecode; the script replaces either
+HP's original or the 0.3 constant.
+
 ## Applying it
 
 No source for `webos-tools.jar` survives, so the fix is applied by rewriting the

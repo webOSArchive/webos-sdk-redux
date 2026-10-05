@@ -18,6 +18,16 @@ which has no vendor prefix, so the match fails and readProductVersion() throws
 "unrecognized device version" -- every palm-install / palm-launch / palm-log
 against a CE device dies there.
 
+Lunacy (https://github.com/webOSArchive/Lunacy), which runs webOS apps on
+Android, says what it is rather than posing as a webOS device:
+
+    PRODUCT_VERSION_STRING=Lunacy 0.5.5
+
+The product regex also recognises that by name. Lunacy's own version number is
+not a webOS version, so for Lunacy the regex captures the word "Lunacy" as the
+"version"; that doesn't parse as a number, and readProductVersion() falls back
+to 1.5.0, which is all the tools ever ask about (see SDK-VERSION-DETECTION.md).
+
 No source for the jar survives, so this script rewrites the two regex string
 constants directly in the class file's constant pool. Only the CONSTANT_Utf8
 bytes change; no bytecode is touched, and the capturing-group numbering the
@@ -48,18 +58,27 @@ DEFAULT_JAR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "Current", "share", "jars", "webos-tools.jar"
 )
 
-# (description, original constant, replacement constant)
+# (description, earlier constants, replacement constant)
 #
 # These are the raw regex bytes as they appear in the constant pool, i.e. the
-# *value* of the Java string literal -- backslashes are literal here.
+# *value* of the Java string literal -- backslashes are literal here. The
+# earlier constants are every version this script has ever replaced, oldest
+# first, so a jar patched by an earlier release is brought up to date too.
 REPLACEMENTS = [
     (
         "product string",
-        rb"^(Palm|HP) webOS\s+([^\s]+)\s*(SDK)?",
-        # Accept any vendor prefix (or none) ahead of "webOS", plus an optional
-        # "CE" suffix and an optional "v" on the version itself. Group 1 soaks up
-        # the product name so groups 2 and 3 keep meaning version and "SDK".
-        rb"^(.*?\bwebOS(?:\s+CE)?)\s+v?([^\s]+)\s*(SDK)?",
+        [
+            # HP's original.
+            rb"^(Palm|HP) webOS\s+([^\s]+)\s*(SDK)?",
+            # 0.3: any vendor prefix (or none) ahead of "webOS", an optional "CE"
+            # and an optional "v" on the version (webOS CE 3.1.0).
+            rb"^(.*?\bwebOS(?:\s+CE)?)\s+v?([^\s]+)\s*(SDK)?",
+        ],
+        # As 0.3, or "Lunacy" by name: the lookahead alternative leaves group 1
+        # empty and lets group 2 (the version) take the word "Lunacy" itself,
+        # which the version regex can't parse, so the device is treated as 1.5.0
+        # or later. Groups 2 and 3 keep meaning version and "SDK".
+        rb"^(.*?\bwebOS(?:\s+CE)?\s+v?|(?=Lunacy\b))([^\s]+)\s*(SDK)?",
     ),
     (
         "version number",
@@ -67,7 +86,7 @@ REPLACEMENTS = [
         # holding only the LAST digit of the major version: "10.2.1" parses as
         # major 0. `([0-9]+)` captures the whole run. Same length, so this is a
         # free fix; it is a no-op for every single-digit-major webOS release.
-        rb"^([0-9])+\.([0-9]+)(\.([0-9]+)){0,1}(\.([0-9]+)){0,1}",
+        [rb"^([0-9])+\.([0-9]+)(\.([0-9]+)){0,1}(\.([0-9]+)){0,1}"],
         rb"^([0-9]+)\.([0-9]+)(\.([0-9]+)){0,1}(\.([0-9]+)){0,1}",
     ),
 ]
@@ -83,11 +102,13 @@ def utf8_constant(value):
 def patch_class(data):
     """Return (patched_bytes, list_of_applied, list_of_already_applied)."""
     applied, already = [], []
-    for label, old, new in REPLACEMENTS:
-        old_entry, new_entry = utf8_constant(old), utf8_constant(new)
-        found = data.count(old_entry)
+    for label, olds, new in REPLACEMENTS:
+        new_entry = utf8_constant(new)
+        present = [(o, data.count(utf8_constant(o))) for o in olds]
+        present = [(o, n) for o, n in present if n]
+        found = sum(n for _, n in present)
         if found == 1:
-            data = data.replace(old_entry, new_entry)
+            data = data.replace(utf8_constant(present[0][0]), new_entry)
             applied.append(label)
         elif found == 0 and new_entry in data:
             already.append(label)
@@ -139,7 +160,7 @@ def main():
 
     if args.check:
         if applied:
-            print("UNPATCHED: %s (%s still stock)" % (args.jar, ", ".join(applied)))
+            print("UNPATCHED: %s (%s not current)" % (args.jar, ", ".join(applied)))
             return 1
         print("PATCHED: %s (%s)" % (args.jar, ", ".join(already)))
         return 0

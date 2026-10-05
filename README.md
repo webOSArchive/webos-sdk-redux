@@ -148,12 +148,27 @@ The stock SDK tools only recognize devices whose `PRODUCT_VERSION_STRING` starts
 with `Palm webOS` or `HP webOS`, so every `palm-*` command against a device
 running **webOS CE 3.1.0** failed with `unrecognized device version`. The
 `webos-tools.jar` in this repo is patched to accept modern version strings —
-webOS CE, Open webOS, and unprefixed `webOS x.y.z` — while still parsing every
-2011-era string exactly as before.
+webOS CE, Open webOS, and unprefixed `webOS x.y.z` — and Lunacy by name, while
+still parsing every 2011-era string exactly as before.
 
 See [SDK-VERSION-DETECTION.md](SDK-VERSION-DETECTION.md) for the bug and the fix,
 and [patch-webos-tools-version.py](patch-webos-tools-version.py) to re-apply it
 to a pristine jar or to check whether a given jar is patched.
+
+## Lunacy
+
+[Lunacy](https://github.com/webOSArchive/Lunacy) runs legacy webOS apps on Android. With an
+Android device attached over adb (USB or Wi-Fi) and Lunacy running on it, novacomd lists it
+beside any webOS device, and every tool works with it:
+
+```
+$ novacom -l
+44815 39bda514d848b5d5710752050a8920c7b7ff5c1f adb lunacy
+$ palm-install -d lunacy com.example.app_1.0.0_all.ipk
+$ palm-log -d lunacy -f com.example.app
+```
+
+There is nothing to set up beyond adb itself. See [LUNACY.md](LUNACY.md).
 
 ## Novacom over Wi-Fi (TCP)
 

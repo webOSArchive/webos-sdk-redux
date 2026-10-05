@@ -104,7 +104,9 @@ in `AbstractDeviceConnection.readProductVersion()`. HP's regex required a vendor
 prefix (`^(Palm|HP) webOS\s+…`), but webOS CE reports
 `PRODUCT_VERSION_STRING=webOS CE 3.1.0` — no prefix — so every command against a
 CE device died with `unrecognized device version`. Two regex constants in the
-class file's constant pool were rewritten to accept modern strings.
+class file's constant pool were rewritten to accept modern strings, and the
+product regex also accepts `Lunacy <version>` by name (treated as webOS 1.5 or
+later, the only distinction the tools make).
 
 **If you ever replace `webos-tools.jar` with an upstream copy, the CE bug comes
 back.** Re-apply the patch:
@@ -138,6 +140,16 @@ are the part that matters. See [PDK.md](PDK.md).
 `install-pdk.sh` copies components individually rather than replacing the
 directory, so a pre-existing full OEM install keeps its toolchains; the
 uninstaller likewise removes only the four components it owns.
+
+## Lunacy devices
+
+novacomd also lists [Lunacy](https://github.com/webOSArchive/Lunacy) on Android devices,
+found through the host's adb server (`novacomd/src/host/adb_relay.c`; `-A` turns it off):
+connection type `adb`, device type `lunacy`, after the USB and TCP devices so the default
+device is unchanged. Each client connection is spliced byte for byte to Lunacy's abstract
+socket `org.webosarchive.lunacy.novacomd`, which speaks a device's side of the protocol.
+Lunacy's `/etc/palm-build-info` says `PRODUCT_VERSION_STRING=Lunacy <version>`, which the
+jar patch recognises by name. See [LUNACY.md](LUNACY.md).
 
 ## Novacom over TCP
 

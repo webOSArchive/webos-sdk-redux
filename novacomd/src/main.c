@@ -34,6 +34,7 @@
 #include <log.h>
 #if HOST
 #include "host/novacom_host.h"
+#include "host/adb_relay.h"
 #include "lib/cksum.h"
 #endif
 
@@ -157,6 +158,7 @@ void usage(void)
 	TRACEL(LOG_ALWAYS, "  -e <io-retry-timeout>    timeout to retry packet I/O in milliesecond\n"); 
 	TRACEL(LOG_ALWAYS, "  -s <io-retry-delay>    delay to retry packet I/O in milliesecond\n"); 
 	TRACEL(LOG_ALWAYS, "  -d                  run in the background\n");
+	TRACEL(LOG_ALWAYS, "  -A                  don't look for Lunacy devices through adb\n");
 	TRACEL(LOG_ALWAYS, "  -V                  print version info\n");
 	TRACEL(LOG_ALWAYS, "  -h                  display this help\n");
 
@@ -288,6 +290,10 @@ void dump_device_list(SOCKET socket)
 	}
 
 	platform_mutex_unlock(&device_list_mutex);
+#if HOST
+	/* Lunacy devices found through adb, after the device's own */
+	adb_relay_dump(socket);
+#endif
 }
 
 /* check device list for duplicate entries */
@@ -890,6 +896,10 @@ int handleopt(const char *opt, const char *val)
 			if (g_usbio_retry_delay > TRANSPORT_MAX_USBIO_RETRY_TIMEOUT) {
 				g_usbio_retry_delay = TRANSPORT_MAX_USBIO_RETRY_TIMEOUT;
 			}
+	} else if (strcmp("no-adb", opt) == 0) {
+#if HOST
+		g_adb_relay = 0;
+#endif
 	} else if (strcmp("no-cpuaffinity", opt) == 0) {
 		g_cpuaffinity = 0;
 	} else if (strcmp("help", opt) == 0) {
@@ -908,15 +918,16 @@ struct option longopts[] = {
 	{"bind-all-interfaces", no_argument, 0, 'b'},
 	{"daemonize", no_argument, 0, 'd'},
 	{"version", no_argument, 0, 'V'},
+	{"no-adb", no_argument, 0, 'A'},
 	{0,0,0,0}
 };
 
 int getnextopt(int argc, char **argv, const char **opt, const char **val)
 {
 #if !defined(W32)
-	int c = getopt_long(argc, argv, "ht:c:e:s:bdCV", longopts, NULL);
+	int c = getopt_long(argc, argv, "ht:c:e:s:bdCVA", longopts, NULL);
 #else
-	int c = getopt_long(argc, argv, "ht:c:e:s:bCV", longopts, NULL);
+	int c = getopt_long(argc, argv, "ht:c:e:s:bCVA", longopts, NULL);
 #endif
 	*val = optarg;
 
@@ -944,6 +955,9 @@ int getnextopt(int argc, char **argv, const char **opt, const char **val)
 			return 1;
 		case 'C':
 			*opt = "no-cpuaffinity";
+			return 1;
+		case 'A':
+			*opt = "no-adb";
 			return 1;
 		case 'h':
 			*opt = "help";
@@ -1096,6 +1110,10 @@ int main(int argc, char **argv)
 	/* run at slightly higher priority, but less so than the kernel threads */
 	nice(-4);
 #endif
+#endif
+
+#if HOST
+	adb_relay_start();
 #endif
 
 	main_loop();

@@ -142,7 +142,8 @@ HOSTOBJS := \
 	src/host/usb-linux.o \
 	src/host/tokenstorage.o \
 	src/host/commands_service.o \
-	src/host/recovery.o
+	src/host/recovery.o \
+	src/host/adb_relay.o
 
 # do some work based on the host platform
 ifeq ($(HOSTPLATFORM), pthreads)
