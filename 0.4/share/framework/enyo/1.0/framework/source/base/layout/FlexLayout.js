@@ -88,6 +88,11 @@ enyo.kind({
 						s[inExtent] = "0px";
 					}
 				}
+				// Lunacy: a percentage height inside a vertically flexed child came to 0 on the
+				// TouchPad (enyo.FlexLayout.percentOfFlexed below).
+				if (inExtent == "height" && s.height == "0px" && enyo.FlexLayout.percentOfFlexed()) {
+					enyo.FlexLayout.collapsePercentChildren(c);
+				}
 				// Mozilla doesn't seem to 'stretch' correctly on this axis
 				if (enyo.isMoz && inExtent == "height" && this.align == "stretch") {
 					s.width = "100%";
@@ -269,4 +274,47 @@ enyo.FlexLayout.contentSized = function(inContainer) {
 	if (l instanceof enyo.HFlexLayout) { return true; }
 	if (l instanceof enyo.VFlexLayout) { return (p.align || l.align) != "stretch"; }
 	return false;
+};
+
+// Lunacy: what a percentage height inside a flexed child comes to (patch 0006).
+//
+// Enyo gives a child it flexes vertically "height: 0px" and lets -webkit-box stretch it. The
+// TouchPad's WebKit worked a percentage height inside that child out against the 0px - before
+// the box stretched it - and never again, so "height: 100%" there came out 0 and the content
+// overflowed it. Email's message view depends on it: its WebView is "height: 100%" inside a
+// flexed pane, and the header after it floats over the web content because the WebView takes
+// no room; measured with Workbench/probe's webviewprobe on the reference TouchPad: the WebView
+// 0 px tall, the header at the pane's top. Chromium resolves the percentage against the
+// stretched height, and the same header lands under a full-height WebView, out of sight.
+// On an engine that does that, an in-flow child with a percentage height, inside a child Enyo
+// flexes vertically, is given what the TouchPad gave it: 0px. Checked once, on a hidden box.
+enyo.FlexLayout.percentOfFlexed = function() {
+	var f = enyo.FlexLayout, root = document.body || document.documentElement;
+	if (f._percentOfFlexed === undefined && root) {
+		var box = document.createElement("div"), item = document.createElement("div"), child = document.createElement("div");
+		box.style.cssText = "position:absolute;visibility:hidden;display:-webkit-box;-webkit-box-orient:vertical;height:100px";
+		item.style.cssText = "-webkit-box-flex:1;height:0px";
+		child.style.cssText = "height:100%";
+		item.appendChild(child);
+		box.appendChild(item);
+		root.appendChild(box);
+		f._percentOfFlexed = child.offsetHeight > 0;
+		root.removeChild(box);
+	}
+	return Boolean(f._percentOfFlexed);
+};
+// Only a child in the flow: an absolutely placed one (enyo.Pane's views, by their enyo-view
+// class) takes its percentage from its positioned container, after layout, on every engine.
+// Its position is known once it is drawn, and a class may arrive after the flex pass (Pane
+// adds enyo-view as it lays its own views out), so the children are looked at just after.
+enyo.FlexLayout.collapsePercentChildren = function(inControl) {
+	setTimeout(function() {
+		var kids = inControl.children || [];
+		for (var i = 0, k, h, n, p; (k = kids[i]); i++) {
+			h = k.domStyles && k.domStyles.height;
+			if (!h || !/%$/.test(String(h)) || !(n = k.hasNode())) { continue; }
+			p = window.getComputedStyle(n).position;
+			if (p != "absolute" && p != "fixed") { k.applyStyle("height", "0px"); }
+		}
+	}, 0);
 };
