@@ -6215,7 +6215,10 @@ return enyo.windows.events.handleRelaunch();
 enyo.windows.manager = {
 getRootWindow: function() {
 var a = window.opener || window.rootWindow || window.top || window;
-return a.setTimeout || (a = window), a;
+// Lunacy (patch 0009): a window from another origin throws here in Chromium, where the
+// TouchPad's WebKit answered undefined; either way it is a root we can't reach.
+try { a.setTimeout || (a = window); } catch (b) { a = window; }
+return a;
 },
 getWindows: function() {
 var a = this.getRootWindow(), b = a.enyo.windows.manager, c = b._windowList, d = {};
@@ -6223,20 +6226,26 @@ for (var e in c) this.isValidWindow(c[e]) && (d[e] = c[e]);
 return b._windowList = d, d;
 },
 getWindowName: function(a) {
-if (a.name) return a.name;
+var n = this._readName(a);
+if (n) return n;
 var b = this.getRootWindow().enyo.windows.manager._windowList, c = Object.keys(b);
 for (var d = 0; d < c.length; d++) if (b[c[d]] === a) return c[d];
 return undefined;
+},
+// Lunacy (patch 0009): a window's name, or undefined from another origin, as the TouchPad's
+// WebKit answered; Chromium throws.
+_readName: function(a) {
+try { return a.name; } catch (b) { return undefined; }
 },
 _windowList: {},
 _pendingWindowParams: {},
 getPendingParamsList: function(a) {
 var b = this.getRootWindow().enyo.windows.manager;
-return b._pendingWindowParams[a.name];
+return b._pendingWindowParams[this._readName(a)];
 },
 setPendingParamsList: function(a, b) {
 var c = this.getRootWindow().enyo.windows.manager;
-c._pendingWindowParams[a.name] = b;
+c._pendingWindowParams[this._readName(a)] = b;
 return;
 },
 executePendingWindowParams: function(a) {
