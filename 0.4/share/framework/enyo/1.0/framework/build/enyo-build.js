@@ -11015,10 +11015,23 @@ this.multiView != a && (this[this.multiView ? "applyMultiViewLayout" : "applySin
 },
 applyMultiViewLayout: function() {
 for (var a = 0, b = this.views, c; c = b[a]; a++) this.uncacheSliding(c, a);
-this.$.client.flow();
+// Lunacy (patch 0010): the flow's styles reach the views.
+this._reflowViews();
 },
 applySingleViewLayout: function() {
 for (var a = 0, b = this.views, c; c = b[a]; a++) this.cacheSliding(c, a), c.setFixedWidth(!0), c.peekWidth = 0, c.flex = 0, c.applyStyle("width", "100.0%");
+// Lunacy (patch 0010): flow, or a view flexed in the wide layout keeps its flex and is squeezed to nothing.
+this._reflowViews();
+},
+// Lunacy (patch 0010): the flow's styles go to the nodes, and each view's box is rebuilt,
+// because an old -webkit-box keeps the width it last gave a flexed child after the flex is gone.
+_reflowViews: function() {
+this.$.client.flow();
+for (var a = 0, b; b = this.views[a]; a++) if (b.hasNode()) {
+b.domStylesChanged();
+var c = b.node.style, d = c.display;
+c.display = "none", b.node.offsetWidth, c.display = d;
+}
 },
 cacheSliding: function(a, b) {
 this.slidingCache[b] = {

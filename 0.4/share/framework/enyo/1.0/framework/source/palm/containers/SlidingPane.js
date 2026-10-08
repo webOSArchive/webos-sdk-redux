@@ -261,7 +261,8 @@ enyo.kind({
 		for (var i=0, s$=this.views, s; s=s$[i]; i++) {
 			this.uncacheSliding(s, i);
 		}
-		this.$.client.flow();
+		// Lunacy (patch 0010): the flow's styles reach the views (_reflowViews).
+		this._reflowViews();
 	},
 	applySingleViewLayout: function() {
 		for (var i=0, s$=this.views, s; s=s$[i]; i++) {
@@ -271,6 +272,26 @@ enyo.kind({
 			s.flex = 0;
 			// defeat auto flex at "100%"
 			s.applyStyle("width", "100.0%");
+		}
+		// Lunacy (patch 0010): without a flow, a view flexed in the wide layout kept its
+		// -webkit-box-flex and was squeezed to nothing beside the full-width view before it.
+		this._reflowViews();
+	},
+	// Lunacy (patch 0010): lay the views out again for the layout just applied. A flow sets
+	// each view's flex in its styles but doesn't write them, so they go to the node; then each
+	// view's box is rebuilt, because an old -webkit-box keeps the width it last gave a flexed
+	// child after the flex is gone (measured on Chromium 44; no TouchPad card was ever narrow
+	// enough for this layout).
+	_reflowViews: function() {
+		this.$.client.flow();
+		for (var i=0, v; v=this.views[i]; i++) {
+			if (v.hasNode()) {
+				v.domStylesChanged();
+				var s = v.node.style, d = s.display;
+				s.display = "none";
+				v.node.offsetWidth;
+				s.display = d;
+			}
 		}
 	},
 	cacheSliding: function(inSliding, inIndex) {
