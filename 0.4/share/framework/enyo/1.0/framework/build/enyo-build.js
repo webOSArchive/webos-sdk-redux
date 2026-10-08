@@ -13620,3 +13620,20 @@ Tellurium.setup(window.enyo), console.log("Tellurium loading...");
 		}
 	};
 })();
+
+// ---------------------------------------------------------------------------
+// Lunacy: a child no longer flexed loses the flex-basis it was given as its share (patch 0010).
+//
+// The same change as in framework/source/base/layout/FlexLayout.js, over the overrides above.
+// ---------------------------------------------------------------------------
+(function () {
+	if (!window.enyo || !enyo.FlexLayout) { return; }
+	var flowExtent = enyo.FlexLayout.prototype.flowExtent;
+	enyo.FlexLayout.prototype.flowExtent = function (inControls, inExtent, inExtentNick) {
+		flowExtent.apply(this, arguments);
+		for (var i = 0, c, s; (c = inControls[i]); i++) {
+			s = c.domStyles;
+			if (!s[this.prefix + "-box-flex"] && s["flex-basis"]) { delete s["flex-basis"]; }
+		}
+	};
+})();

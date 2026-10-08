@@ -97,6 +97,10 @@ enyo.kind({
 				if (enyo.isMoz && inExtent == "height" && this.align == "stretch") {
 					s.width = "100%";
 				}
+			} else if (s["flex-basis"]) {
+				// Lunacy (patch 0010): a child no longer flexed loses the share it was given,
+				// or an engine that honours flex-basis keeps it 0 px wide.
+				delete s["flex-basis"];
 			}
 		}
 	},
