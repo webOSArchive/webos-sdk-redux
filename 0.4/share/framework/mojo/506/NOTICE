@@ -2,5 +2,5 @@ Palm's Mojo framework, submission 506, as HP's 3.0.5 SDK shipped it for desktop 
 files a device links into /usr/palm/frameworks/mojocommon (stylesheets, images, templates and
 localized resources) are copied from the reference TouchPad (webOS CE 3.1.0), and Lunacy's
 patch 0003-scene-fills-its-scroller is applied, with the desktop forms of its other Mojo
-patches (LunaRuntimes/mojo/sdk-patches) in javascripts/ (Lunacy 6bebf6a,
+patches (LunaRuntimes/mojo/sdk-patches) in javascripts/ (Lunacy 77cb8b6,
 github.com/webOSArchive/Lunacy). Palm's code, distributed as abandonware.

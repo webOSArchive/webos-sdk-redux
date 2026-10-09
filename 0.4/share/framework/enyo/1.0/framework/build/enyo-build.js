@@ -13446,6 +13446,8 @@ Tellurium.setup(window.enyo), console.log("Tellurium loading...");
 // The plugin drew into the page, so Enyo's popups came out over the web content. The native
 // view is over the whole page, so while a popup is open the view is "covered": a picture of it
 // goes into the box and the view steps aside until the popup has gone.
+// Anything else the page draws over the box - a positioned element outside it, the Web app's
+// load progress - is a hole in the native view, where the card shows through.
 // ---------------------------------------------------------------------------
 (function () {
 	if (!window.enyo || !enyo.BasicWebView || !enyo.BasicPopup) { return; }
@@ -13523,6 +13525,83 @@ Tellurium.setup(window.enyo), console.log("Tellurium loading...");
 		return r.left < inBox.right && r.right > inBox.left && r.top < inBox.bottom && r.bottom > inBox.top;
 	}
 
+	// ---- what the page draws over the box ----
+
+	// The plugin drew into the page, so whatever the page put over it was seen over the web
+	// content: the Web app's load progress under its action bar, the copy and paste popup. The
+	// native view is left out where the page draws over the box (its holes, BrowserViews.kt),
+	// so the card shows there and takes the touches. What draws over it is a positioned
+	// element that is neither inside the box nor holding it; of that, the parts that paint
+	// something - a background, an image, a border, text - and are seen. The positioned
+	// elements are found again when the document changes, and looked at on each placing.
+	var overlays = null;
+	if (window.MutationObserver) {
+		new MutationObserver(function () { overlays = null; }).observe(document.documentElement,
+			{childList: true, subtree: true, attributes: true, attributeFilter: ["class", "style"]});
+	}
+
+	function findOverlays(inBox) {
+		var out = [];
+		(function walk(inEl) {
+			for (var c = inEl.firstElementChild; c; c = c.nextElementSibling) {
+				if (c === inBox) { continue; }
+				if (c.contains(inBox)) { walk(c); continue; }
+				var s = getComputedStyle(c);
+				if (s.display == "none") { continue; }
+				if (s.position != "static" && !(parseInt(s.zIndex, 10) < 0)) { out.push(c); } else { walk(c); }
+			}
+		})(document.body);
+		return out;
+	}
+
+	function transparent(inColor) {
+		return !inColor || inColor == "transparent" || /rgba\(.*,\s*0\)$/.test(inColor);
+	}
+
+	function paints(inEl, inStyle) {
+		if (/^(IMG|CANVAS|VIDEO|svg|INPUT|TEXTAREA|BUTTON|SELECT)$/.test(inEl.tagName)) { return true; }
+		if (!transparent(inStyle.backgroundColor) || inStyle.backgroundImage != "none") { return true; }
+		if ((inStyle.webkitBorderImage || "none") != "none" || inStyle.boxShadow != "none") { return true; }
+		if (parseFloat(inStyle.borderTopWidth) && !transparent(inStyle.borderTopColor) ||
+				parseFloat(inStyle.borderBottomWidth) && !transparent(inStyle.borderBottomColor)) { return true; }
+		for (var t = inEl.firstChild; t; t = t.nextSibling) {
+			if (t.nodeType == 3 && /\S/.test(t.nodeValue)) { return true; }
+		}
+		return false;
+	}
+
+	function seen(inEl) {
+		for (var e = inEl; e && e.nodeType == 1; e = e.parentNode) {
+			var s = getComputedStyle(e);
+			if (s.display == "none" || s.visibility == "hidden" || parseFloat(s.opacity) == 0) { return false; }
+		}
+		return true;
+	}
+
+	// The parts of an overlay that paint and are over the box, as [x, y, w, h].
+	function holesOf(inEl, inBox, inOut, inDepth) {
+		if (inDepth > 8 || inOut.length > 32) { return; }
+		var s = getComputedStyle(inEl);
+		if (s.display == "none" || s.visibility == "hidden" || parseFloat(s.opacity) == 0) { return; }
+		if (paints(inEl, s)) {
+			var b = inEl.getBoundingClientRect();
+			var l = Math.max(b.left, inBox.left), t = Math.max(b.top, inBox.top);
+			var rt = Math.min(b.right, inBox.right), bt = Math.min(b.bottom, inBox.bottom);
+			if (rt > l && bt > t) { inOut.push([l, t, rt - l, bt - t]); }
+		}
+		for (var c = inEl.firstElementChild; c; c = c.nextElementSibling) { holesOf(c, inBox, inOut, inDepth + 1); }
+	}
+
+	function holesOver(inNode, inBox) {
+		if (!overlays) { overlays = findOverlays(inNode); }
+		var out = [];
+		for (var i = 0; i < overlays.length; i++) {
+			var o = overlays[i];
+			if (document.documentElement.contains(o) && seen(o.parentNode)) { holesOf(o, inBox, out, 0); }
+		}
+		return out;
+	}
+
 	p._lunacyPlace = function (inForce) {
 		if (!this._lunacyId) { return; }
 		var n = this.node, r = null, visible = false, covered = false;
@@ -13538,7 +13617,8 @@ Tellurium.setup(window.enyo), console.log("Tellurium loading...");
 		}
 		var place = {
 			x: r ? r.left : 0, y: r ? r.top : 0, w: r ? r.width : 0, h: r ? r.height : 0,
-			vw: window.innerWidth, visible: visible, covered: covered
+			vw: window.innerWidth, visible: visible, covered: covered,
+			holes: visible && !covered ? holesOver(n, r) : []
 		};
 		var key = JSON.stringify(place);
 		if (inForce || key != this._lunacyKey) {
