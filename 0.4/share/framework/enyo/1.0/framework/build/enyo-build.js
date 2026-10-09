@@ -11019,9 +11019,12 @@ for (var a = 0, b = this.views, c; c = b[a]; a++) this.uncacheSliding(c, a);
 this._reflowViews();
 },
 applySingleViewLayout: function() {
-for (var a = 0, b = this.views, c; c = b[a]; a++) this.cacheSliding(c, a), c.setFixedWidth(!0), c.peekWidth = 0, c.flex = 0, c.applyStyle("width", "100.0%");
+// Lunacy (patch 0010): the views' controls are told to resize once the layout is whole, not by setFixedWidth while each view still has the wide layout's flex.
+var d = [];
+for (var a = 0, b = this.views, c; c = b[a]; a++) this.cacheSliding(c, a), c.fixedWidth || (d[a] = !!(c.$.client.domStyles.width && c.$.client.hasNode()), c.fixedWidth = !0, c.applySize(!1, !0)), c.peekWidth = 0, c.flex = 0, c.applyStyle("width", "100.0%");
 // Lunacy (patch 0010): flow, or a view flexed in the wide layout keeps its flex and is squeezed to nothing.
 this._reflowViews();
+for (a = 0; c = b[a]; a++) d[a] && (c.doResize(null), c.broadcastToControls("resize"));
 },
 // Lunacy (patch 0010): the flow's styles go to the nodes, and each view's box is rebuilt,
 // because an old -webkit-box keeps the width it last gave a flexed child after the flex is gone.

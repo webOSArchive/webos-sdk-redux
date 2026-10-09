@@ -265,9 +265,18 @@ enyo.kind({
 		this._reflowViews();
 	},
 	applySingleViewLayout: function() {
+		// Lunacy (patch 0010): setFixedWidth told each view's controls to resize at once, while
+		// the view still had the wide layout's flex and width; a list inside measured itself
+		// 0 px wide there (Plex's grid, which then filled the screen with empty rows for ever).
+		// They are told once the layout is whole, as setFixedWidth would have told them.
+		var tell = [];
 		for (var i=0, s$=this.views, s; s=s$[i]; i++) {
 			this.cacheSliding(s, i);
-			s.setFixedWidth(true);
+			if (!s.fixedWidth) {
+				tell[i] = Boolean(s.$.client.domStyles.width && s.$.client.hasNode());
+				s.fixedWidth = true;
+				s.applySize(false, true);
+			}
 			s.peekWidth = 0;
 			s.flex = 0;
 			// defeat auto flex at "100%"
@@ -276,6 +285,12 @@ enyo.kind({
 		// Lunacy (patch 0010): without a flow, a view flexed in the wide layout kept its
 		// -webkit-box-flex and was squeezed to nothing beside the full-width view before it.
 		this._reflowViews();
+		for (i=0; s=s$[i]; i++) {
+			if (tell[i]) {
+				s.doResize(null);
+				s.broadcastToControls("resize");
+			}
+		}
 	},
 	// Lunacy (patch 0010): lay the views out again for the layout just applied. A flow sets
 	// each view's flex in its styles but doesn't write them, so they go to the node; then each
