@@ -20,60 +20,6 @@ Target devices run either the original **HP webOS 3.0.5** or the community
 **webOS CE 3.1.0** update. Both are supported; see "Device version detection"
 below, which is the one place that distinction has bitten us.
 
-## Release 0.4.1: in progress (delete this section once it is published)
-
-Two Macs and a Windows VM share the work. The commits are on `main`, and nothing
-is pushed, tagged or released yet. **Don't push, tag or publish without the
-maintainer's go-ahead.** Release assets go on a GitHub release tagged
-`0.4.1-Release`.
-
-| Asset | Built on | Status |
-| --- | --- | --- |
-| `webOS-SDK-Redux-0.4.1-Setup.exe` | Windows VM (`installer-windows\build.ps1`) | Built and installs. SHA-256 `b781bc188b8ac265a8897bed1c167eda9a74ccfbd8e075dbed1ec55c29325ba3` |
-| `novacom-installer-x86_64.pkg` | Intel Mac Pro | Built, notarized, stapled and verified (pkg 3.1.0.1, `novacomd-3.1.0.1`, has Lunacy). SHA-256 `4062d7ee0170fced4fe32c1031793c749bf848edfcb1f874079f28c989ef8297`. At `~/Desktop/novacom-installer-x86_64.pkg` |
-| `novacom-installer-arm64.pkg` | Apple Silicon MacBook | Built, notarized, stapled and verified (pkg 3.1.0.1, `novacomd-3.1.0.1`, has Lunacy). SHA-256 `e9a878b29d663ca7bdc5c1da7884f25a48aa688c13ab195cfeb876d6e595ad1d`. On the Mac Pro at `~/Desktop/novacom-installer-arm64.pkg` |
-
-Windows batch scripts: verified on the VM. `install-windows.bat` finishes after
-`52a0a22`; it had hung copying the PDK's symlinks from the shared folder.
-
-**Building a driver package** (either Mac). The 0.4 release's packages are not
-reusable; see "macOS driver installer" below.
-
-1. Prerequisites, once per Mac:
-   - Xcode Command Line Tools, Homebrew, `brew install libusb libusb-compat`.
-   - Both certificates **with their private keys** in the login keychain:
-     "Developer ID Application" (signs the binaries) and "Developer ID Installer"
-     (signs the `.pkg`), team `Z97JEYX9UJ`. Check with
-     `security find-identity -v | grep "Developer ID"`; it should list 2. To move
-     them from another Mac, export both from Keychain Access as one `.p12` and
-     import it.
-   - `set-apple-vars.sh` in the repo root, with `APPLE_ID`, `APPLE_TEAM_ID` and
-     `APPLE_APP_SPECIFIC_PASSWORD`, laid out like `set-apple-vars example.sh`.
-     It is gitignored and holds credentials, so copy it by hand (AirDrop, a
-     password manager). **Never commit it, and never print its contents.**
-     `--keychain-profile <name>` is the alternative.
-   - Make sure `novacomd/build-novacomd` and `novacom/build-novacom` are absent or
-     yours. The script stops and says so if root owns them.
-2. Build, sign, notarize and staple. This takes a few minutes, mostly waiting on
-   Apple:
-   ```bash
-   ./build-driver-installer-mac.sh --notarize
-   ```
-   In the log, "Payload version strings" must show `novacomd-3.1.0.1` and
-   `novacom-3.1.0.1`. A `..local..user@host..` stamp there means a stale build.
-3. Verify before handing it over:
-   ```bash
-   pkgutil --check-signature novacom-installer-$(uname -m).pkg   # Notarization: trusted by the Apple notary service
-   xcrun stapler validate novacom-installer-$(uname -m).pkg
-   spctl -a -vv -t install novacom-installer-$(uname -m).pkg      # source=Notarized Developer ID
-   rm -rf /tmp/pkgcheck && pkgutil --expand-full novacom-installer-$(uname -m).pkg /tmp/pkgcheck
-   strings /tmp/pkgcheck/Payload/usr/local/bin/novacomd | grep -c lunacy   # non-zero
-   shasum -a 256 novacom-installer-$(uname -m).pkg
-   ```
-4. Report the SHA-256 and update the status table above. The `.pkg` is
-   gitignored (`*.pkg`), so it travels to the releasing machine by hand or is
-   attached to the release directly once the maintainer says to.
-
 ## Repository layout
 
 ```
