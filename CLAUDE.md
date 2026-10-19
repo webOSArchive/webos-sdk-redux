@@ -230,6 +230,59 @@ unshield can unpack. Batch files are stored **CRLF**; keep them that way.
 
 See [WINDOWS.md](WINDOWS.md).
 
+### Working from a Windows checkout
+
+Most development happens on macOS; a Windows machine (often a VM) is used to
+build the setup wizard and to test the Windows installers. Things to know there:
+
+- **Tools.** Inno Setup 6.3+ (`winget install JRSoftware.InnoSetup`) builds the
+  wizard. Java 8+ runs the `palm-*` tools. `gh` is needed to attach release
+  assets. MSYS2 (`winget install MSYS2.MSYS2`) is needed **only** to rebuild
+  novacomd, and that is only necessary if `novacomd/src` or `novacomd/include`
+  changed after the commit in WINDOWS.md's "novacomd on Windows" table. Check with
+  `git log --oneline -1 -- novacomd/src novacomd/include`.
+- **`Current` may be a plain file.** Git checks symlinks out as text files unless
+  `core.symlinks` is on, which needs Developer Mode. If so, `Current` is a file
+  holding `./0.4.1`. `build.ps1` and `install-windows.bat` both cope with this.
+  Don't commit a change to `Current`; it must stay a symlink in git.
+- **Line endings.** The repo has no `.gitattributes`. `.bat` files are CRLF in git
+  and everything else is LF. With `core.autocrlf=true`, check `git diff --stat`
+  before committing, so a commit doesn't rewrite whole files. Never commit
+  `installer-windows/Output/` (it is gitignored).
+- **Elevation.** The installers, `novacomd -i`/`-u` and `sc config` need an
+  Administrator prompt. Building the wizard does not.
+
+Build the wizard from the repo root (normal prompt):
+
+```
+powershell -ExecutionPolicy Bypass -File installer-windows\build.ps1
+```
+
+This produces `installer-windows\Output\webOS-SDK-Redux-<version>-Setup.exe`
+(about 76 MB), where `<version>` comes from `Current`, and prints its SHA-256.
+Record the hash in the release notes.
+
+Smoke test after installing, with a device passed through to the VM if possible:
+`sc qc NovacomD` should show `BINARY_PATH_NAME` pointing at
+`...\PalmSDK\novacomd\novacomd.exe`, something should be listening on
+`127.0.0.1:6968` (`netstat -ano | findstr 6968`), and `novacom -l` /
+`palm-install --device-list` should list the device (or an empty list, not an
+error). After uninstalling, `sc qc NovacomD` must show HP's path **in quotes**
+(`"C:\Program Files\Palm, Inc\..."`). An unquoted path with spaces is the bug
+fixed in `b4455e4`.
+
+Releases are tagged `<version>-Release` (`0.4-Release`, `0.4.1-Release`). Attach
+the wizard with `gh release upload <tag> <exe>`. Don't create, publish or
+retag a release without the maintainer's go-ahead; the macOS `.pkg` assets come
+from the Mac side.
+
+**Open for 0.4.1** (remove this paragraph once done): build
+`webOS-SDK-Redux-0.4.1-Setup.exe` and test it. Also test `install-windows.bat` →
+`uninstall-windows.bat`, because the uninstaller's HP service hand-back was
+rewritten in `b4455e4` (batch `sc config binPath= "\"...\""` instead of
+PowerShell) and has **not** been run on Windows. Report the `sc qc NovacomD`
+output after uninstall.
+
 ## SDK command-line tools
 
 All tools live in `Current/bin/` and follow the `palm-*` convention. They are
