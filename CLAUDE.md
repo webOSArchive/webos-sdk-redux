@@ -30,7 +30,7 @@ maintainer's go-ahead.** Release assets go on a GitHub release tagged
 | Asset | Built on | Status |
 | --- | --- | --- |
 | `webOS-SDK-Redux-0.4.1-Setup.exe` | Windows VM (`installer-windows\build.ps1`) | Built and installs. SHA-256 `b781bc188b8ac265a8897bed1c167eda9a74ccfbd8e075dbed1ec55c29325ba3` |
-| `novacom-installer-x86_64.pkg` | Intel Mac Pro | Not built yet: needs `sudo rm -rf novacomd/build-novacomd novacom/build-novacom` (root-owned, from an old sudo build), then the command below |
+| `novacom-installer-x86_64.pkg` | Intel Mac Pro | Built, notarized, stapled and verified (pkg 3.1.0.1, `novacomd-3.1.0.1`, has Lunacy). SHA-256 `4062d7ee0170fced4fe32c1031793c749bf848edfcb1f874079f28c989ef8297`. At `~/Desktop/novacom-installer-x86_64.pkg` |
 | `novacom-installer-arm64.pkg` | Apple Silicon MacBook | Built, notarized, stapled and verified (pkg 3.1.0.1, `novacomd-3.1.0.1`, has Lunacy). SHA-256 `e9a878b29d663ca7bdc5c1da7884f25a48aa688c13ab195cfeb876d6e595ad1d`. On the Mac Pro at `~/Desktop/novacom-installer-arm64.pkg` |
 
 Still unverified: `install-windows.bat` → `uninstall-windows.bat` on Windows. The
