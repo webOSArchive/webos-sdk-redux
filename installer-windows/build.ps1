@@ -34,7 +34,7 @@ $version = Split-Path -Leaf $target
 if (-not (Test-Path (Join-Path $repo "$version\share\jars\webos-tools.jar"))) { throw "Current points at '$target', which is not an SDK tree" }
 
 if (-not $NovacomdExe) { $NovacomdExe = Join-Path $repo 'windows\novacomd.exe' }
-$NovacomdExe = (Resolve-Path $NovacomdExe).Path
+$NovacomdExe = (Resolve-Path $NovacomdExe).ProviderPath
 if (-not $OutputDir) { $OutputDir = Join-Path $PSScriptRoot 'Output' }
 
 $iscc = @(
