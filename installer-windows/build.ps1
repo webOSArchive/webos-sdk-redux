@@ -15,7 +15,7 @@ param(
 $ErrorActionPreference = 'Stop'
 $repo = Split-Path -Parent $PSScriptRoot
 
-# Current is a symlink in git; on a checkout without symlinks it is a file holding "./0.4"
+# Current is a symlink in git; on a checkout without symlinks it is a file holding "./0.4.1"
 $current = Join-Path $repo 'Current'
 $item = Get-Item $current
 if ($item.LinkType) { $target = $item.Target | Select-Object -First 1 } else { $target = (Get-Content $current -Raw).Trim() }

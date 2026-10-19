@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-This is **PalmSDK 0.4 (Redux)** — a modernization of the 2011-era HP webOS SDK
+This is **PalmSDK 0.4.1 (Redux)** — a modernization of the 2011-era HP webOS SDK
 (3.0.5) and its USB driver stack, so that Palm/HP devices like the Palm Pre and
 HP TouchPad can still be developed against from current macOS and Linux hosts.
 
@@ -23,7 +23,7 @@ below, which is the one place that distinction has bitten us.
 ## Repository layout
 
 ```
-0.4/                          # The SDK itself — see "SDK versioning" below
+0.4.1/                        # The SDK itself — see "SDK versioning" below
 ├── bin/                      # Command-line tools (palm-* commands)
 ├── install-sdk-macos.sh      # SDK-only installers
 ├── install-sdk-linux.sh
@@ -40,7 +40,7 @@ below, which is the one place that distinction has bitten us.
     └── samplecode/
         ├── enyo/             # Enyo examples and templates
         └── mojo/             # Mojo examples and samples
-Current -> ./0.4              # Always points at the current SDK version
+Current -> ./0.4.1            # Always points at the current SDK version
 
 novacom/                      # novacom client source + build/install scripts
 novacomd/                     # novacomd daemon source + build/install scripts
@@ -62,8 +62,8 @@ set-apple-vars.sh             # Apple signing/notarization credentials
 ### SDK versioning
 
 The SDK lives in a **numbered folder that is renamed each release** (`0.2` →
-`0.3` → `0.4` → …), with a `Current` symlink alongside it. The same convention is
-reproduced at install time: `$SDK_INSTALL_DIR/Current -> $SDK_INSTALL_DIR/0.4`.
+`0.3` → `0.4` → `0.4.1` → …), with a `Current` symlink alongside it. The same
+convention is reproduced at install time: `$SDK_INSTALL_DIR/Current -> $SDK_INSTALL_DIR/0.4.1`.
 
 Because of this, **prefer `Current/` over a hardcoded version number** in
 scripts and docs — e.g. `Current/share/jars/webos-tools.jar`. The installers
@@ -86,7 +86,7 @@ Or piecemeal — build novacomd first, since novacom installs alongside it:
 ```bash
 cd novacomd && ./build.sh          # offers to install on success
 cd novacom  && ./build.sh
-cd 0.4      && sudo ./install-sdk-macos.sh    # or install-sdk-linux.sh
+cd 0.4.1    && sudo ./install-sdk-macos.sh    # or install-sdk-linux.sh
 cd pdk      && sudo ./install-pdk.sh          # same script on both platforms
 ```
 
@@ -97,7 +97,7 @@ SDK versions is just `ln -sfn`, not a reinstall.
 
 ## Device version detection (important)
 
-`0.4/share/jars/webos-tools.jar` in this repo is **patched** and is not
+`0.4.1/share/jars/webos-tools.jar` in this repo is **patched** and is not
 byte-identical to HP's original.
 
 Every `palm-*` tool resolves the device's OS version before doing anything else,
@@ -222,7 +222,7 @@ Two things drive the whole design:
   `host/service_win32.c` replaces daemonizing. Keep new host code on those
   calls, not `close()`/`fcntl()` on sockets, so it still builds on Windows.
 
-`0.4/bin/palm-*.bat` are the Windows launchers, one per command, sharing
+`Current/bin/palm-*.bat` are the Windows launchers, one per command, sharing
 `palm-common.bat` for Java detection. They were written from the bash scripts
 and the jar's `command.properties`, not extracted from HP's Windows SDK — that
 installer is an InstallShield ISSetupStream archive that neither 7-Zip nor
@@ -370,7 +370,7 @@ standard way to declare dependencies in an Enyo app.
 
 ## Version information
 
-- PalmSDK Redux: 0.4
+- PalmSDK Redux: 0.4.1
 - SDK tools: 3.0.5b38 (`palm-install --version`)
 - Enyo framework: 1.0
 - Mojo framework: 506

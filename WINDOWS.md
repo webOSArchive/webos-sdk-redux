@@ -105,7 +105,7 @@ everything:
 
 ## The `palm-*.bat` launchers
 
-`0.4/bin/palm-*.bat` sit alongside their bash equivalents. Each one is a
+`Current/bin/palm-*.bat` sit alongside their bash equivalents. Each one is a
 wrapper around a single command:
 
 ```bat
@@ -211,7 +211,7 @@ one when it exists. To refresh the committed binary after changing novacomd
 `strip` drops the debug info, which holds local paths):
 
 ```bash
-make spotless && BUILDVERSION=redux-0.4-$(git rev-parse --short HEAD) make host
+make spotless && BUILDVERSION=redux-0.4.1-$(git rev-parse --short HEAD) make host
 strip -o ../windows/novacomd.exe build-novacomd/novacomd.exe
 sha256sum ../windows/novacomd.exe   # update the table above
 ```

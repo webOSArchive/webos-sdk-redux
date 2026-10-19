@@ -1,4 +1,4 @@
-# PalmSDK 0.4 Overview
+# PalmSDK 0.4.1 Overview
 
 This is a modernization of the 2011-era webOS SDK and driver for the Palm/HP mobile operating system. It works with devices like the Palm Pre or the HP TouchPad on modern desktop platforms.
 
@@ -11,7 +11,28 @@ The SDK consists of four parts, most of which were initially distributed separat
 
 The easiest, and most common deployment will use all four parts, but you can also pick and choose based on your needs.
 
-## What's new in 0.4
+## What's new in 0.4.1
+
+A Windows release: Windows now gets what macOS and Linux got in 0.4. Thanks to
+[@achunt2143](https://github.com/achunt2143) for the port.
+
+- **Lunacy devices on Windows.** Windows now runs this repo's own novacomd, built
+  from the same sources as macOS and Linux, as the `NovacomD` service in place of
+  HP's closed 2011 daemon. So Lunacy devices on adb are listed there too, and
+  future novacomd fixes reach Windows. A prebuilt x64 `windows\novacomd.exe` is
+  committed, so nothing needs compiling. See [Windows](#windows) below.
+- **A Windows setup wizard**, `webOS-SDK-Redux-<version>-Setup.exe`. You pick
+  components, it offers to install Java if Java is missing, it upgrades or takes
+  over an earlier install, and it uninstalls from Settings → Apps.
+- **The batch installer and uninstaller** install this novacomd too, and hand the
+  service back to HP's daemon on uninstall (`/hpnovacomd` keeps HP's).
+- No changes to the SDK tools, frameworks or PDK, or to novacomd's behaviour on
+  macOS and Linux. The SDK folder is renamed `0.4.1` to follow the
+  versioning convention.
+- Known issue: novacomd doesn't build with gcc 15 or later on Linux (C23 makes
+  `bool` a keyword). This predates the port. See [GCC15-C23-BOOL.md](GCC15-C23-BOOL.md).
+
+## What was new in 0.4
 
 - **Lunacy devices.** [Lunacy](https://github.com/webOSArchive/Lunacy) runs webOS apps on
   Android. novacomd now finds it through adb and lists it beside any TouchPad, and every tool
@@ -40,7 +61,7 @@ The easiest, and most common deployment will use all four parts, but you can als
 
 ## Pre-requisites
 
-- This SDK targets macOS (Intel or Apple Silicon) and 64-bit Linux. Windows is supported via a batch installer — see [Windows](#windows) below. On 32-bit Linux or very old OSX, the [legacy SDK](https://sdk.webosarchive.org) will likely work for you.
+- This SDK targets macOS (Intel or Apple Silicon) and 64-bit Linux. Windows gets a setup wizard (64-bit Windows 10 and 11) and a batch installer; see [Windows](#windows) below. On 32-bit Linux or very old OSX, the [legacy SDK](https://sdk.webosarchive.org) will likely work for you.
 - You will need some version of Java. This version of the toolchain is very tolerant of different versions of Java, but make sure you have at least Java 8 working!
 - You will need build tools for your platform. On Linux these are installed with your package manager and called `build-essential` or `Development Tools`. On macOS this means XCode Command Line tools and [Homebrew](https://brew.sh/).
 - You will need libusb. On Linux this is `libusb-dev` or `libusb-devel`. On macOS, this is `libusb-compat` from Homebrew.
@@ -75,16 +96,16 @@ This is optional, but useful for some SDK operations and device troubleshooting
 If you want to build webOS applications, you'll need the SDK. You don't strictly have to install it, but it can be helpful to have it in your path. Typically you'll install this in the same place as novacom (if you built it).
 
 - Ensure you have installed novacomd and novacom
-- Run `./install-<platform>.sh` from the `0.4` folder
+- Run `./install-<platform>.sh` from the `0.4.1` folder
 
 The SDK ships in a numbered folder that changes with each release, with a
 `Current` symlink beside it. The installer mirrors that layout where it installs
-— `/opt/PalmSDK/Current -> /opt/PalmSDK/0.4` by default — and the `palm-*`
+— `/opt/PalmSDK/Current -> /opt/PalmSDK/0.4.1` by default — and the `palm-*`
 commands it puts on your PATH point *through* `Current`. Switching or rolling
 back a version is therefore one command, with no reinstall:
 
 ```bash
-sudo ln -sfn /opt/PalmSDK/0.3 /opt/PalmSDK/Current
+sudo ln -sfn /opt/PalmSDK/0.4 /opt/PalmSDK/Current
 ```
 
 Older versions are left in place when you install a new one; the installer tells
@@ -111,7 +132,8 @@ a modern Mac. That was true of the compilers and false of everything else — se
 ## Windows
 
 Windows gets a setup wizard: download `webOS-SDK-Redux-<version>-Setup.exe`
-from the releases and run it. It lets you pick components, offers to install
+from the [releases](https://github.com/webOSArchive/webos-sdk-redux/releases)
+and run it. It lets you pick components, offers to install
 Java (Eclipse Temurin) if it's missing, and uninstalls from Settings → Apps.
 Build it yourself with `installer-windows\build.ps1` (needs Inno Setup).
 

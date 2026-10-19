@@ -58,9 +58,22 @@ rem was saved by install-windows.bat; without it, the service is just removed.
 if exist "%NOVACOMD_DIR%\novacomd.exe" (
     net stop NovacomD >nul 2>&1
     if exist "%NOVACOMD_DIR%\hp-service.txt" (
-        set "NOVACOMD_DIR_ENV=%NOVACOMD_DIR%"
-        powershell -NoProfile -ExecutionPolicy Bypass -Command ^
-         "$l=@(Get-Content (Join-Path $env:NOVACOMD_DIR_ENV 'hp-service.txt')); & sc.exe config NovacomD binPath= $l[0].Trim().Trim([char]34) | Out-Null; if($l.Count -gt 1 -and $l[1]){ & sc.exe description NovacomD $l[1] | Out-Null }; & sc.exe start NovacomD | Out-Null; if($LASTEXITCODE -eq 0){ Write-Host '[OK]   NovacomD service handed back to HP''s novacomd' } else { Write-Host '[WARN] Could not restart HP''s novacomd - try: net start NovacomD' }"
+        rem Line 1 is HP's path, line 2 its description. The path has spaces in it,
+        rem under Program Files, so it goes back quoted in sc.exe's own form below:
+        rem unquoted, Windows would try C:\Program.exe first.
+        set "HP_PATH="
+        set "HP_DESC="
+        for /f "usebackq delims=" %%L in ("%NOVACOMD_DIR%\hp-service.txt") do (
+            if not defined HP_PATH (set "HP_PATH=%%~L") else if not defined HP_DESC set "HP_DESC=%%L"
+        )
+        sc config NovacomD binPath= "\"!HP_PATH!\"" >nul
+        if defined HP_DESC sc description NovacomD "!HP_DESC!" >nul
+        sc start NovacomD >nul
+        if errorlevel 1 (
+            echo [WARN] Could not restart HP's novacomd - try: net start NovacomD
+        ) else (
+            echo [OK]   NovacomD service handed back to HP's novacomd
+        )
     ) else (
         "%NOVACOMD_DIR%\novacomd.exe" -u
     )
