@@ -24,9 +24,13 @@ A Windows release: Windows now gets what macOS and Linux got in 0.4. Thanks to
 - **A Windows setup wizard**, `webOS-SDK-Redux-<version>-Setup.exe`. You pick
   components, it offers to install Java if Java is missing, it upgrades or takes
   over an earlier install, and it uninstalls from Settings → Apps.
+- **macOS driver packages rebuilt** (package version 3.1.0.1). The `.pkg`
+  files published with 0.3 and 0.4 carried an older novacomd with no Lunacy
+  support, and on arm64 no TCP fix either. The new ones are built from clean on
+  both architectures.
 - **The batch installer and uninstaller** install this novacomd too, and hand the
   service back to HP's daemon on uninstall (`/hpnovacomd` keeps HP's).
-- No changes to the SDK tools, frameworks or PDK, or to novacomd's behaviour on
+- No changes to the SDK tools, frameworks or PDK, or to novacomd's source on
   macOS and Linux. The SDK folder is renamed `0.4.1` to follow the
   versioning convention.
 - Known issue: novacomd doesn't build with gcc 15 or later on Linux (C23 makes
@@ -176,7 +180,7 @@ signed, notarized macOS installer package containing novacomd, novacom, novaterm
 and their libusb dependencies:
 
 ```bash
-./build-driver-installer-mac.sh     # produces novacom-installer-<arch>.pkg
+./build-driver-installer-mac.sh --notarize    # produces novacom-installer-<arch>.pkg
 ```
 
 It builds both binaries from clean, stamped with the package version, and prints

@@ -13,18 +13,14 @@ This guide explains how to build the novacom/novacomd installer package on any M
    ```bash
    brew install libusb libusb-compat
    ```
-3. **Built binaries** for novacom and novacomd:
-   ```bash
-   # Build novacomd
-   cd novacomd
-   ./build.sh
-   cd ..
-
-   # Build novacom
-   cd novacom
-   ./build.sh
-   cd ..
-   ```
+3. **A build toolchain** (Xcode Command Line Tools). You don't need to build
+   novacom or novacomd first: the script rebuilds both from clean, stamped with
+   the package version, so a release never ships a stale binary. If either
+   `build-novacomd` or `build-novacom` was created by a `sudo` build, it is owned
+   by root and the script stops and asks you to `sudo rm -rf` it.
+4. **The package builds for the Mac it runs on.** It bundles that Mac's Homebrew
+   libusb, so the x86_64 package must be built on an Intel Mac and the arm64 one
+   on Apple Silicon.
 
 ## Building the Installer
 
@@ -193,11 +189,7 @@ To clean all build artifacts and rebuild from scratch:
 rm -rf installer-package
 rm -f novacom-installer-*.pkg
 
-# Rebuild binaries (optional)
-cd novacomd && ./build.sh clean && ./build.sh && cd ..
-cd novacom && ./build.sh clean && ./build.sh && cd ..
-
-# Rebuild package
+# Rebuild package (the script rebuilds novacomd and novacom from clean itself)
 ./build-driver-installer-mac.sh
 ```
 
@@ -212,11 +204,12 @@ through to `pkgbuild`:
 
 ```bash
 PKG_IDENTIFIER="com.palm.novacom"
-PKG_VERSION="3.1.0"
+PKG_VERSION="3.1.0.1"
 ```
 
 `PKG_VERSION` tracks the webOS release these drivers ship alongside — webOS CE
 3.1.0 — so that "which novacom do I need for CE 3.1.0?" has an obvious answer.
+A rebuild for the same OS release adds a fourth number (`3.1.0.1`).
 The drivers themselves are not OS-specific and work with webOS 1.x/2.x/3.0.5
 devices too.
 
@@ -446,24 +439,26 @@ Script will automatically detect and use your Developer ID!
 
 ## Notarization (Advanced)
 
-For maximum trust, you can notarize your package with Apple:
+Published packages should be notarized. The script does it with `--notarize`:
 
 ```bash
-# Upload for notarization
-xcrun notarytool submit novacom-installer-arm64.pkg \
-  --apple-id "your@email.com" \
-  --team-id "TEAM123" \
-  --password "app-specific-password" \
-  --wait
+./build-driver-installer-mac.sh --notarize
+./build-driver-installer-mac.sh --notarize --keychain-profile <profile>
+```
 
-# Check status
-xcrun notarytool info <submission-id> \
-  --apple-id "your@email.com" \
-  --team-id "TEAM123" \
-  --password "app-specific-password"
+It signs the package with your Developer ID Installer certificate (checked before
+anything is built), submits it to Apple, waits for the verdict and staples the
+ticket, retrying the staple while the ticket propagates. Credentials come from
+`set-apple-vars.sh` beside the script (gitignored; exports `APPLE_ID`,
+`APPLE_TEAM_ID` and `APPLE_APP_SPECIFIC_PASSWORD`), or from a `notarytool`
+keychain profile.
 
-# Staple notarization to package
-xcrun stapler staple novacom-installer-arm64.pkg
+Check the result before publishing:
+
+```bash
+pkgutil --check-signature novacom-installer-<arch>.pkg   # "Notarization: trusted..."
+xcrun stapler validate novacom-installer-<arch>.pkg
+spctl -a -vv -t install novacom-installer-<arch>.pkg      # "source=Notarized Developer ID"
 ```
 
 **Note**: Notarization requires Developer ID signing first.

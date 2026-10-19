@@ -20,6 +20,61 @@ Target devices run either the original **HP webOS 3.0.5** or the community
 **webOS CE 3.1.0** update. Both are supported; see "Device version detection"
 below, which is the one place that distinction has bitten us.
 
+## Release 0.4.1: in progress (delete this section once it is published)
+
+Two Macs and a Windows VM share the work. The commits are on `main`, and nothing
+is pushed, tagged or released yet. **Don't push, tag or publish without the
+maintainer's go-ahead.** Release assets go on a GitHub release tagged
+`0.4.1-Release`.
+
+| Asset | Built on | Status |
+| --- | --- | --- |
+| `webOS-SDK-Redux-0.4.1-Setup.exe` | Windows VM (`installer-windows\build.ps1`) | Built and installs. SHA-256 `b781bc188b8ac265a8897bed1c167eda9a74ccfbd8e075dbed1ec55c29325ba3` |
+| `novacom-installer-x86_64.pkg` | Intel Mac Pro | Not built yet: needs `sudo rm -rf novacomd/build-novacomd novacom/build-novacom` (root-owned, from an old sudo build), then the command below |
+| `novacom-installer-arm64.pkg` | Apple Silicon MacBook | Not built yet |
+
+Still unverified: `install-windows.bat` → `uninstall-windows.bat` on Windows. The
+HP service hand-back was rewritten in `b4455e4`. After uninstalling,
+`sc qc NovacomD` must show HP's path in quotes.
+
+**Building a driver package** (either Mac). The 0.4 release's packages are not
+reusable; see "macOS driver installer" below.
+
+1. Prerequisites, once per Mac:
+   - Xcode Command Line Tools, Homebrew, `brew install libusb libusb-compat`.
+   - Both certificates **with their private keys** in the login keychain:
+     "Developer ID Application" (signs the binaries) and "Developer ID Installer"
+     (signs the `.pkg`), team `Z97JEYX9UJ`. Check with
+     `security find-identity -v | grep "Developer ID"`; it should list 2. To move
+     them from another Mac, export both from Keychain Access as one `.p12` and
+     import it.
+   - `set-apple-vars.sh` in the repo root, with `APPLE_ID`, `APPLE_TEAM_ID` and
+     `APPLE_APP_SPECIFIC_PASSWORD`, laid out like `set-apple-vars example.sh`.
+     It is gitignored and holds credentials, so copy it by hand (AirDrop, a
+     password manager). **Never commit it, and never print its contents.**
+     `--keychain-profile <name>` is the alternative.
+   - Make sure `novacomd/build-novacomd` and `novacom/build-novacom` are absent or
+     yours. The script stops and says so if root owns them.
+2. Build, sign, notarize and staple. This takes a few minutes, mostly waiting on
+   Apple:
+   ```bash
+   ./build-driver-installer-mac.sh --notarize
+   ```
+   In the log, "Payload version strings" must show `novacomd-3.1.0.1` and
+   `novacom-3.1.0.1`. A `..local..user@host..` stamp there means a stale build.
+3. Verify before handing it over:
+   ```bash
+   pkgutil --check-signature novacom-installer-$(uname -m).pkg   # Notarization: trusted by the Apple notary service
+   xcrun stapler validate novacom-installer-$(uname -m).pkg
+   spctl -a -vv -t install novacom-installer-$(uname -m).pkg      # source=Notarized Developer ID
+   rm -rf /tmp/pkgcheck && pkgutil --expand-full novacom-installer-$(uname -m).pkg /tmp/pkgcheck
+   strings /tmp/pkgcheck/Payload/usr/local/bin/novacomd | grep -c lunacy   # non-zero
+   shasum -a 256 novacom-installer-$(uname -m).pkg
+   ```
+4. Report the SHA-256 and update the status table above. The `.pkg` is
+   gitignored (`*.pkg`), so it travels to the releasing machine by hand or is
+   attached to the release directly once the maintainer says to.
+
 ## Repository layout
 
 ```
@@ -171,11 +226,21 @@ so it does not carry the webOS CE fix. There is no graphical installer for the
 SDK; that is the shell installer described above.
 
 `PKG_VERSION` in the build script tracks the **webOS release** the drivers ship
-alongside (currently `3.1.0`), not the driver source version — the drivers
-themselves work with webOS 1.x/2.x/3.0.5 devices too. Bump it whenever the
-payload changes, even if the OS release has not, since macOS keys package
-upgrade behaviour off it. Do not confuse `com.palm.novacom` (the package
-identifier) with `com.palm.novacomd` (the launchd daemon label).
+alongside (currently `3.1.0.1`; a fourth number marks a rebuild for the same OS
+release), not the driver source version. The drivers themselves work with webOS
+1.x/2.x/3.0.5 devices too. Bump it whenever the payload changes, even if the OS
+release has not, since macOS keys package upgrade behaviour off it. Do not
+confuse `com.palm.novacom` (the package identifier) with `com.palm.novacomd`
+(the launchd daemon label).
+
+Release builds: `./build-driver-installer-mac.sh --notarize`, once on an Intel
+Mac and once on Apple Silicon, since each package bundles its own host's Homebrew
+libusb. The script rebuilds both binaries from clean with
+`BUILDVERSION=$PKG_VERSION`. **Rebuild the packages whenever novacomd or novacom
+changes**, rather than re-posting old ones: the 0.3 and 0.4 releases shipped an
+arm64 novacomd from March that had neither the TCP fix nor Lunacy. Before
+attaching a package, `pkgutil --expand-full` it and check that
+`strings .../novacomd` shows `novacomd-<PKG_VERSION>` and contains `lunacy`.
 
 ## Windows
 
@@ -290,13 +355,6 @@ Releases are tagged `<version>-Release` (`0.4-Release`, `0.4.1-Release`). Attach
 the wizard with `gh release upload <tag> <exe>`. Don't create, publish or
 retag a release without the maintainer's go-ahead; the macOS `.pkg` assets come
 from the Mac side.
-
-**Open for 0.4.1** (remove this paragraph once done): build
-`webOS-SDK-Redux-0.4.1-Setup.exe` and test it. Also test `install-windows.bat` →
-`uninstall-windows.bat`, because the uninstaller's HP service hand-back was
-rewritten in `b4455e4` (batch `sc config binPath= "\"...\""` instead of
-PowerShell) and has **not** been run on Windows. Report the `sc qc NovacomD`
-output after uninstall.
 
 ## SDK command-line tools
 

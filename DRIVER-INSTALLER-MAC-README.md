@@ -291,6 +291,15 @@ that "which novacom do I need for webOS CE 3.1.0?" has an obvious answer. The
 drivers are not OS-specific — they work with webOS 1.x, 2.x and 3.0.5 devices
 too.
 
+### 3.1.0.1
+- Published with PalmSDK Redux 0.4.1
+- **Lunacy devices**: novacomd lists [Lunacy](LUNACY.md) on Android devices
+  attached through adb, beside any webOS device
+- The packages published with the 0.3 and 0.4 SDK releases were labelled
+  `1.0.0`, and the arm64 one carried a novacomd built before the TCP fix below.
+  This release is rebuilt from clean on both architectures, so each carries the
+  TCP fix and the Lunacy support. `novacomd -V` reports `novacomd-3.1.0.1`.
+
 ### 3.1.0
 - Published alongside the webOS CE 3.1.0 community OS release
 - **novacomd TCP transport fix** — removes the `SO_RCVLOWAT` setting that

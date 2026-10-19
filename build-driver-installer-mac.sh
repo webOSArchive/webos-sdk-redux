@@ -121,6 +121,22 @@ if [ "$NOTARIZE" = true ]; then
 fi
 
 # Configuration
+
+# Package identity. PKG_VERSION tracks the webOS release these drivers are
+# published alongside (webOS CE 3.1.0), rather than the driver source itself --
+# the community asks "which novacom do I need for CE 3.1.0?", and this makes the
+# answer obvious. Note the drivers are not actually OS-specific: they work with
+# webOS 1.x/2.x/3.0.5 devices too. Bump this whenever the payload changes, even
+# if the OS has not moved -- macOS keys upgrade behaviour off it, and shipping
+# two different payloads under one version makes an installed package
+# indistinguishable from an older one via `pkgutil --pkg-info`.
+PKG_IDENTIFIER="com.palm.novacom"
+PKG_VERSION="3.1.0.1"
+#
+# 3.1.0.1: the 0.4.1 rebuild. The packages published with 0.3 and 0.4 carried an
+# older novacomd (no Lunacy/adb support) under --version 1.0.0; this is the
+# first with the Lunacy relay.
+
 NOVACOMD_BIN="$SCRIPT_DIR/novacomd/build-novacomd/novacomd"
 NOVACOM_BIN="$SCRIPT_DIR/novacom/build-novacom/novacom"
 NOVATERM_SCRIPT="$SCRIPT_DIR/novacom/scripts/novaterm"
@@ -134,6 +150,46 @@ SCRIPTS_DIR="$PKG_DIR/scripts"
 
 OUTPUT_PKG="$SCRIPT_DIR/novacom-installer-${ARCH}.pkg"
 
+# Rebuild both binaries from clean, stamped with the package version.
+#
+# This is a release build, so it must not depend on whatever happens to be
+# sitting in the build directories. Two problems it avoids:
+#
+#   1. Identity leakage. The makefiles' default BUILDVERSION is
+#        "..local..$(whoami)@$(hostname)..$(date)"
+#      which bakes the builder's username and machine name into a binary that
+#      gets published. Setting BUILDVERSION replaces that with
+#      "novacomd-<version>". It must be passed through the ENVIRONMENT, not as
+#      "make BUILDVERSION=x": a command-line assignment overrides the makefile's
+#      own quoting of the value and the build fails to compile.
+#
+#   2. Stale stamps. BUILDVERSION is compiled into main.o, which an incremental
+#      build will not recompile if main.c is unchanged -- so the version string
+#      records when main.o was last built, not what is in the binary.
+#
+# A build run under sudo (build.sh's install step, or `sudo make`) leaves build
+# directories owned by root, which `make spotless` can't remove -- and the loop
+# below hides make's output -- so catch that first and say what to do.
+for d in "$SCRIPT_DIR/novacomd/build-novacomd" "$SCRIPT_DIR/novacom/build-novacom"; do
+    if [ -e "$d" ] && [ -n "$(find "$d" ! -user "$(id -u)" -print -quit 2>/dev/null)" ]; then
+        log_error "$d holds files you don't own, from an earlier sudo build"
+        log_info "Remove it, then run this again: sudo rm -rf \"$d\""
+        exit 1
+    fi
+done
+log_info "Rebuilding novacomd and novacom from clean (version $PKG_VERSION)..."
+for component in novacomd novacom; do
+    [ "$component" = "novacomd" ] && target="host" || target=""
+    if ! ( cd "$SCRIPT_DIR/$component" \
+           && make spotless >/dev/null 2>&1 \
+           && BUILDVERSION="$PKG_VERSION" make $target >/dev/null 2>&1 ); then
+        log_error "Failed to build $component"
+        log_info "Build it manually to see the error: cd $component && make $target"
+        exit 1
+    fi
+    log_success "Built $component"
+done
+
 # Verify binaries exist
 log_info "Checking for required binaries..."
 if [ ! -f "$NOVACOMD_BIN" ]; then
@@ -142,6 +198,20 @@ if [ ! -f "$NOVACOMD_BIN" ]; then
     exit 1
 fi
 log_success "Found novacomd"
+
+# Verify binary architecture matches host — the bundled Homebrew libs must be the same arch
+BINARY_ARCH=$(file "$NOVACOMD_BIN" | grep -o 'arm64\|x86_64' | head -1)
+if [ -z "$BINARY_ARCH" ]; then
+    log_error "Could not determine architecture of novacomd binary"
+    exit 1
+fi
+if [ "$BINARY_ARCH" != "$ARCH" ]; then
+    log_error "Binary architecture ($BINARY_ARCH) does not match host architecture ($ARCH)"
+    log_info "The bundled libusb libraries must match the binary architecture"
+    log_info "Build novacomd on a $ARCH machine, then run this script there"
+    exit 1
+fi
+log_success "Binary architecture matches host: $ARCH"
 
 if [ ! -f "$NOVACOM_BIN" ]; then
     log_error "novacom binary not found at: $NOVACOM_BIN"
@@ -202,17 +272,28 @@ log_info "Relinking libraries for /usr/local/lib..."
 install_name_tool -id /usr/local/lib/libusb-1.0.0.dylib \
     "$PAYLOAD_DIR/usr/local/lib/libusb-1.0.0.dylib"
 
-# Update libusb-compat install name and dependency
+# Update libusb-compat install name and its dependency on libusb-1.0
+# Read the actual embedded path from the library rather than assuming it matches BREW_PREFIX
+# (the library may have been built on a different architecture with a different Homebrew prefix)
 install_name_tool -id /usr/local/lib/libusb-0.1.4.dylib \
     "$PAYLOAD_DIR/usr/local/lib/libusb-0.1.4.dylib"
-install_name_tool -change "$BREW_PREFIX/opt/libusb/lib/libusb-1.0.0.dylib" \
-    /usr/local/lib/libusb-1.0.0.dylib \
-    "$PAYLOAD_DIR/usr/local/lib/libusb-0.1.4.dylib"
+LIBUSB_COMPAT_LIBUSB_PATH=$(otool -L "$PAYLOAD_DIR/usr/local/lib/libusb-0.1.4.dylib" | awk '/libusb-1\.0\.0/{print $1}')
+if [ -n "$LIBUSB_COMPAT_LIBUSB_PATH" ] && [ "$LIBUSB_COMPAT_LIBUSB_PATH" != "/usr/local/lib/libusb-1.0.0.dylib" ]; then
+    install_name_tool -change "$LIBUSB_COMPAT_LIBUSB_PATH" \
+        /usr/local/lib/libusb-1.0.0.dylib \
+        "$PAYLOAD_DIR/usr/local/lib/libusb-0.1.4.dylib"
+fi
 
-# Update novacomd to use bundled libusb
-install_name_tool -change "$BREW_PREFIX/opt/libusb-compat/lib/libusb-0.1.4.dylib" \
-    /usr/local/lib/libusb-0.1.4.dylib \
-    "$PAYLOAD_DIR/usr/local/bin/novacomd"
+# Update novacomd to use bundled libusb-compat
+# Read the actual embedded path from the binary for the same reason
+NOVACOMD_LIBUSB_PATH=$(otool -L "$PAYLOAD_DIR/usr/local/bin/novacomd" | awk '/libusb-0\.1\.4/{print $1}')
+if [ -n "$NOVACOMD_LIBUSB_PATH" ] && [ "$NOVACOMD_LIBUSB_PATH" != "/usr/local/lib/libusb-0.1.4.dylib" ]; then
+    install_name_tool -change "$NOVACOMD_LIBUSB_PATH" \
+        /usr/local/lib/libusb-0.1.4.dylib \
+        "$PAYLOAD_DIR/usr/local/bin/novacomd"
+else
+    log_warning "novacomd already references /usr/local/lib/libusb-0.1.4.dylib or libusb not found in binary"
+fi
 
 log_success "Libraries relinked"
 
@@ -426,13 +507,28 @@ log_success "Postinstall script created"
 
 # Build the package
 log_info "Building installer package..."
+
+# Echo the version strings actually compiled into the payload. A wrong stamp is
+# then visible in the build log rather than discovered after release, and any
+# "..local..user@host.." here means the BUILDVERSION override above did not take
+# and the package would publish the builder's identity.
+log_info "Payload version strings:"
+for b in "$PAYLOAD_DIR/usr/local/bin/novacomd" "$PAYLOAD_DIR/usr/local/bin/novacom"; do
+    [ -f "$b" ] || continue
+    stamp=$(strings "$b" 2>/dev/null | grep -oE '(novacomd?-[0-9][^ "]*|\.\.local\.\.[^ "]*)' | head -1)
+    printf '    %-10s %s\n' "$(basename "$b")" "${stamp:-<none found>}"
+    case "$stamp" in
+        ..local..*) log_warning "$(basename "$b") carries a local build stamp with user@host" ;;
+    esac
+done
+
 rm -f "$OUTPUT_PKG"
 
 pkgbuild \
     --root "$PAYLOAD_DIR" \
     --scripts "$SCRIPTS_DIR" \
-    --identifier "com.palm.novacom" \
-    --version "1.0.0" \
+    --identifier "$PKG_IDENTIFIER" \
+    --version "$PKG_VERSION" \
     --install-location "/" \
     "$OUTPUT_PKG"
 
@@ -507,6 +603,7 @@ echo ""
 log_info "Package: $OUTPUT_PKG"
 log_info "Size: $(ls -lh "$OUTPUT_PKG" | awk '{print $5}')"
 log_info "Architecture: $ARCH"
+log_info "Version: $PKG_VERSION ($PKG_IDENTIFIER)"
 echo ""
 log_info "Package contents:"
 pkgutil --payload-files "$OUTPUT_PKG" | sed 's/^/  /'
