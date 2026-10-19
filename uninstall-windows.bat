@@ -4,7 +4,8 @@ rem  webOS SDK Redux - Windows uninstaller
 rem
 rem  Removes the SDK, the PATH entry and the PDK. novacom is left to Windows'
 rem  own uninstaller: it was installed by an MSI, so removing it here by hand
-rem  would leave the installer database inconsistent.
+rem  would leave the installer database inconsistent. If this repo's novacomd had
+rem  taken over the NovacomD service, the service is handed back to HP's first.
 rem
 rem  Usage:  uninstall-windows.bat [/y]
 rem  Must be run from an elevated (Administrator) command prompt.
@@ -14,6 +15,7 @@ setlocal EnableDelayedExpansion
 set "SDK_INSTALL_DIR=%ProgramFiles%\PalmSDK"
 set "PDK_INSTALL_DIR=C:\PalmPDK"
 set "BIN_DIR=%SDK_INSTALL_DIR%\Current\bin"
+set "NOVACOMD_DIR=%SDK_INSTALL_DIR%\novacomd"
 set "ASSUME_YES=0"
 if /i "%~1"=="/y" set "ASSUME_YES=1"
 
@@ -33,6 +35,7 @@ echo This will remove:
 echo   - %SDK_INSTALL_DIR%
 echo   - %PDK_INSTALL_DIR%
 echo   - %BIN_DIR% from the system PATH
+if exist "%NOVACOMD_DIR%\novacomd.exe" echo   - this repo's novacomd, handing the NovacomD service back to HP's
 echo.
 echo novacom is NOT removed here. Uninstall "Palm Novacom" from
 echo Settings ^> Apps, or: msiexec /x NovacomInstaller_^<arch^>.msi
@@ -48,6 +51,20 @@ rem cannot break the command quoting.
 set "PALMSDK_BIN=%BIN_DIR%"
 powershell -NoProfile -ExecutionPolicy Bypass -Command ^
  "$b=$env:PALMSDK_BIN; $p=[Environment]::GetEnvironmentVariable('Path','Machine'); $n=(($p -split ';') | Where-Object {$_ -ne $b -and $_ -ne ''}) -join ';'; if($n -ne $p){[Environment]::SetEnvironmentVariable('Path',$n,'Machine'); Write-Host '[OK]   Removed from system PATH'} else {Write-Host '[INFO] Not present on system PATH'}"
+
+rem This repo's novacomd runs from under the SDK directory, so it has to let go of
+rem the NovacomD service before that directory can be deleted. HP's registration
+rem was saved by install-windows.bat; without it, the service is just removed.
+if exist "%NOVACOMD_DIR%\novacomd.exe" (
+    net stop NovacomD >nul 2>&1
+    if exist "%NOVACOMD_DIR%\hp-service.txt" (
+        set "NOVACOMD_DIR_ENV=%NOVACOMD_DIR%"
+        powershell -NoProfile -ExecutionPolicy Bypass -Command ^
+         "$l=@(Get-Content (Join-Path $env:NOVACOMD_DIR_ENV 'hp-service.txt')); & sc.exe config NovacomD binPath= $l[0].Trim().Trim([char]34) | Out-Null; if($l.Count -gt 1 -and $l[1]){ & sc.exe description NovacomD $l[1] | Out-Null }; & sc.exe start NovacomD | Out-Null; if($LASTEXITCODE -eq 0){ Write-Host '[OK]   NovacomD service handed back to HP''s novacomd' } else { Write-Host '[WARN] Could not restart HP''s novacomd - try: net start NovacomD' }"
+    ) else (
+        "%NOVACOMD_DIR%\novacomd.exe" -u
+    )
+)
 
 rem The junction must go before the directory it points at, and rmdir (not
 rem "rmdir /s") is what deletes a junction without following it into the target.

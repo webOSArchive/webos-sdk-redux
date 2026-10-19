@@ -92,4 +92,6 @@ later. `patch-webos-tools-version.py` applies this along with the webOS CE fix; 
   command`. Use Chrome's DevTools (`chrome://inspect`) on Lunacy's cards instead.
 - `palm-log --system-log-level` sets a level on webOS's log daemon, which Lunacy hasn't got;
   it fails with the bus's own error.
-- Windows: the SDK there uses HP's novacomd, which knows nothing of adb.
+- Windows: `install-windows.bat` installs this repo's novacomd, which finds Lunacy the same
+  way (tested on Windows 11; see [WINDOWS.md](WINDOWS.md)). With `/hpnovacomd`, or on
+  32-bit Windows, it is HP's novacomd, which knows nothing of adb.

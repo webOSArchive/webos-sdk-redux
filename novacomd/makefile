@@ -108,6 +108,19 @@ else ifeq ($(UNAME), Linux)
 	HOSTLDLIBS += -lpthread -lusb
 	LDFLAGS += -Wl,-rpath,.
 	DEVICELDLIBS += -lrt
+else ifneq ($(filter MINGW% UCRT% CLANG%,$(UNAME)),)
+	# Windows, from an MSYS2 MinGW-w64 shell (UCRT64 recommended).
+	# include/win32 stands in for the POSIX socket headers; USB is libusb-1.0 over
+	# WinUSB; everything is linked statically so novacomd.exe needs no DLLs.
+	HOSTPLATFORM := pthreads
+	HOSTOS := windows
+	EXE := .exe
+	CC := gcc
+	LIBUSB_CFLAGS := $(shell pkg-config --cflags libusb-1.0)
+	HOSTCFLAGS += -std=gnu11 -Iinclude/win32 -DWIN32_LEAN_AND_MEAN -D_WIN32_WINNT=0x0601 \
+		-DFD_SETSIZE=1024 -DUSB_LIBUSB1=1 $(LIBUSB_CFLAGS)
+	LDFLAGS += -static
+	HOSTLDLIBS += -lusb-1.0 -lpthread -lws2_32 -ladvapi32 -lsetupapi -lole32
 endif
 
 COMMONOBJS := \
@@ -145,6 +158,11 @@ HOSTOBJS := \
 	src/host/recovery.o \
 	src/host/adb_relay.o
 
+ifeq ($(HOSTOS),windows)
+HOSTOBJS += \
+	src/host/service_win32.o
+endif
+
 # do some work based on the host platform
 ifeq ($(HOSTPLATFORM), pthreads)
 HOSTOBJS += \
@@ -165,7 +183,7 @@ all: host device
 # Build targets
 device: $(BUILDDIR)-device/$(TARGET)
 
-host: $(BUILDDIR)/$(TARGET)
+host: $(BUILDDIR)/$(TARGET)$(EXE)
 
 # Universal binary (macOS only - Intel + Apple Silicon)
 universal:
@@ -207,7 +225,7 @@ help:
 	@echo "  BUILD_ARCH=arch  - Build for specific architecture (x86_64, arm64, etc.)"
 	@echo "  UNIVERSAL=1      - Build universal binary (macOS only)"
 
-$(BUILDDIR)/$(TARGET): $(HOSTOBJS)
+$(BUILDDIR)/$(TARGET)$(EXE): $(HOSTOBJS)
 	@echo HOST linking $@
 	@${ENVP} $(CC) $(LDFLAGS) $(HOSTOBJS) -o $@ $(HOSTLDLIBS)
 
@@ -217,7 +235,7 @@ $(BUILDDIR)-device/$(TARGET): $(DEVICEOBJS)
 
 .PHONY: clean
 clean:
-	rm -f $(HOSTOBJS) $(DEVICEOBJS) $(DEPS) $(BUILDDIR)/$(TARGET) $(BUILDDIR)-device/$(TARGET)
+	rm -f $(HOSTOBJS) $(DEVICEOBJS) $(DEPS) $(BUILDDIR)/$(TARGET)$(EXE) $(BUILDDIR)-device/$(TARGET)
 
 .PHONY: spotless
 spotless:
@@ -231,14 +249,14 @@ BINDIR = $(PREFIX)/bin
 install: host
 	@echo "Installing novacomd to $(BINDIR)..."
 	@mkdir -p $(BINDIR)
-	install -m 755 $(BUILDDIR)/$(TARGET) $(BINDIR)/$(TARGET)
+	install -m 755 $(BUILDDIR)/$(TARGET)$(EXE) $(BINDIR)/$(TARGET)$(EXE)
 	@echo "Installation complete!"
 	@echo "Note: You may need to run 'sudo make install' for system-wide installation."
 
 .PHONY: uninstall
 uninstall:
 	@echo "Removing novacomd from $(BINDIR)..."
-	rm -f $(BINDIR)/$(TARGET)
+	rm -f $(BINDIR)/$(TARGET)$(EXE)
 	@echo "Uninstallation complete!"
 
 # makes sure the target dir exists

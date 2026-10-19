@@ -37,12 +37,18 @@ SOCKET create_listen_socket(int port, int bind_all)
 	if (s == INVALID_SOCKET)
 		return s;
 	/* close on exec */
-	fcntl(s, F_SETFD, FD_CLOEXEC);
+	platform_socket_cloexec(s);
 
 	/* set the reusaddr option */
 	int reuse_addr = 1;
+#ifdef _WIN32
+	/* Winsock's SO_REUSEADDR would let us share a port another novacomd is listening on;
+	 * TIME_WAIT never blocks a listener there anyway */
+	if (setsockopt(s, SOL_SOCKET, SO_EXCLUSIVEADDRUSE, (const char*)&reuse_addr, sizeof(reuse_addr)) < 0) {
+#else
 	if (setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (const char*)&reuse_addr, sizeof(reuse_addr)) < 0) {
-		close(s);
+#endif
+		platform_closesocket(s);
 		return INVALID_SOCKET;
 	}
 
@@ -58,13 +64,13 @@ SOCKET create_listen_socket(int port, int bind_all)
 		saddr.sin_addr.s_addr = htonl(INADDR_ANY);
 	}
 	if (bind(s, (const struct sockaddr *)&saddr,  sizeof(saddr)) < 0) {
-		close(s);
+		platform_closesocket(s);
 		return INVALID_SOCKET;
 	}
 
 	/* start the socket listening */
 	if (listen(s, SOMAXCONN) < 0) {
-		close(s);
+		platform_closesocket(s);
 		return INVALID_SOCKET;
 	}
 
@@ -84,7 +90,7 @@ SOCKET accept_socket(SOCKET socket)
 		return new_s;
 
 	/* close on exec */
-	fcntl(new_s, F_SETFD, FD_CLOEXEC);
+	platform_socket_cloexec(new_s);
 	return new_s;
 }
 

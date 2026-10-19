@@ -49,6 +49,10 @@ detect_os() {
         else
             LINUX_DISTRO="unknown"
         fi
+    elif [ -n "$MSYSTEM" ]; then
+        # Windows, from an MSYS2 shell; only the MinGW-w64 ones build native binaries
+        OS="windows"
+        OS_NAME="Windows (MSYS2 $MSYSTEM)"
     else
         OS="unknown"
         OS_NAME="Unknown"
@@ -256,6 +260,24 @@ install_deps_linux() {
     return 0
 }
 
+# Install dependencies on Windows (MSYS2)
+install_deps_windows() {
+    log_step "Installing Windows (MSYS2) dependencies..."
+
+    if [ "$MSYSTEM" = "MSYS" ] || [ -z "$MINGW_PACKAGE_PREFIX" ]; then
+        log_error "This is the plain MSYS shell, which can't build a native novacomd.exe"
+        log_info "Open the \"MSYS2 UCRT64\" shell from the Start menu and run this script again"
+        return 1
+    fi
+
+    log_info "Installing make, gcc, libusb-1.0 and pkgconf for $MSYSTEM..."
+    pacman -S --noconfirm --needed make \
+        "${MINGW_PACKAGE_PREFIX}-gcc" "${MINGW_PACKAGE_PREFIX}-libusb" "${MINGW_PACKAGE_PREFIX}-pkgconf"
+
+    log_success "Dependencies installed"
+    return 0
+}
+
 # Build novacomd
 build_novacomd() {
     log_step "Building novacomd..."
@@ -286,7 +308,7 @@ build_novacomd() {
 verify_build() {
     log_step "Verifying build..."
 
-    local binary="./build-novacomd/novacomd"
+    local binary="./build-novacomd/novacomd$EXE"
 
     if [ ! -f "$binary" ]; then
         log_error "Binary not found at $binary"
@@ -439,6 +461,12 @@ main() {
             log_error "Failed to install Linux dependencies"
             exit 1
         fi
+    elif [ "$OS" = "windows" ]; then
+        EXE=".exe"
+        if ! install_deps_windows; then
+            log_error "Failed to install Windows dependencies"
+            exit 1
+        fi
     else
         log_error "Unsupported operating system: $OS"
         exit 1
@@ -467,8 +495,24 @@ main() {
 
     log_success "novacomd has been built successfully"
     echo ""
-    log_info "Binary location: ./build-novacomd/novacomd"
+    log_info "Binary location: ./build-novacomd/novacomd$EXE"
     echo ""
+
+    # Windows: no sudo, and novacomd runs as the NovacomD service
+    if [ "$OS" = "windows" ]; then
+        log_info "Next steps, from an Administrator prompt:"
+        echo ""
+        echo "  1. Install it as the NovacomD service (replaces HP's novacomd, keeps its driver):"
+        echo "     build-novacomd\\novacomd.exe -i"
+        echo ""
+        echo "  2. Or stop the NovacomD service and run it in a console instead:"
+        echo "     build-novacomd\\novacomd.exe"
+        echo ""
+        echo "  Or run ..\\install-windows.bat, which does step 1 for you."
+        echo ""
+        log_success "Done!"
+        exit 0
+    fi
     # Determine install script based on OS
     if [ "$OS" = "macos" ]; then
         INSTALL_SCRIPT="./install-macos.sh"

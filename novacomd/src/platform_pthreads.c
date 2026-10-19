@@ -31,6 +31,7 @@
 #include <sched.h>
 #include <unistd.h>
 #include <assert.h>
+#include <fcntl.h>
 
 #include <novacom.h>
 #include <debug.h>
@@ -48,6 +49,46 @@ void platform_init(void)
 
 	platform_mutex_init(&atomic_mutex);
 	platform_mutex_init(&fork_mutex);
+	platform_init_socket();
+}
+
+void platform_init_socket(void)
+{
+#ifdef _WIN32
+	WSADATA wsadata;
+	if (WSAStartup(MAKEWORD(2, 2), &wsadata) != 0) {
+		log_printf(LOG_ERROR, "unable to start Winsock\n");
+		exit(1);
+	}
+#endif
+}
+
+int platform_closesocket(SOCKET s)
+{
+#ifdef _WIN32
+	return closesocket(s);
+#else
+	return close(s);
+#endif
+}
+
+void platform_socket_cloexec(SOCKET s)
+{
+#ifdef _WIN32
+	SetHandleInformation((HANDLE)s, HANDLE_FLAG_INHERIT, 0);
+#else
+	fcntl(s, F_SETFD, FD_CLOEXEC);
+#endif
+}
+
+void platform_socket_nonblock(SOCKET s)
+{
+#ifdef _WIN32
+	u_long on = 1;
+	ioctlsocket(s, FIONBIO, &on);
+#else
+	fcntl(s, F_SETFL, fcntl(s, F_GETFL) | O_NONBLOCK);
+#endif
 }
 
 int platform_create_thread(platform_thread_t *_thread, thread_routine routine, void *arg)
@@ -381,7 +422,11 @@ void platform_free(void *p)
 
 int platform_socket_getlasterrno()
 {
+#ifdef _WIN32
+	return WSAGetLastError();
+#else
 	return errno;
+#endif
 }
 
 #define __SCHED_GCC_VERSION  40300

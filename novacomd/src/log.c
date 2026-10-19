@@ -18,6 +18,7 @@
 
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -159,9 +160,9 @@ void log_printf(unsigned int mask, const char *fmt, ...)
 		// dump to any connected log socket listeners
 		if (log_socket != INVALID_SOCKET) {
 			int rc = send(log_socket, msg, len, MSG_DONTWAIT);
-			if (rc < 0 && errno != EAGAIN) {
+			if (rc < 0 && platform_socket_getlasterrno() != E_SOCKET_WOULDBLOCK) {
 				shutdown(log_socket, SHUT_RDWR);
-				close(log_socket);
+				platform_closesocket(log_socket);
 				log_socket = INVALID_SOCKET;
 			}
 		}
@@ -183,8 +184,12 @@ void log_add_socket(SOCKET s)
 		SOCKET temp = log_socket;
 		log_socket = INVALID_SOCKET;
 		shutdown(temp, SHUT_RDWR);
-		close(temp);
+		platform_closesocket(temp);
 	}
+#ifdef _WIN32
+	/* no MSG_DONTWAIT: a stalled log reader must not block whoever is logging */
+	platform_socket_nonblock(s);
+#endif
 	log_socket = s;
 }
 
@@ -196,12 +201,12 @@ void log_add_socket(SOCKET s)
  */
 void hexdump8(const void *ptr, size_t len)
 {
-	unsigned long address = (unsigned long)ptr;
+	uintptr_t address = (uintptr_t)ptr;
 	size_t count;
 	size_t i;
 #undef fprintf
 	for (count = 0 ; count < len; count += 16) {
-		fprintf(stderr, "0x%08lx: ", address);
+		fprintf(stderr, "0x%08lx: ", (unsigned long)address);
 		for (i=0; i < MIN(16, len - count); i++) {
 			fprintf(stderr, "0x%02hhx ", (*(const unsigned char *)(address + i)));
 		}

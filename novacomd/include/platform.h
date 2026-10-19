@@ -28,12 +28,21 @@
 /* platform abstraction */
 
 /* portable sockets */
+#ifdef _WIN32
+#include <win32/compat.h>	/* SOCKET, INVALID_SOCKET */
+#else
 #define SOCKET int
 #define INVALID_SOCKET -1
+#endif
 
 void platform_init(void);
 void platform_init_mutex(void);
 void platform_init_socket(void);
+
+/* a socket is not a file descriptor on Windows */
+int platform_closesocket(SOCKET s);
+void platform_socket_cloexec(SOCKET s);
+void platform_socket_nonblock(SOCKET s);
 
 	/* platform headers */
 #if PLATFORM_PTHREADS
@@ -103,7 +112,11 @@ void platform_abort(void);
 int platform_socket_getlasterrno();
 
 #define platform_assert(x) do { if (!(x)) { log_printf(LOG_ERROR, "ASSERT FAILED at (%s:%d): %s\n", __FILE__, __LINE__, #x); platform_abort(); } } while (0)
+#ifdef _WIN32
+#define E_SOCKET_WOULDBLOCK WSAEWOULDBLOCK
+#else
 #define E_SOCKET_WOULDBLOCK EWOULDBLOCK
+#endif
 
 
 /* alloc api */

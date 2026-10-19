@@ -207,6 +207,8 @@ void *packet_thread(void *arg)
 							break;
 						}
 						break;
+#if !defined(_WIN32)
+					/* only a device spawns children; a Windows host never has one */
 					case PACKET_OOB_SIGNAL:
 						if (args->child) {
 							LTRACEF("Sending signal %d to %d\n", m.data.signo, args->child);
@@ -234,10 +236,11 @@ void *packet_thread(void *arg)
 									} else {
 										TRACEF("Unable to set winsize to %d %d on fd %d\n", ws.ws_row, ws.ws_col, args->stdoutfd);
 									}
-								}	
+								}
 							}
 						}
 						break;
+#endif
 					case PACKET_OOB_RETURN:
 						// what?
 						TRACEF("Got a return code from the other side. no idea why.\n");

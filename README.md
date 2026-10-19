@@ -110,25 +110,40 @@ a modern Mac. That was true of the compilers and false of everything else — se
 
 ## Windows
 
-Windows gets a batch installer rather than a GUI. Run it from an **elevated**
+Windows gets a setup wizard: download `webOS-SDK-Redux-<version>-Setup.exe`
+from the releases and run it. It lets you pick components, offers to install
+Java (Eclipse Temurin) if it's missing, and uninstalls from Settings → Apps.
+Build it yourself with `installer-windows\build.ps1` (needs Inno Setup).
+
+For scripting there is also a batch installer. Run it from an **elevated**
 command prompt:
 
 ```
 install-windows.bat
 ```
 
-It installs the SDK to `%ProgramFiles%\PalmSDK` (with the same `Current`
+Either one installs the SDK to `%ProgramFiles%\PalmSDK` (with the same `Current`
 junction convention), puts the `palm-*` commands on the system PATH, installs
-the PDK to `C:\PalmPDK`, and runs HP's novacom MSI for the USB driver and
-`novacomd`. Options: `/y`, `/sdkdir <path>`, `/nopdk`, `/nonovacom`.
+the PDK to `C:\PalmPDK`, runs HP's novacom MSI for the USB driver, and installs
+this repo's `novacomd` as the `NovacomD` service in place of HP's 2011 daemon.
+That brings Lunacy devices (through adb) to Windows, and replaces HP's closed
+32-bit binary with one built from the same sources as macOS and Linux, so their
+fixes reach Windows too. Nothing needs compiling:
+a prebuilt x64 `windows\novacomd.exe` is committed. You need 64-bit Windows 10
+or 11 and Java 8+. Options: `/y`, `/sdkdir <path>`, `/nopdk`, `/nonovacom`,
+`/hpnovacomd` (keep HP's daemon).
+
+Tested on Windows 11 with an HP TouchPad (webOS CE 3.1.0), a Palm Pre 3 (HP
+webOS 2.2.4) and Lunacy 0.8.0 over adb. To build novacomd yourself, MSYS2's MinGW-w64 does it (see
+[novacomd/README.md](novacomd/README.md)); the installer prefers your build.
 
 The one thing that cannot be built from source here is the driver — Windows
 needs HP's original `NovacomInstaller_{x86,x64}.msi`, which is committed under
 `windows/`. It binds the device to Microsoft's in-box WinUSB rather than
-shipping its own kernel driver, and its catalog is WHQL-signed by Microsoft, but
-with a **SHA-1 digest from 2011** that modern Windows may reject. That is
-untested on real hardware. If it fails, the SDK still installs and works — you
-just won't be able to reach a device.
+shipping its own kernel driver, and its catalog is WHQL-signed by Microsoft
+with a **SHA-1 digest from 2011**. Windows 11 still loads it and re-running
+the MSI over an existing install works, though installing it on a machine that
+never had it has not been tried on Windows 11.
 
 See [WINDOWS.md](WINDOWS.md) for the details.
 

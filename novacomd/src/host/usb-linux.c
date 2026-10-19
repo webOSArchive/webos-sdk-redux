@@ -16,9 +16,22 @@
 *
 * LICENSE@@@ */
 
+/*
+ * Two backends share this file: libusb-0.1 (libusb-compat), the original, and
+ * libusb-1.0, built with USB_LIBUSB1=1. Windows needs the latter: its WinUSB backend
+ * opens Palm's USB IDs through the WinUSB binding HP's novacom driver package installs.
+ * Only finding, opening, reading, writing and closing a device differ between them.
+ */
+
 #include <stdio.h>
+#include <stdlib.h>
+#if USB_LIBUSB1
+#include <libusb.h>
+#else
 #include <usb.h>
+#endif
 #include <stdint.h>
+#include <unistd.h>
 #include <sys/time.h>
 #include <errno.h>
 #include <time.h>
@@ -49,7 +62,11 @@
 #define USBDEVFS_IOCTL_TIMEOUT  2000
 
 typedef struct {
+#if USB_LIBUSB1
+	libusb_device_handle *handle;
+#else
 	usb_dev_handle *handle;
+#endif
 	novacom_usbll_handle_t usbll_handle;
 
 	bool shutdown;
@@ -70,6 +87,279 @@ typedef struct {
 /* vars */
 static platform_thread_t findandattach_thread;
 volatile int novacom_shutdown = 0;
+
+#if USB_LIBUSB1
+
+#define MAX_ATTACHED 32
+
+static libusb_context *usb_ctx;
+
+/*
+ * Devices with a handle open, by (bus << 16 | address). Each scan skips these rather
+ * than opening them again: a second WinUSB handle to an attached device need not fail.
+ */
+static platform_mutex_t attached_mutex;
+static uint32_t attached[MAX_ATTACHED];
+static int attached_count;
+
+static bool attached_has(uint32_t port)
+{
+	int i;
+	bool found = false;
+
+	platform_mutex_lock(&attached_mutex);
+	for (i = 0; i < attached_count; i++) {
+		if (attached[i] == port) {
+			found = true;
+			break;
+		}
+	}
+	platform_mutex_unlock(&attached_mutex);
+	return found;
+}
+
+static void attached_add(uint32_t port)
+{
+	platform_mutex_lock(&attached_mutex);
+	if (attached_count < MAX_ATTACHED)
+		attached[attached_count++] = port;
+	platform_mutex_unlock(&attached_mutex);
+}
+
+static void attached_remove(uint32_t port)
+{
+	int i;
+
+	platform_mutex_lock(&attached_mutex);
+	for (i = 0; i < attached_count; i++) {
+		if (attached[i] == port) {
+			attached[i] = attached[--attached_count];
+			break;
+		}
+	}
+	platform_mutex_unlock(&attached_mutex);
+}
+
+static uint32_t usb_port(int busnum, int devnum)
+{
+	return ((busnum & 0x0FFFF) << 16) | (devnum & 0x0FFFF);
+}
+
+/* why a matching device could not be opened, once per change rather than every scan */
+static void report_open_error(int busnum, int devnum, const char *what, int rc)
+{
+	static int last_rc;
+
+	if (rc == last_rc)
+		return;
+	last_rc = rc;
+	if (rc) {
+		log_printf(LOG_ERROR, "usb %d/%d: unable to %s: %s%s\n", busnum, devnum, what, libusb_error_name(rc),
+#ifdef _WIN32
+			rc == LIBUSB_ERROR_NOT_SUPPORTED ? " (is Palm's WinUSB driver installed for it?)" :
+			rc == LIBUSB_ERROR_ACCESS ? " (is another novacomd running?)" :
+#endif
+			"");
+	}
+}
+
+/* find_endpoints */
+static int novacom_usb_find_endpoints(libusb_device_handle *handle, int eps[2], int *iface)
+{
+	libusb_device *dev = libusb_get_device(handle);
+	struct libusb_config_descriptor *config;
+	int i;
+	int a;
+	int rc = -1;
+	int err;
+
+	err = libusb_get_active_config_descriptor(dev, &config);
+	if (err != 0) {
+		report_open_error(libusb_get_bus_number(dev), libusb_get_device_address(dev), "read its configuration", err);
+		return -1;
+	}
+
+	for (i = 0; i < config->bNumInterfaces && rc != 0; i++) {
+		const struct libusb_interface *interface = &config->interface[i];
+
+		for (a = 0; a < interface->num_altsetting; a++) {
+			const struct libusb_interface_descriptor *alt = &interface->altsetting[a];
+
+#if USB_SCAN_TRACE
+			log_printf(LOG_SPEW, "interface %d altsetting %d: class %d subclass %d protocol %d endpoints %d\n",
+				i, a, alt->bInterfaceClass, alt->bInterfaceSubClass, alt->bInterfaceProtocol, alt->bNumEndpoints);
+#endif
+
+			// a blank interface with our subclass/protocol id and two bulk endpoints
+			if (alt->bInterfaceClass != LIBUSB_CLASS_VENDOR_SPEC ||
+				alt->bInterfaceSubClass != 0x47 || alt->bInterfaceProtocol != 0x11 ||
+				alt->bNumEndpoints < 2)
+				continue;
+
+			// match the two bulk endpoints we care about
+			eps[0] = eps[1] = 0;
+			if (alt->endpoint[0].bEndpointAddress & 0x80)
+				eps[0] = alt->endpoint[0].bEndpointAddress;
+			if ((alt->endpoint[1].bEndpointAddress & 0x80) == 0)
+				eps[1] = alt->endpoint[1].bEndpointAddress;
+
+			if (eps[0] == 0 || eps[1] == 0) {
+				log_printf(LOG_ERROR, "failed to find acceptable endpoints\n");
+				continue;
+			}
+
+			// claim this interface
+			err = libusb_claim_interface(handle, alt->bInterfaceNumber);
+			if (err != 0) {
+				report_open_error(libusb_get_bus_number(dev), libusb_get_device_address(dev), "claim its novacom interface", err);
+				i = config->bNumInterfaces;	/* as the 0.1 path: give up on this device */
+				break;
+			}
+			if (iface)
+				*iface = alt->bInterfaceNumber;
+			rc = 0;
+			break;
+		}
+	}
+
+	libusb_free_config_descriptor(config);
+	return rc;
+}
+
+static novacom_usb_handle_t *novacom_usb_open( void )
+{
+	libusb_device **list;
+	ssize_t count;
+	ssize_t n;
+	novacom_usb_handle_t *usb_handle = NULL;
+
+	count = libusb_get_device_list(usb_ctx, &list);
+	if (count < 0)
+		return NULL;
+
+	for (n = 0; n < count && !usb_handle; n++) {
+		libusb_device *dev = list[n];
+		struct libusb_device_descriptor desc;
+		libusb_device_handle *handle;
+		int busnum = libusb_get_bus_number(dev);
+		int devnum = libusb_get_device_address(dev);
+		int eps[2];
+		int iface = -1;
+		int rc;
+		uint i;
+
+		if (libusb_get_device_descriptor(dev, &desc) != 0)
+			continue;
+
+#if USB_SCAN_TRACE
+		log_printf(LOG_SPEW, "looking at dev %d/%d %04x:%04x\n", busnum, devnum, desc.idVendor, desc.idProduct);
+#endif
+		/* try to match against our list of vendor/products */
+		for (i=0; usbid_list[i].name; i++) {
+			if ((desc.idVendor == usbid_list[i].vendor) && (desc.idProduct == usbid_list[i].product))
+				break;
+		}
+		if (!usbid_list[i].name || attached_has(usb_port(busnum, devnum)))
+			continue;
+
+		rc = libusb_open(dev, &handle);
+		if (rc != 0) {
+			report_open_error(busnum, devnum, "open it", rc);
+			continue;
+		}
+
+		if (novacom_usb_find_endpoints(handle, eps, &iface) != 0) {
+			libusb_close(handle);
+			continue;
+		}
+
+		LTRACEF("got endpoints: %x, %x\n", eps[0], eps[1]);
+		usb_handle = platform_calloc(sizeof(novacom_usb_handle_t));
+		if(!usb_handle) {
+			libusb_release_interface(handle, iface);
+			libusb_close(handle);
+			break;
+		}
+		usb_handle->handle = handle;
+		usb_handle->rxep = eps[0];
+		usb_handle->txep = eps[1];
+		usb_handle->devtype = usbid_list[i].name;
+		usb_handle->busnum = busnum;
+		usb_handle->devnum = devnum;
+		usb_handle->iface = iface;
+		attached_add(usb_port(busnum, devnum));
+		report_open_error(busnum, devnum, NULL, 0);
+	}
+
+	libusb_free_device_list(list, 1);
+	return usb_handle;
+}
+
+static int novacom_usb_close(novacom_usb_handle_t *usb_handle)
+{
+	if(usb_handle && usb_handle->handle) {
+		/* release iface if used */
+		if(usb_handle->iface != -1) {
+			libusb_release_interface(usb_handle->handle, usb_handle->iface);
+		}
+		/* close */
+		libusb_close(usb_handle->handle);
+		usb_handle->handle = NULL;
+		attached_remove(usb_port(usb_handle->busnum, usb_handle->devnum));
+	}
+
+	return 0;
+}
+
+int novacom_usb_transport_init(void)
+{
+	int rc;
+
+#if !defined(_WIN32)
+	if (geteuid() != 0) {
+		log_printf(LOG_ERROR, "need to run as super user to access usb\n");
+		return -1;
+	}
+#endif
+
+	platform_mutex_init(&attached_mutex);
+	rc = libusb_init(&usb_ctx);
+	if (rc != 0) {
+		log_printf(LOG_ERROR, "unable to initialize libusb: %s\n", libusb_error_name(rc));
+		return -1;
+	}
+	return 0;
+}
+
+static int novacom_usb_read(novacom_usb_handle_t *handle, void *buf, size_t len)
+{
+	int rc;
+	int transferred = 0;
+
+	rc = libusb_bulk_transfer(handle->handle, handle->rxep, buf, len, &transferred, handle->rx_timeout);
+	/* as usb_bulk_read: the byte count, even if it timed out after some arrived */
+	if (rc == 0 || transferred > 0)
+		rc = transferred;
+	if (rc > 0) { //now check the packet header
+
+		if (novacom_usbll_check_packet_header(buf, rc)) { //bad packet
+			log_printf(LOG_ERROR, "%s:%d -- received bad packet, set received packet size=%d\n", __FUNCTION__, __LINE__, rc);
+			rc = 0;
+		}
+	}
+	return rc;
+}
+
+static int novacom_usb_write(novacom_usb_handle_t *handle, void *buf, size_t len)
+{
+	int rc;
+	int transferred = 0;
+
+	rc = libusb_bulk_transfer(handle->handle, handle->txep, buf, len, &transferred, handle->tx_timeout);
+	return (rc == 0) ? transferred : rc;
+}
+
+#else /* libusb-0.1 */
 
 /* find_endpoints */
 static int novacom_usb_find_endpoints(usb_dev_handle *handle, int eps[2], int *iface)
@@ -276,8 +566,10 @@ static int novacom_usb_write(novacom_usb_handle_t *handle, void *buf, size_t len
 {
 //	TRACEF("handle %p, buf %p, len %d, timeout %d\n", handle, buf, len, timeout);
 
-	return usb_bulk_write(handle->handle, handle->txep, buf, len, handle->tx_timeout);	
+	return usb_bulk_write(handle->handle, handle->txep, buf, len, handle->tx_timeout);
 }
+
+#endif /* USB_LIBUSB1 */
 
 struct usb_thread_args {
 	novacom_usb_handle_t *handle;

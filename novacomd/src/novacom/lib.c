@@ -16,6 +16,9 @@
 *
 * LICENSE@@@ */
 
+#ifdef _WIN32
+#define _CRT_RAND_S	/* rand_s() */
+#endif
 #include <stdlib.h>
 #include <fcntl.h>
 #include <sys/stat.h>
@@ -60,6 +63,18 @@ int novacom_init(void)
 
 uint32_t novacom_get_new_sessionid()
 {
+#ifdef _WIN32
+	/*
+	 * The Windows CRT keeps rand()'s state per thread and srand() seeded only the main
+	 * one, so the USB thread's first session would be 41 in every process. A device still
+	 * holding a session 41 from a novacomd that was killed then looks like ours: its
+	 * heartbeats are taken as ours, no reset is sent, and the link never comes up.
+	 */
+	unsigned int sid = 0;
+	rand_s(&sid);
+	return sid;
+#else
 	uint32_t sid =rand();
 	return sid;
+#endif
 }

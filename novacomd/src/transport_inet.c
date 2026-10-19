@@ -215,7 +215,7 @@ void *inet_rx_loop(void *arg)
 	// includes implicit release
 	novacom_go_offline(device_handle);
 exit:
-	close(socket);
+	platform_closesocket(socket);
 	platform_free(t_ctl);
 	platform_free(buf);
 
@@ -251,13 +251,13 @@ static void *inetlisten_findandattach_thread(void *arg)
 
 			if(newsock) {
 				*newsock = s;
-				fcntl(s, F_SETFD, FD_CLOEXEC);	/* close on exec */
+				platform_socket_cloexec(s);	/* close on exec */
 				getnameinfo((struct sockaddr *)&faddr, faddrlen, hostname, sizeof(hostname), servname, sizeof(servname), NI_NUMERICHOST|NI_NUMERICSERV);
 				log_printf(LOG_TRACE, "Incoming connection from %s/%s\n", hostname, servname);
 
 				platform_create_thread(NULL, &inet_rx_loop, newsock);
 			} else {
-				close(s);
+				platform_closesocket(s);
 			}
 
 		} else {
@@ -324,12 +324,12 @@ static void *inetconnect_findandattach_thread(void *arg)
 
 		if(INVALID_SOCKET != (*newsocket)) {
 			/* close on exec */
-			fcntl(*newsocket, F_SETFD, FD_CLOEXEC);
+			platform_socket_cloexec(*newsocket);
 			if (connect(*newsocket, aip->ai_addr, aip->ai_addrlen) == 0) {
 				// call as not-a-thread
 				inet_rx_loop(newsocket);
 			} else {
-				close(*newsocket);
+				platform_closesocket(*newsocket);
 				platform_free(newsocket);
 			}
 		} else {

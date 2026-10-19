@@ -1,9 +1,9 @@
 novacomd
 ========
 
-Modern build of novacomd for macOS and Linux, enabling communication between webOS SDK tools and webOS devices.
+Modern build of novacomd for macOS, Linux and Windows, enabling communication between webOS SDK tools and webOS devices.
 
-This updated version compiles on modern macOS (including Apple Silicon) and Linux systems, replacing the legacy 32-bit binaries from the original HP webOS SDK.
+This updated version compiles on modern macOS (including Apple Silicon), Linux and Windows systems, replacing the legacy 32-bit binaries from the original HP webOS SDK.
 
 ## Supported Platforms
 
@@ -13,6 +13,8 @@ This updated version compiles on modern macOS (including Apple Silicon) and Linu
   - Tested on macOS 15.7.2 (Sequoia)
 - **Linux**
   - x86_64, ARM64, ARM (32-bit)
+- **Windows 10/11** (x64), built with MSYS2's MinGW-w64
+  - Tested on Windows 11 with an HP TouchPad running webOS CE 3.1.0
 
 ## Prerequisites
 
@@ -45,6 +47,27 @@ sudo dnf install gcc make libusb-devel
 ```bash
 sudo pacman -S base-devel libusb-compat
 ```
+
+### Windows
+
+To just install it, you don't need to build anything: `install-windows.bat` at
+the repo root installs the prebuilt `windows\novacomd.exe`. To build it:
+
+Install [MSYS2](https://www.msys2.org/) (`winget install MSYS2.MSYS2`), open the
+**MSYS2 UCRT64** shell, and run `./build.sh` from this directory; it installs
+the packages itself. By hand:
+
+```bash
+pacman -S make mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-libusb mingw-w64-ucrt-x86_64-pkgconf
+make host
+```
+
+The result, `build-novacomd\novacomd.exe`, is statically linked and needs no
+DLLs. USB goes through libusb-1.0 over the WinUSB binding that HP's novacom
+driver package installs, so that driver is still required (`install-windows.bat`
+installs both). As Administrator, `novacomd.exe -i` registers it as the
+`NovacomD` service, taking over from HP's daemon, and `-u` removes it. See
+[../WINDOWS.md](../WINDOWS.md).
 
 ## Building
 

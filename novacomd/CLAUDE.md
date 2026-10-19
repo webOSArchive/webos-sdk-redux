@@ -157,6 +157,15 @@ The Makefile handles two separate build configurations:
 
 The code uses `PLATFORM_PTHREADS=1` to enable POSIX threads. On macOS, the makefile pretends it's Linux (`HOSTOS := linux`) to use the libusb-based USB implementation in `src/host/usb-linux.c`.
 
+Windows (`HOSTOS := windows`, from an MSYS2 MinGW-w64 shell) uses the same sources:
+`include/win32/` stands in for the POSIX socket headers, sockets go through
+`platform_closesocket()` / `platform_socket_cloexec()` / `platform_socket_nonblock()`
+(never `close()` or `fcntl()` on a socket), USB uses the libusb-1.0 backend in
+`usb-linux.c` (`USB_LIBUSB1=1`), and `src/host/service_win32.c` runs it as the
+`NovacomD` service (`-i` / `-u`). Don't draw ids from `rand()` on a thread other than
+the one that called `srand()`: the Windows CRT keeps its state per thread. See
+`../WINDOWS.md`.
+
 ## License
 
 Apache License 2.0 - Copyright (c) 2008-2012 Hewlett-Packard Development Company, L.P.

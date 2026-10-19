@@ -4,3 +4,6 @@ novacom/build-novacom
 installer-package
 set-apple-vars.sh
 *.pkg
+
+# Windows GUI installer output (installer-windows/build.ps1)
+installer-windows/Output/

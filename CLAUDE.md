@@ -46,8 +46,9 @@ novacom/                      # novacom client source + build/install scripts
 novacomd/                     # novacomd daemon source + build/install scripts
 novacom-tcp/                  # Wi-Fi novacom helper scripts + device firewall job
 pdk/                          # Native plug-in kit -> /opt/PalmPDK (see below)
-windows/                      # HP's novacom MSIs (x86 / x64) -- payload only
+windows/                      # HP's novacom MSIs (x86 / x64) + prebuilt x64 novacomd.exe
 installer-package/            # Staging area for the macOS driver .pkg
+installer-windows/            # Inno Setup script + build.ps1 for the Windows setup wizard
 
 install.sh                    # Installs all four parts (macOS / Linux)
 uninstall.sh                  # Removes all four parts (macOS / Linux)
@@ -181,8 +182,22 @@ identifier) with `com.palm.novacomd` (the launchd daemon label).
 `install-windows.bat` at the repo root (elevated) installs the SDK to
 `%ProgramFiles%\PalmSDK\<version>` with a `Current` **junction** — `mklink /J`,
 not a symlink, since junctions need no developer mode — the PDK to
-`C:\PalmPDK`, and novacom via HP's MSI. `uninstall-windows.bat` reverses
-it, except novacom, which must go through the MSI.
+`C:\PalmPDK`, and novacom via HP's MSI. It then copies this repo's
+`novacomd.exe` to `%ProgramFiles%\PalmSDK\novacomd` and runs `novacomd -i`, which
+repoints HP's `NovacomD` service at it (HP's path is saved first). The exe is a
+local `novacomd\build-novacomd\` build if present, else the committed
+`windows\novacomd.exe` (x64 only; 32-bit Windows keeps HP's). **Rebuild and
+recommit `windows\novacomd.exe` whenever novacomd's sources change**, with the
+version stamp, `strip` and SHA-256 steps in WINDOWS.md, or the installer ships
+stale code. `uninstall-windows.bat` reverses it, handing the service back to
+HP's novacomd, except novacom, which must go through the MSI.
+
+`installer-windows/webos-sdk-redux.iss` is the GUI equivalent, built by
+`installer-windows/build.ps1` into `installer-windows/Output/` (not committed;
+publish it as a release asset). It does the same steps from Pascal script, and
+keeps HP's service registration in `HKLM\SOFTWARE\webOS SDK Redux` rather than in
+the install folder. **Keep the two installers doing the same things**: a step
+added to one belongs in the other.
 
 Two things drive the whole design:
 
@@ -192,11 +207,20 @@ Two things drive the whole design:
   rather than a service name — which is not discoverable anyway, since
   `novacomd.exe` self-registers via `-i` and the MSI has no `ServiceInstall`
   table.
-- **novacom cannot be built from source on Windows.** `windows/NovacomInstaller_{x86,x64}.msi`
-  are HP's 2011 originals, committed deliberately. The driver binds Palm's USB
-  IDs to Microsoft's in-box WinUSB (no third-party kernel driver) and is
-  WHQL-signed, but with a SHA-1 catalog that modern Windows may reject. Untested
-  on hardware.
+- **The driver cannot be built from source on Windows; novacomd can.**
+  `windows/NovacomInstaller_{x86,x64}.msi` are HP's 2011 originals, committed
+  deliberately. The driver binds Palm's USB IDs to Microsoft's in-box WinUSB (no
+  third-party kernel driver) and is WHQL-signed with a SHA-1 catalog; an existing
+  install works on Windows 11, a fresh one from the MSI is untested. novacomd
+  builds with MSYS2 MinGW-w64 (UCRT64 shell, `novacomd/build.sh`), statically,
+  and reaches the device through that WinUSB binding with libusb-1.0. The
+  `novacom` client is still HP's.
+- **The Windows port is not a fork.** `novacomd/include/win32/` shims the POSIX
+  socket headers onto Winsock, `platform_closesocket()`/`_cloexec()`/`_nonblock()`
+  cover what Winsock spells differently, `host/usb-linux.c` carries a
+  libusb-1.0 backend beside the 0.1 one (`USB_LIBUSB1`), and
+  `host/service_win32.c` replaces daemonizing. Keep new host code on those
+  calls, not `close()`/`fcntl()` on sockets, so it still builds on Windows.
 
 `0.4/bin/palm-*.bat` are the Windows launchers, one per command, sharing
 `palm-common.bat` for Java detection. They were written from the bash scripts
@@ -352,5 +376,6 @@ standard way to declare dependencies in an Enyo app.
 - Mojo framework: 506
 - PDK: symbols only, from the OEM 3.0.5.676 `palmpdk.pkg` (no toolchains)
 - novacom / novacomd: built from source in this repo; `novacom -V` reports a
-  local build stamp rather than HP's original version number
+  local build stamp rather than HP's original version number. On Windows only
+  novacomd is; `novacom.exe` is HP's
 - Supported device OS: HP webOS 3.0.5 and webOS CE 3.1.0

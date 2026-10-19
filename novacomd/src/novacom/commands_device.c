@@ -52,6 +52,13 @@
 
 // === IO stuff here ===
 
+/*
+ * Serving get/put/connect from this side's own files selects over pipes and plain fds,
+ * which Windows can't do; a Windows host answers them as unrecognized commands. The SDK
+ * tools only ever send commands the other way, host to device.
+ */
+#if !defined(_WIN32)
+
 #define PIPE_READ 0
 #define PIPE_WRITE 1
 
@@ -684,6 +691,7 @@ static void novacom_start_tcp_connect(device_handle_t device_handle, int channel
 	novacom_retain_device_handle(device_handle);
 	platform_create_thread(NULL, &tcp_connect_thread, (void *)tc_args);
 }
+#endif // !_WIN32
 
 #if DEVICE
 static void novacom_spawn_shell(device_handle_t device_handle, int channel, const char *path, const char **args)
@@ -973,10 +981,12 @@ static struct {
 	void (*spawn)(device_handle_t device_handle, int chan, const char *path, const char **args);
 } iohandlers[] =
 {
+#if !defined(_WIN32)
 	{ "get", "file", novacom_start_file_send },
 	{ "put", "file", novacom_start_file_receive },
 	// no non-packet version of this, unless someone can think of a good reason
 	{ "connect", "tcp-port", novacom_start_tcp_connect },
+#endif
 #if DEVICE
 	{ "open", "tty", novacom_spawn_shell },
 	{ "run", "file", novacom_spawn_process },

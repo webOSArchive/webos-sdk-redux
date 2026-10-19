@@ -22,7 +22,9 @@
 #include <string.h>
 #include <errno.h>
 #include <limits.h>
+#ifndef _WIN32
 #include <pwd.h>
+#endif
 #include <unistd.h>
 #include <sys/stat.h>
 #include "novacom.h"
@@ -36,6 +38,8 @@
  * @brief handles save/read/delete token files on host side
  * Linux OS
  *   /root/.nova
+ * Windows (as the LocalSystem service)
+ *   C:\Windows\System32\config\systemprofile\.nova
  */
 
 /*
@@ -46,6 +50,20 @@
 static int tokenstorage_path(char *path, size_t len)
 {
 	int rc = 0;
+#ifdef _WIN32
+	const char *home = getenv("USERPROFILE");
+
+	if (!home || !*home) {
+		TRACEF("unable to recover home directory\n");
+		return -1;
+	}
+
+	/* create directory */
+	snprintf(path, len, "%s\\.nova\\", home);
+	LTRACEF("path %s\n", path);
+
+	rc = mkdir(path);
+#else
 	uid_t uid;
 	struct passwd *pw = NULL;
 
@@ -63,6 +81,7 @@ static int tokenstorage_path(char *path, size_t len)
 	LTRACEF("path %s\n", path);
 
 	rc = mkdir(path, S_IRWXU);
+#endif
 	if (rc && errno != EEXIST) {
 		TRACEF("unable to create .nova directory\n");
 		return -1;
@@ -77,7 +96,7 @@ static int tokenstorage_path(char *path, size_t len)
  */
 int tokenstorage_store(const char *file, void *buf, size_t len)
 {
-	char path[128];
+	char path[PATH_MAX];
 	size_t  rc=0;
 	FILE *fd = NULL;
 
@@ -112,7 +131,7 @@ int tokenstorage_store(const char *file, void *buf, size_t len)
 int tokenstorage_remove(const char *file)
 {
 	int rc;
-	char path[128];
+	char path[PATH_MAX];
 	/* check storage path */
 	rc = tokenstorage_path(path, sizeof(path));
 	if (-1 == rc) {
@@ -133,7 +152,7 @@ int tokenstorage_remove(const char *file)
  */
 int tokenstorage_read(const char *file, void *buf, size_t len)
 {
-	char path[128];
+	char path[PATH_MAX];
 	size_t rc;
 	FILE *fd;
 

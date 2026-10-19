@@ -100,7 +100,7 @@ static int adb_connect_server(void)
 		return -1;
 	fd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
 	if (fd >= 0 && connect(fd, res->ai_addr, res->ai_addrlen) != 0) {
-		close(fd);
+		platform_closesocket(fd);
 		fd = -1;
 	}
 	freeaddrinfo(res);
@@ -135,11 +135,15 @@ static int read_all(int fd, void *buf, size_t len)
 
 static void set_timeout(int fd, int ms)
 {
+#ifdef _WIN32
+	DWORD tv = ms;
+#else
 	struct timeval tv;
 	tv.tv_sec = ms / 1000;
 	tv.tv_usec = (ms % 1000) * 1000;
-	setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv));
-	setsockopt(fd, SOL_SOCKET, SO_SNDTIMEO, &tv, sizeof(tv));
+#endif
+	setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, (const char *)&tv, sizeof(tv));
+	setsockopt(fd, SOL_SOCKET, SO_SNDTIMEO, (const char *)&tv, sizeof(tv));
 }
 
 /* One adb request: "%04x<request>", answered OKAY or FAIL<len><message>. */
@@ -165,7 +169,7 @@ static int adb_open_lunacy(const char *serial, int timeout_ms)
 	if (timeout_ms) set_timeout(fd, timeout_ms);
 	snprintf(req, sizeof(req), "host:transport:%s", serial);
 	if (adb_request(fd, req) < 0 || adb_request(fd, "localabstract:" LUNACY_SOCKET) < 0) {
-		close(fd);
+		platform_closesocket(fd);
 		return -1;
 	}
 	return fd;
@@ -180,18 +184,18 @@ static int adb_devices(char *buf, size_t size)
 	if (fd < 0) return -1;
 	set_timeout(fd, IO_TIMEOUT_MS);
 	if (adb_request(fd, "host:devices") < 0 || read_all(fd, lenhex, 4) < 0) {
-		close(fd);
+		platform_closesocket(fd);
 		return -1;
 	}
 	lenhex[4] = 0;
 	len = (unsigned)strtoul(lenhex, NULL, 16);
 	if (len >= size) len = size - 1;
 	if (len && read_all(fd, buf, len) < 0) {
-		close(fd);
+		platform_closesocket(fd);
 		return -1;
 	}
 	buf[len] = 0;
-	close(fd);
+	platform_closesocket(fd);
 	return 0;
 }
 
@@ -251,7 +255,7 @@ static int lunacy_nduid(const char *serial, char nduid[NOVACOM_NDUID_STRLEN])
 	nduid[got] = 0;
 	rc = 0;
 done:
-	close(fd);
+	platform_closesocket(fd);
 	return rc;
 }
 
@@ -290,13 +294,13 @@ static void *splice_thread(void *arg)
 			}
 			if (done) break;
 		}
-		close(device);
+		platform_closesocket(device);
 	} else {
 		/* As a device's novacomd answers a command it can't start. */
 		const char *reply = "device not responding\n";
 		write_all(a->client, reply, strlen(reply) + 1);
 	}
-	close(a->client);
+	platform_closesocket(a->client);
 	platform_free(a);
 	return NULL;
 }
@@ -316,7 +320,7 @@ static void *accept_thread(void *arg)
 			splice_args_t *a;
 			if (c == INVALID_SOCKET) continue;
 			a = platform_calloc(sizeof(*a));
-			if (!a) { close(c); continue; }
+			if (!a) { platform_closesocket(c); continue; }
 			a->client = c;
 			pthread_mutex_lock(&relays_mutex);
 			snprintf(a->serial, sizeof(a->serial), "%s", r->serial);
@@ -324,12 +328,12 @@ static void *accept_thread(void *arg)
 			if (pthread_create(&t, NULL, splice_thread, a) == 0) {
 				pthread_detach(t);
 			} else {
-				close(c);
+				platform_closesocket(c);
 				platform_free(a);
 			}
 		}
 	}
-	close(r->listen);
+	platform_closesocket(r->listen);
 	platform_free(r);
 	return NULL;
 }
@@ -360,7 +364,7 @@ static void add_relay(const char *serial, const char *nduid)
 		pthread_mutex_lock(&relays_mutex);
 		relays = r->next;
 		pthread_mutex_unlock(&relays_mutex);
-		close(r->listen);
+		platform_closesocket(r->listen);
 		platform_free(r);
 	}
 }

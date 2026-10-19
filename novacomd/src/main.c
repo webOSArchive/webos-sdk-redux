@@ -37,6 +37,9 @@
 #include "host/adb_relay.h"
 #include "lib/cksum.h"
 #endif
+#if defined(_WIN32)
+#include "host/service_win32.h"
+#endif
 
 #include <termios.h>
 #include <sys/socket.h>
@@ -54,7 +57,7 @@ int g_recovery_timeout = TRANSPORT_RECOVERY_TIMEOUT;
 int g_usbio_retry_timeout = TRANSPORT_USBIO_RETRY_TIMEOUT;
 int g_usbio_retry_delay = 50;   //RETRANSMIT_WAIT_PERIOD=50ms
 int g_cpuaffinity = 0;
-#if !defined(W32)
+#if !defined(_WIN32)
 int g_daemonize = 0;
 #endif
 
@@ -157,7 +160,12 @@ void usage(void)
 	TRACEL(LOG_ALWAYS, "  -c <host>:<port>    connect to specified IP address\n"); 
 	TRACEL(LOG_ALWAYS, "  -e <io-retry-timeout>    timeout to retry packet I/O in milliesecond\n"); 
 	TRACEL(LOG_ALWAYS, "  -s <io-retry-delay>    delay to retry packet I/O in milliesecond\n"); 
+#if defined(_WIN32)
+	TRACEL(LOG_ALWAYS, "  -i                  install and start the NovacomD service (as Administrator)\n");
+	TRACEL(LOG_ALWAYS, "  -u, -d              stop and remove the NovacomD service (as Administrator)\n");
+#else
 	TRACEL(LOG_ALWAYS, "  -d                  run in the background\n");
+#endif
 	TRACEL(LOG_ALWAYS, "  -A                  don't look for Lunacy devices through adb\n");
 	TRACEL(LOG_ALWAYS, "  -V                  print version info\n");
 	TRACEL(LOG_ALWAYS, "  -h                  display this help\n");
@@ -183,7 +191,7 @@ static void unblock_main_loop(void)
 			return;
 		}
 		if ( connect(unblock_fd_write, (struct sockaddr *)&saddr, sizeof(saddr)) < 0) {
-			close(unblock_fd_write);
+			platform_closesocket(unblock_fd_write);
 			unblock_fd_write = INVALID_SOCKET;
 			TRACEL(LOG_ERROR, "unable to connect\n");
 			return;
@@ -192,7 +200,7 @@ static void unblock_main_loop(void)
 
 	char c = 0;
 	if (send(unblock_fd_write, &c, 1, 0) < 0) {
-		close(unblock_fd_write);
+		platform_closesocket(unblock_fd_write);
 		unblock_fd_write = INVALID_SOCKET;
 	}
 }
@@ -219,8 +227,8 @@ static int socketchan_read_callback(device_handle_t device_handle, uint32_t chan
 
 	written = send(sc->socket, (char *)buf + sc->partial_pos, len - sc->partial_pos, 0);
 	
-	if ((written == 0)|| ((written == -1) && (errno != EAGAIN) && (errno != 0))) {
-		TRACEL(LOG_TRACE, "novacom channel %d error: %d %d %d %d\n", channel, written, errno, len, sc->partial_pos);
+	if ((written == 0)|| ((written == -1) && (platform_socket_getlasterrno() != E_SOCKET_WOULDBLOCK) && (platform_socket_getlasterrno() != 0))) {
+		TRACEL(LOG_TRACE, "novacom channel %d error: %d %d %d %d\n", channel, written, platform_socket_getlasterrno(), len, sc->partial_pos);
 		sc->close = 1;
 		unblock_main_loop();
 	}
@@ -258,7 +266,7 @@ static void destroy_socketchan(socketchan_t *sc)
 	/* inform client */
 	if (sc->socket != INVALID_SOCKET) {
 		shutdown(sc->socket, SHUT_RDWR);
-		close(sc->socket);
+		platform_closesocket(sc->socket);
 		sc->socket = INVALID_SOCKET;
 	}
 	novacom_release_device_handle(sc->device_handle);
@@ -485,7 +493,7 @@ static void remove_device_ref(struct active_device *dev)
 
 		novacom_release_device_handle(dev->device_handle);
 
-		close(dev->socket);
+		platform_closesocket(dev->socket);
 		platform_free(dev->devid);
 		platform_free(dev->conntype);
 		platform_free(dev->devtype);
@@ -661,7 +669,7 @@ static int main_loop(void)
 		if( (unblock_fd_read != INVALID_SOCKET) && (FD_ISSET(unblock_fd_read, &fds)) ) {
 			char c;
 			if( recv(unblock_fd_read, &c, 1, 0) < 0) {
-				close(unblock_fd_read);
+				platform_closesocket(unblock_fd_read);
 				unblock_fd_read = INVALID_SOCKET;
 			}
 		}
@@ -696,7 +704,7 @@ static int main_loop(void)
 					}
 				}
 
-				close(newsocket);
+				platform_closesocket(newsocket);
 			}
 		}
 
@@ -706,7 +714,7 @@ static int main_loop(void)
 			SOCKET newsocket = accept_socket(device_list_socket);
 			if(newsocket != INVALID_SOCKET) {
 				dump_device_list(newsocket);
-				close(newsocket);
+				platform_closesocket(newsocket);
 			}
 		}
 
@@ -726,9 +734,9 @@ static int main_loop(void)
 				int rc = novacom_register_command(newsocket, NULL);
 				/* -1, 1: command is done */
 				if (rc)
-					close(newsocket);
+					platform_closesocket(newsocket);
 #else
-				close(newsocket);
+				platform_closesocket(newsocket);
 #endif
 			}
 		}
@@ -745,7 +753,7 @@ static int main_loop(void)
 				if(newsocket != INVALID_SOCKET) {
 
 					// Set non-blocking or novacomd will drop offline if the socket fills up
-					fcntl(newsocket, F_SETFL, fcntl(newsocket, F_GETFL) | O_NONBLOCK);
+					platform_socket_nonblock(newsocket);
 					novacom_register_client(dev, newsocket);
 				}
 			}
@@ -801,7 +809,7 @@ static int main_loop(void)
 }
 
 // commandline parsing stuff below
-static void novacomopt(int argc, char **argv)
+static int novacomopt(int argc, char **argv)
 {
 	SOCKET optsock;
 	struct sockaddr_in saddr;
@@ -830,7 +838,7 @@ static void novacomopt(int argc, char **argv)
 				if(valLen) {
 					send(optsock, val, lengths[1], 0);
 				}
-				close(optsock);
+				platform_closesocket(optsock);
 				optsock = socket(AF_INET, SOCK_STREAM, 0);
 				if(optsock != INVALID_SOCKET) {
 					if (connect(optsock, (struct sockaddr *)&saddr, sizeof(saddr)) != 0) {
@@ -844,18 +852,20 @@ static void novacomopt(int argc, char **argv)
 
 			if(optsock != INVALID_SOCKET) {
 				send(optsock, (const char*)nemo, sizeof(nemo), 0);
-				close(optsock);
+				platform_closesocket(optsock);
 			}
 #endif
 			
 			TRACEL(LOG_ALWAYS, "Cannot start novacomd twice!\n");
-			exit(0);
+			platform_closesocket(optsock);
+			return 1;
 		} else {
-			close(optsock);
+			platform_closesocket(optsock);
 		}
 	} else {
 		TRACEL(LOG_ERROR, "unable to create socket\n");
 	}
+	return 0;
 }
 
 int handleopt(const char *opt, const char *val)
@@ -876,8 +886,15 @@ int handleopt(const char *opt, const char *val)
 		exit(1);
 	} else if (strcmp("bind-all-interfaces", opt) == 0) {
 		g_listen_all = 1;
+#if defined(_WIN32)
+	} else if (strcmp("install-service", opt) == 0) {
+		exit(service_win32_install() < 0 ? 1 : 0);
+	} else if (strcmp("uninstall-service", opt) == 0) {
+		exit(service_win32_uninstall() < 0 ? 1 : 0);
+#else
 	} else if (strcmp("daemonize", opt) == 0) {
 		g_daemonize = 1;
+#endif
 	} else if (strcmp("recoverytimeout", opt) == 0) {
 		g_recovery_timeout = atol(val);
 		if (g_recovery_timeout < 2 || g_recovery_timeout > 5) {
@@ -916,7 +933,12 @@ int handleopt(const char *opt, const char *val)
 struct option longopts[] = {
 	{"connect-ip", required_argument, 0, 'c'},
 	{"bind-all-interfaces", no_argument, 0, 'b'},
+#if defined(_WIN32)
+	{"install-service", no_argument, 0, 'i'},
+	{"uninstall-service", no_argument, 0, 'u'},
+#else
 	{"daemonize", no_argument, 0, 'd'},
+#endif
 	{"version", no_argument, 0, 'V'},
 	{"no-adb", no_argument, 0, 'A'},
 	{0,0,0,0}
@@ -924,10 +946,10 @@ struct option longopts[] = {
 
 int getnextopt(int argc, char **argv, const char **opt, const char **val)
 {
-#if !defined(W32)
+#if !defined(_WIN32)
 	int c = getopt_long(argc, argv, "ht:c:e:s:bdCVA", longopts, NULL);
 #else
-	int c = getopt_long(argc, argv, "ht:c:e:s:bCVA", longopts, NULL);
+	int c = getopt_long(argc, argv, "ht:c:e:s:bCVAiud", longopts, NULL);
 #endif
 	*val = optarg;
 
@@ -941,9 +963,19 @@ int getnextopt(int argc, char **argv, const char **opt, const char **val)
 		case 'b':
 			*opt = "bind-all-interfaces";
 			return 1;
+#if defined(_WIN32)
+		case 'i':
+			*opt = "install-service";
+			return 1;
+		case 'u':
+		case 'd':	/* as HP's Windows novacomd */
+			*opt = "uninstall-service";
+			return 1;
+#else
 		case 'd':
 			*opt = "daemonize";
 			return 1;
+#endif
 		case 't':
 			*opt="recoverytimeout";
 			return 1;
@@ -987,11 +1019,13 @@ int parse_commandline (int argc, char **argv)
 	return err;
 }
 
-int main(int argc, char **argv)
+static int novacomd_main(int argc, char **argv)
 {
 	int err;
 
+#if !defined(_WIN32)
 	signal(SIGPIPE, SIG_IGN);
+#endif
 
 	platform_init();
 #if HOST
@@ -1013,8 +1047,11 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 
-	novacomopt(argc, argv);
+	/* another novacomd already has the ports; under the SCM this reports the service failed */
+	if (novacomopt(argc, argv))
+		return 0;
 
+#if !defined(_WIN32)
 	if (1 == g_daemonize) {
 		/* Our process ID and Session ID */
 		pid_t pid, sid;
@@ -1053,6 +1090,7 @@ int main(int argc, char **argv)
 		close(STDOUT_FILENO);
 		close(STDERR_FILENO);
 	}
+#endif
 
 	platform_mutex_init(&device_list_mutex);
 
@@ -1119,6 +1157,16 @@ int main(int argc, char **argv)
 	main_loop();
 
 	return 0;
+}
+
+int main(int argc, char **argv)
+{
+#if defined(_WIN32)
+	/* started by the service control manager: run as the NovacomD service */
+	if (service_win32_dispatch(novacomd_main, argc, argv))
+		return 0;
+#endif
+	return novacomd_main(argc, argv);
 }
 
 //do not submit...
@@ -1453,7 +1501,7 @@ static void destroy_socketcmd(socketcmd_t *sc)
 
 	/* close client socket */
 	if (sc->socket != INVALID_SOCKET) {
-		close(sc->socket);
+		platform_closesocket(sc->socket);
 		sc->socket = INVALID_SOCKET;
 	}
 
