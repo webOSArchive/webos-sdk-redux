@@ -54,18 +54,34 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command ^
 
 rem This repo's novacomd runs from under the SDK directory, so it has to let go of
 rem the NovacomD service before that directory can be deleted. HP's registration
-rem was saved by install-windows.bat; without it, the service is just removed.
+rem is in one of two places: hp-service.txt, saved by install-windows.bat, with the
+rem path on line 1 and the description on line 2; or the setup wizard's registry
+rem key, when the wizard took the service over first and the batch install ran on
+rem top. HP's path has spaces in it, under Program Files, so it goes back quoted
+rem in sc.exe's own form below: unquoted, Windows would try C:\Program.exe first.
+rem With neither, or with HP's novacomd.exe gone, the service is just removed.
+set "HP_PATH="
+set "HP_DESC="
+set "HP_KEY=HKLM\SOFTWARE\webOS SDK Redux"
 if exist "%NOVACOMD_DIR%\novacomd.exe" (
     net stop NovacomD >nul 2>&1
     if exist "%NOVACOMD_DIR%\hp-service.txt" (
-        rem Line 1 is HP's path, line 2 its description. The path has spaces in it,
-        rem under Program Files, so it goes back quoted in sc.exe's own form below:
-        rem unquoted, Windows would try C:\Program.exe first.
-        set "HP_PATH="
-        set "HP_DESC="
         for /f "usebackq delims=" %%L in ("%NOVACOMD_DIR%\hp-service.txt") do (
             if not defined HP_PATH (set "HP_PATH=%%~L") else if not defined HP_DESC set "HP_DESC=%%L"
         )
+    ) else (
+        for /f "tokens=2,*" %%a in ('reg query "%HP_KEY%" /v HPServicePath /reg:64 2^>nul') do (
+            if "%%a"=="REG_SZ" set "HP_PATH=%%~b"
+        )
+        for /f "tokens=2,*" %%a in ('reg query "%HP_KEY%" /v HPServiceDescription /reg:64 2^>nul') do (
+            if "%%a"=="REG_SZ" set "HP_DESC=%%b"
+        )
+    )
+    if defined HP_PATH if not exist "!HP_PATH!" (
+        echo [WARN] HP's novacomd is no longer at "!HP_PATH!"
+        set "HP_PATH="
+    )
+    if defined HP_PATH (
         sc config NovacomD binPath= "\"!HP_PATH!\"" >nul
         if defined HP_DESC sc description NovacomD "!HP_DESC!" >nul
         sc start NovacomD >nul
@@ -76,6 +92,8 @@ if exist "%NOVACOMD_DIR%\novacomd.exe" (
         )
     ) else (
         "%NOVACOMD_DIR%\novacomd.exe" -u
+        echo [INFO] HP's novacomd was not recorded, so the NovacomD service was removed.
+        echo        To get a working one back, run install-windows.bat again.
     )
 )
 
