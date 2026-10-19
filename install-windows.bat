@@ -190,7 +190,11 @@ if exist "%SDK_INSTALL_DIR%\!SDK_VER!" (
 )
 
 mkdir "%SDK_INSTALL_DIR%\!SDK_VER!" 2>nul
-robocopy "!SDK_SRC!" "%SDK_INSTALL_DIR%\!SDK_VER!" /E /NFL /NDL /NJH /NJS /NP >nul
+rem /R:2 /W:2 because robocopy's default is a million retries, 30s apart: a file it
+rem can't read, such as a Mac-side symlink seen through a VM's shared folder, would
+rem hang the install with nothing on screen. With /NFL /NDL /NJH /NJS it prints
+rem only errors, so nothing is sent to nul: a failure names the file and the cause.
+robocopy "!SDK_SRC!" "%SDK_INSTALL_DIR%\!SDK_VER!" /E /R:2 /W:2 /NFL /NDL /NJH /NJS /NP
 rem robocopy uses bitmapped exit codes; anything under 8 means success.
 if errorlevel 8 (
     echo [ERROR] Failed to copy the SDK
@@ -267,9 +271,12 @@ if "%DO_PDK%"=="0" (
         echo [WARN] "%REPO_ROOT%\pdk" not found - skipping PDK
     ) else (
         rem Only the host-agnostic parts. pdk\bin is bash and cannot run here.
+        rem /SL copies the PDK's 25 relative symlinks, libSDL.so and the like, as links.
+        rem Following them fails when they sit on a share, where Windows refuses to
+        rem evaluate a remote symlink by default; installed locally they resolve.
         for %%c in (include device share) do (
             if exist "%REPO_ROOT%\pdk\%%c" (
-                robocopy "%REPO_ROOT%\pdk\%%c" "%PDK_INSTALL_DIR%\%%c" /E /NFL /NDL /NJH /NJS /NP >nul
+                robocopy "%REPO_ROOT%\pdk\%%c" "%PDK_INSTALL_DIR%\%%c" /E /SL /R:2 /W:2 /NFL /NDL /NJH /NJS /NP
                 if errorlevel 8 ( echo [WARN] Failed to copy pdk\%%c ) else ( echo [OK]   PDK %%c )
             )
         )

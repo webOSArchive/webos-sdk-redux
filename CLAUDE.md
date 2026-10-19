@@ -33,9 +33,19 @@ maintainer's go-ahead.** Release assets go on a GitHub release tagged
 | `novacom-installer-x86_64.pkg` | Intel Mac Pro | Built, notarized, stapled and verified (pkg 3.1.0.1, `novacomd-3.1.0.1`, has Lunacy). SHA-256 `4062d7ee0170fced4fe32c1031793c749bf848edfcb1f874079f28c989ef8297`. At `~/Desktop/novacom-installer-x86_64.pkg` |
 | `novacom-installer-arm64.pkg` | Apple Silicon MacBook | Built, notarized, stapled and verified (pkg 3.1.0.1, `novacomd-3.1.0.1`, has Lunacy). SHA-256 `e9a878b29d663ca7bdc5c1da7884f25a48aa688c13ab195cfeb876d6e595ad1d`. On the Mac Pro at `~/Desktop/novacom-installer-arm64.pkg` |
 
-Still unverified: `install-windows.bat` → `uninstall-windows.bat` on Windows. The
-HP service hand-back was rewritten in `b4455e4`. After uninstalling,
-`sc qc NovacomD` must show HP's path in quotes.
+Windows batch scripts, still to verify on the VM (run from the share, elevated):
+
+1. `install-windows.bat` got through steps 1–3 but hung at 4/4, "Installing PDK".
+   The likely cause is the PDK's 25 symlinks (`pdk/device/lib/libSDL.so` and
+   others). Windows won't follow a symlink on a share by default, and robocopy
+   retried a million times with its output sent to nul. The fix: robocopy now
+   uses `/R:2 /W:2` and shows its errors, and the PDK copy adds `/SL`, which
+   copies links as links. Rerun it. It should finish, and
+   `dir C:\PalmPDK\device\lib\libSDL.so` should show `<SYMLINK>`. If it still
+   fails, the error robocopy now prints names the file and the cause. Report that
+   and `fsutil behavior query SymlinkEvaluation`.
+2. Then `uninstall-windows.bat`. The HP service hand-back was rewritten in
+   `b4455e4`. Afterwards, `sc qc NovacomD` must show HP's path in quotes.
 
 **Building a driver package** (either Mac). The 0.4 release's packages are not
 reusable; see "macOS driver installer" below.
