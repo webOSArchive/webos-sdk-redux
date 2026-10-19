@@ -241,14 +241,29 @@ build the setup wizard and to test the Windows installers. Things to know there:
   novacomd, and that is only necessary if `novacomd/src` or `novacomd/include`
   changed after the commit in WINDOWS.md's "novacomd on Windows" table. Check with
   `git log --oneline -1 -- novacomd/src novacomd/include`.
-- **`Current` may be a plain file.** Git checks symlinks out as text files unless
-  `core.symlinks` is on, which needs Developer Mode. If so, `Current` is a file
-  holding `./0.4.1`. `build.ps1` and `install-windows.bat` both cope with this.
-  Don't commit a change to `Current`; it must stay a symlink in git.
-- **Line endings.** The repo has no `.gitattributes`. `.bat` files are CRLF in git
-  and everything else is LF. With `core.autocrlf=true`, check `git diff --stat`
-  before committing, so a commit doesn't rewrite whole files. Never commit
-  `installer-windows/Output/` (it is gitignored).
+- **The VM usually works on the Mac's own working tree, through a shared
+  folder**, not a clone. So:
+  - **Leave git to the Mac.** Don't commit, stage, check out or run `git status`
+    from Windows. Git for Windows on a share means "dubious ownership" errors,
+    mode-bit and line-ending noise, and an index rewritten with Windows stat data.
+    Read-only `git log`/`git show` are fine. Edit files and say what changed; the
+    Mac side reviews and commits.
+  - **Keep line endings as they are.** The repo has no `.gitattributes`. `.bat`
+    files are CRLF and everything else is LF, and an editor on the VM must not
+    convert either.
+  - **`Current`** is a symlink on the Mac. Through the share it may look like a
+    plain directory (followed), a file, or a link. `build.ps1` handles all three
+    (as a directory, it takes the highest-numbered SDK folder), and
+    `install-windows.bat` never reads it. Never replace it.
+  - **Elevated prompts may not see the share's drive letter.** Drive mappings
+    belong to one logon session. In an Administrator prompt, use the UNC path
+    (`pushd \\Mac\...` maps a temporary letter) or remap it there.
+  - Inno Setup over a share is slow. `build.ps1 -OutputDir C:\some\local\dir`
+    builds faster; copy the exe back if the Mac side needs it.
+- In a real Windows clone instead, `Current` is a text file holding `./0.4.1`
+  unless `core.symlinks` is on (needs Developer Mode). Don't commit a change to
+  it.
+- Never commit `installer-windows/Output/` (gitignored).
 - **Elevation.** The installers, `novacomd -i`/`-u` and `sc config` need an
   Administrator prompt. Building the wizard does not.
 

@@ -15,10 +15,21 @@ param(
 $ErrorActionPreference = 'Stop'
 $repo = Split-Path -Parent $PSScriptRoot
 
-# Current is a symlink in git; on a checkout without symlinks it is a file holding "./0.4.1"
+# Current is a symlink in git; on a checkout without symlinks it is a file holding "./0.4.1",
+# and on a folder shared from a Mac or Linux host it can show up as the directory it points at,
+# which no longer says which one: then take the highest-numbered SDK folder, as install.sh does
 $current = Join-Path $repo 'Current'
 $item = Get-Item $current
-if ($item.LinkType) { $target = $item.Target | Select-Object -First 1 } else { $target = (Get-Content $current -Raw).Trim() }
+if ($item.LinkType) {
+	$target = $item.Target | Select-Object -First 1
+} elseif (-not $item.PSIsContainer) {
+	$target = (Get-Content $current -Raw).Trim()
+} else {
+	$target = Get-ChildItem $repo -Directory | Where-Object { $_.Name -match '^[0-9][0-9.]*$' } |
+		Sort-Object { [version]($_.Name + ('.0' * (3 - ($_.Name.Split('.').Count - 1)))) } |
+		Select-Object -Last 1 -ExpandProperty Name
+	if (-not $target) { throw "Current is a directory and there is no numbered SDK folder beside it" }
+}
 $version = Split-Path -Leaf $target
 if (-not (Test-Path (Join-Path $repo "$version\share\jars\webos-tools.jar"))) { throw "Current points at '$target', which is not an SDK tree" }
 
