@@ -2870,7 +2870,10 @@ var a = (new Date).getTime(), b = 0, c, d, e = enyo.bind(this, function() {
 var f = (new Date).getTime();
 this.job = enyo.requestAnimationFrame(e);
 var g = f - a;
-a = f, this.dragging && (this.y0 = this.y = this.uy, this.x0 = this.x = this.ux), b += g, this.fixedTime && !this.isInOverScroll() && (b = this.interval), b = this.simulate(b), d != this.y || c != this.x ? this.scroll() : this.dragging || (this.stop(!0), this.scroll()), d = this.y, c = this.x;
+a = f, this.dragging && (this.y0 = this.y = this.uy, this.x0 = this.x = this.ux), b += g, this.fixedTime && !this.isInOverScroll() && (b = this.interval);
+// Lunacy (patch 0014): a frame shorter than one step (10 ms; most frames above 100 Hz) is no stall.
+var h = b >= this.frame;
+b = this.simulate(b), d != this.y || c != this.x ? this.scroll() : this.dragging || !h || (this.stop(!0), this.scroll()), d = this.y, c = this.x;
 });
 this.job = enyo.requestAnimationFrame(e);
 },

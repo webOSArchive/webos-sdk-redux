@@ -157,13 +157,18 @@ enyo.kind({
 			if (this.fixedTime && !this.isInOverScroll()) {
 				t = this.interval;
 			}
+			// Lunacy (patch 0014): a frame shorter than one simulation step moves nothing, and
+			// on a screen faster than 100 Hz (the Galaxy Z Fold3's 120) most frames are. That
+			// is not a stall: only a frame that stepped and stood still ends the animation, or
+			// every flick stopped dead and an overscroll stayed where it was let go.
+			var stepped = t >= this.frame;
 			// consume some t in simulation
 			t = this.simulate(t);
 			// scroll if we have moved, otherwise the animation is stalled and we can stop
 			if (y0 != this.y || x0 != this.x) {
 				//this.log(this.y, y0);
 				this.scroll();
-			} else if (!this.dragging) {
+			} else if (!this.dragging && stepped) {
 				this.stop(true);
 				this.scroll();
 			}
