@@ -13481,6 +13481,10 @@ Tellurium.setup(window.enyo), console.log("Tellurium loading...");
 			if (!self.hasNode() || self._lunacyId) { return; }
 			self._lunacyId = N.webViewCreate(String(self.identifier || ""));
 			live[self._lunacyId] = self;
+			// A view made in a frame (webOS's cross-app UI: an account's sign-in page) hears its
+			// events there: Lunacy sends them to the main frame, which hands them on to the frame
+			// that says it owns the view (bridge.js), as it hands on the frame's bus replies.
+			if (window.top !== window) { try { window.top.postMessage("lunacyWebViewOwner=" + self._lunacyId, "*"); } catch (e) {} }
 			self.serverConnected();
 			self._lunacyPlace(true);
 			watch();
