@@ -713,6 +713,14 @@ enyo.kind({
 			// events there: Lunacy sends them to the main frame, which hands them on to the frame
 			// that says it owns the view (bridge.js), as it hands on the frame's bus replies.
 			if (window.top !== window) { try { window.top.postMessage("lunacyWebViewOwner=" + self._lunacyId, "*"); } catch (e) {} }
+			// A frame is taken away without its controls being destroyed (Accounts closing an
+			// account's page): its views go with it, or they would stay on the card.
+			if (window.top !== window && !window._lunacyViewsGoWithFrame) {
+				window._lunacyViewsGoWithFrame = true;
+				window.addEventListener("unload", function () {
+					for (var k in live) { try { N.webViewDestroy(Number(k)); } catch (e) {} delete live[k]; }
+				});
+			}
 			self.serverConnected();
 			self._lunacyPlace(true);
 			watch();
