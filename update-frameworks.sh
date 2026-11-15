@@ -58,8 +58,8 @@ M="$F/mojo/506"
 done
 # Lunacy's Mojo patches that a desktop browser reaches. 0001 and 0002 change the builtins that
 # webOS's browser had compiled in, which a desktop page never loads (it takes javascripts/);
-# 0003 is the stylesheet a scene's height comes from.
-for name in 0003-scene-fills-its-scroller; do
+# 0003 is the stylesheet a scene's height comes from, 0005 the one a dashboard's count badge does.
+for name in 0003-scene-fills-its-scroller 0005-dashboard-count-on-one-line; do
     p="$LUNACY/LunaRuntimes/mojo/patches/$name.patch"
     [ -e "$p" ] || continue
     # The patch names submissions/506/...; here the submission is the folder itself.
