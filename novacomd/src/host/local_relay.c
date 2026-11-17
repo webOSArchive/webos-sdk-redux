@@ -16,9 +16,12 @@
  * the way a client reads it, `get file:///proc/nduid`.
  *
  * Where the sockets are (DesktopNovacom.kt in Lunacy):
- *   Linux, macOS  /tmp/luna-de-<uid>/novacom-<pid>.sock, in a folder of that user's that only
- *                 they can open. A folder or socket owned by anyone else is passed over, so
- *                 nobody can list a device in another user's name.
+ *   Linux         /run/user/<uid>/luna-de/novacom-<pid>.sock, in the user's runtime folder
+ *                 ($XDG_RUNTIME_DIR), which systemd's PrivateTmp doesn't hide;
+ *   macOS         /tmp/luna-de-<uid>/novacom-<pid>.sock (and Linux without a runtime folder).
+ *                 Either way in a folder of that user's that only they can open. A folder or
+ *                 socket owned by anyone else is passed over, so nobody can list a device in
+ *                 another user's name.
  *   Windows       %ProgramData%\luna-de\novacom-<pid>.sock (AF_UNIX, Windows 10 1803 and later).
  *
  * Turn the search off with -L (--no-local).
@@ -351,33 +354,50 @@ static void search(void)
 
 #else
 
+/* The sockets in one copy's folder, if the folder is uid's own and closed to everyone else. */
+static void search_folder(const char *dir, unsigned long uid)
+{
+	char path[PATH_MAX_LEN];
+	struct stat st;
+	DIR *d;
+	struct dirent *s;
+	if (lstat(dir, &st) != 0 || !S_ISDIR(st.st_mode) || st.st_uid != uid || (st.st_mode & 077)) return;
+	if (!(d = opendir(dir))) return;
+	while ((s = readdir(d))) {
+		if (!is_socket_name(s->d_name)) continue;
+		snprintf(path, sizeof(path), "%s/%s", dir, s->d_name);
+		if (lstat(path, &st) != 0 || !S_ISSOCK(st.st_mode) || st.st_uid != uid) continue;
+		found(path);
+	}
+	closedir(d);
+}
+
+/* Each entry of parent named <prefix><uid>, as folder (with suffix) to search for that uid. */
+static void search_under(const char *parent, const char *prefix, const char *suffix)
+{
+	DIR *p = opendir(parent);
+	struct dirent *e;
+	size_t n = strlen(prefix);
+	if (!p) return;
+	while ((e = readdir(p))) {
+		char dir[PATH_MAX_LEN], *end;
+		unsigned long uid;
+		if (strncmp(e->d_name, prefix, n) != 0) continue;
+		uid = strtoul(e->d_name + n, &end, 10);
+		if (end == e->d_name + n || *end) continue;
+		snprintf(dir, sizeof(dir), "%s/%s%s", parent, e->d_name, suffix);
+		search_folder(dir, uid);
+	}
+	closedir(p);
+}
+
 static void search(void)
 {
-	DIR *tmp = opendir("/tmp");
-	struct dirent *e;
-	if (!tmp) return;
-	while ((e = readdir(tmp))) {
-		char dir[PATH_MAX_LEN], path[PATH_MAX_LEN], *end;
-		unsigned long uid;
-		struct stat st;
-		DIR *d;
-		struct dirent *s;
-		if (strncmp(e->d_name, "luna-de-", 8) != 0) continue;
-		uid = strtoul(e->d_name + 8, &end, 10);
-		if (end == e->d_name + 8 || *end) continue;
-		snprintf(dir, sizeof(dir), "/tmp/%s", e->d_name);
-		/* The user's own folder, closed to everyone else, or nothing in it is theirs. */
-		if (lstat(dir, &st) != 0 || !S_ISDIR(st.st_mode) || st.st_uid != uid || (st.st_mode & 077)) continue;
-		if (!(d = opendir(dir))) continue;
-		while ((s = readdir(d))) {
-			if (!is_socket_name(s->d_name)) continue;
-			snprintf(path, sizeof(path), "%s/%s", dir, s->d_name);
-			if (lstat(path, &st) != 0 || !S_ISSOCK(st.st_mode) || st.st_uid != uid) continue;
-			found(path);
-		}
-		closedir(d);
-	}
-	closedir(tmp);
+	/* The user's runtime folder (Linux, $XDG_RUNTIME_DIR): systemd's PrivateTmp, which the
+	 * service novacomd runs as here has, hides the real /tmp from it. */
+	search_under("/run/user", "", "/luna-de");
+	/* /tmp, where there is no runtime folder (macOS). */
+	search_under("/tmp", "luna-de-", "");
 }
 
 #endif

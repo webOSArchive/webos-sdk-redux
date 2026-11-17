@@ -114,7 +114,9 @@ $ palm-log -d luna-de -f com.example.app
 ```
 
 Each running copy of Luna DE listens on a Unix-domain socket of the user running it:
-`/tmp/luna-de-<uid>/novacom-<pid>.sock` on Linux and macOS, in a folder only that user can open,
+`$XDG_RUNTIME_DIR/luna-de/novacom-<pid>.sock` (`/run/user/<uid>`) on Linux, since the systemd
+service's `PrivateTmp` hides the real `/tmp` from novacomd; `/tmp/luna-de-<uid>/novacom-<pid>.sock`
+on macOS (and a Linux without a runtime folder); each in a folder only that user can open;
 and `%ProgramData%\luna-de\novacom-<pid>.sock` on Windows (AF_UNIX, Windows 10 1803 and later).
 novacomd (`novacomd/src/host/local_relay.c`) looks there every few seconds, reads each copy's
 nduid with `get file:///proc/nduid`, gives it a port and splices each client connection to the
@@ -124,10 +126,13 @@ search off. Luna DE's build info says `Lunacy Luna DE`, which `webos-tools.jar` 
 recognises.
 
 Luna DE runs no program of the host's for a command. A `run` is one of its own few commands,
-held inside its webOS root: `luna-send`, `tail` (`-f`, for `palm-log`), `cat`, `ls`, `mkdir`,
+held inside its webOS root: `luna-send`, `tail` (`-f`, for `palm-log -f`), `grep` (`palm-log`),
+`cat`, `ls`, `mkdir`,
 `rm`, `rmdir`, `uname`, and `sh -c` holding one of those, which is everything `palm-install`,
 `palm-launch`, `palm-log` and `palm-run` send. Anything else answers `file does not exist`.
 `get` and `put` reach files in the root only. `open tty://` (`novaterm`) and package scripts
 aren't there yet: they need a shell held inside the root on every host.
 
-Built and checked on Linux (2026-11-17); not yet built for Windows or macOS.
+Built and checked on Linux (2026-11-17) with the installed service: `palm-install` (and `--list`,
+`-r`), `palm-launch` (and `-c`), `palm-log` (and `-f`) and `palm-run` against `-d luna-de`. Not yet
+built for Windows or macOS.
