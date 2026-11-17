@@ -1,7 +1,10 @@
 # novacomd: gcc 15 / C23 `bool` build break
 
-*Found 2026-10-17, while porting novacomd to Windows. Not yet fixed. This is the
-handoff for fixing it on Linux.*
+*Found 2026-10-17, while porting novacomd to Windows. **Fixed 2026-11-17 for 0.5**, as
+"The fix" below says: `<stdbool.h>` in `platform.h`, and the Windows branch's `-std=gnu11`
+dropped. Checked on Linux with gcc 13 under `-std=gnu2x`, which makes `bool` a keyword as
+gcc 15's default does (the old header fails there with "two or more data types in declaration
+specifiers"); a real gcc 15 build is still to do. The rest of this page is the original handoff.*
 
 ## Summary
 
@@ -167,8 +170,9 @@ Then smoke-test against a device as usual: `novacom -l`, then
 Done looks like:
 
 - [ ] `make host` succeeds with gcc 15+ and no `-std` flag
-- [ ] it still succeeds with `-std=gnu11` (older distros, and the ARM device build)
-- [ ] a device lists and answers `run`
+- [x] it still succeeds with `-std=gnu11` (older distros; the ARM device build not tried)
+- [x] a device lists and answers `run` (2026-11-17: TouchPad on USB, a Lunacy device on adb and
+      Luna DE, with the build installed as the service)
 - [ ] the Windows makefile branch no longer passes `-std=gnu11`, and a Windows
       rebuild confirms it
 

@@ -20,6 +20,8 @@ The easiest, and most common deployment will use all four parts, but you can als
 - **novacomd finds Luna DE** on the same machine, with no adb and no emulator: `novacom -l` lists
   it as `local luna-de`, and `palm-install`, `palm-launch`, `palm-log` and `palm-run` work against
   `-d luna-de`. `novacomd -L` turns this off. See [LUNACY.md](LUNACY.md#luna-de).
+- **novacomd builds with gcc 15** (Fedora 42, Arch and other distros whose compiler defaults
+  to C23), which 0.4.1 didn't. See [GCC15-C23-BOOL.md](GCC15-C23-BOOL.md).
 - **Enyo and Mojo fixes from Lunacy** (Enyo's 0013 to 0017, Mojo's 0005 and
   compat-mutation-events): the spinner at high density, scrolling at 120 Hz, WebViews in frames,
   dashboards at any width, a dashboard's count on one line, removal events in order. See
@@ -49,6 +51,7 @@ A Windows release: Windows now gets what macOS and Linux got in 0.4. Thanks to
   versioning convention.
 - Known issue: novacomd doesn't build with gcc 15 or later on Linux (C23 makes
   `bool` a keyword). This predates the port. See [GCC15-C23-BOOL.md](GCC15-C23-BOOL.md).
+  *(Fixed in 0.5.)*
 
 ## What was new in 0.4
 
@@ -240,14 +243,26 @@ There is nothing to set up beyond adb itself. See [LUNACY.md](LUNACY.md).
 ## Luna DE
 
 Luna DE is Lunacy on your desktop: webOS apps in a TouchPad- or Pre3-shaped window (or full
-screen), with the same bus, db8 and JS services Lunacy runs on Android. Download its package for
-your system from this release and run it; with this SDK's novacomd installed, the tools find it:
+screen), with the same bus, db8 and JS services Lunacy runs on Android. Its version is the SDK
+version it goes with. Download its package for your system from this release and run it; it
+carries its own Java and Node, so it needs nothing else installed. With this SDK's novacomd
+running, the tools find it:
 
 ```
 $ novacom -l
 45233 6bff51fb47cb7aec05e6a806d87dc5927e65f8aa local luna-de
 $ palm-run -d luna-de myapp/
 ```
+
+On Linux:
+
+- **Start novacomd's service.** `install.sh` creates it but doesn't start it:
+  `sudo systemctl enable --now novacomd`. If you installed 0.4.1 or earlier, run `install.sh`
+  again first; older novacomd doesn't look for Luna DE.
+- **The AppImage needs FUSE 2**, which many recent distros leave out: `sudo apt install
+  libfuse2t64` on Ubuntu 24.04 (`libfuse2` on older Ubuntu and Debian), `sudo dnf install
+  fuse-libs` on Fedora. Without it, run the AppImage with `--appimage-extract-and-run`, or use
+  the `.tar.gz` and start the `luna-de` program inside it.
 
 Luna DE runs none of your machine's programs for the tools, only its own few commands inside
 its webOS root, so `novaterm` and packages' install scripts aren't available there yet. See

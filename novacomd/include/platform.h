@@ -64,9 +64,7 @@ typedef struct platform_event {
 
 typedef pthread_t platform_thread_t;
 
-typedef int bool;
-#define true 1
-#define false 0
+#include <stdbool.h>
 
 typedef struct platform_time {
 	struct timeval time;

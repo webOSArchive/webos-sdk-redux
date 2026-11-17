@@ -117,7 +117,7 @@ else ifneq ($(filter MINGW% UCRT% CLANG%,$(UNAME)),)
 	EXE := .exe
 	CC := gcc
 	LIBUSB_CFLAGS := $(shell pkg-config --cflags libusb-1.0)
-	HOSTCFLAGS += -std=gnu11 -Iinclude/win32 -DWIN32_LEAN_AND_MEAN -D_WIN32_WINNT=0x0601 \
+	HOSTCFLAGS += -Iinclude/win32 -DWIN32_LEAN_AND_MEAN -D_WIN32_WINNT=0x0601 \
 		-DFD_SETSIZE=1024 -DUSB_LIBUSB1=1 $(LIBUSB_CFLAGS)
 	LDFLAGS += -static
 	HOSTLDLIBS += -lusb-1.0 -lpthread -lws2_32 -ladvapi32 -lsetupapi -lole32
