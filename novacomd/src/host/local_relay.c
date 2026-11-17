@@ -22,7 +22,8 @@
  *                 Either way in a folder of that user's that only they can open. A folder or
  *                 socket owned by anyone else is passed over, so nobody can list a device in
  *                 another user's name.
- *   Windows       %ProgramData%\luna-de\novacom-<pid>.sock (AF_UNIX, Windows 10 1803 and later).
+ *   Windows       %ProgramData%\luna-de\<user>\novacom-<pid>.sock (AF_UNIX, Windows 10 1803 and
+ *                 later), in a folder Luna DE makes private to that user and SYSTEM.
  *
  * Turn the search off with -L (--no-local).
  */
@@ -334,20 +335,39 @@ static int is_socket_name(const char *name)
 
 #ifdef _WIN32
 
-static void search(void)
+/* The sockets in one user's folder, %ProgramData%\luna-de\<user>. */
+static void search_folder(const char *dir)
 {
-	char dir[MAX_PATH], pattern[MAX_PATH + 32], path[PATH_MAX_LEN];
+	char pattern[PATH_MAX_LEN], path[PATH_MAX_LEN];
 	WIN32_FIND_DATAA fd;
 	HANDLE h;
-	DWORD n = GetEnvironmentVariableA("ProgramData", dir, sizeof(dir));
-	if (n == 0 || n >= sizeof(dir)) snprintf(dir, sizeof(dir), "C:\\ProgramData");
-	snprintf(pattern, sizeof(pattern), "%s\\luna-de\\novacom-*.sock", dir);
+	snprintf(pattern, sizeof(pattern), "%s\\novacom-*.sock", dir);
 	h = FindFirstFileA(pattern, &fd);
 	if (h == INVALID_HANDLE_VALUE) return;
 	do {
 		if (!is_socket_name(fd.cFileName)) continue;
-		snprintf(path, sizeof(path), "%s\\luna-de\\%s", dir, fd.cFileName);
+		snprintf(path, sizeof(path), "%s\\%s", dir, fd.cFileName);
 		found(path);
+	} while (FindNextFileA(h, &fd));
+	FindClose(h);
+}
+
+static void search(void)
+{
+	char base[MAX_PATH], pattern[MAX_PATH + 32], dir[PATH_MAX_LEN];
+	WIN32_FIND_DATAA fd;
+	HANDLE h;
+	DWORD n = GetEnvironmentVariableA("ProgramData", base, sizeof(base));
+	if (n == 0 || n >= sizeof(base)) snprintf(base, sizeof(base), "C:\\ProgramData");
+	/* Each user's own folder, which Luna DE makes private to them and SYSTEM. */
+	snprintf(pattern, sizeof(pattern), "%s\\luna-de\\*", base);
+	h = FindFirstFileA(pattern, &fd);
+	if (h == INVALID_HANDLE_VALUE) return;
+	do {
+		if (!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) || fd.cFileName[0] == '.') continue;
+		if (fd.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) continue;
+		snprintf(dir, sizeof(dir), "%s\\luna-de\\%s", base, fd.cFileName);
+		search_folder(dir);
 	} while (FindNextFileA(h, &fd));
 	FindClose(h);
 }

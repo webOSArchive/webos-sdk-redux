@@ -131,8 +131,9 @@ fi
 # two different payloads under one version makes an installed package
 # indistinguishable from an older one via `pkgutil --pkg-info`.
 PKG_IDENTIFIER="com.palm.novacom"
-PKG_VERSION="3.1.0.1"
+PKG_VERSION="3.1.0.2"
 #
+# 3.1.0.2: the 0.5 rebuild: novacomd finds Luna DE on the same machine (local_relay.c).
 # 3.1.0.1: the 0.4.1 rebuild. The packages published with 0.3 and 0.4 carried an
 # older novacomd (no Lunacy/adb support) under --version 1.0.0; this is the
 # first with the Lunacy relay.

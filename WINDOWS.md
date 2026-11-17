@@ -211,7 +211,7 @@ one when it exists. To refresh the committed binary after changing novacomd
 `strip` drops the debug info, which holds local paths):
 
 ```bash
-make spotless && BUILDVERSION=redux-0.4.1-$(git rev-parse --short HEAD) make host
+make spotless && BUILDVERSION=redux-0.5-$(git rev-parse --short HEAD) make host
 strip -o ../windows/novacomd.exe build-novacomd/novacomd.exe
 sha256sum ../windows/novacomd.exe   # update the table above
 ```

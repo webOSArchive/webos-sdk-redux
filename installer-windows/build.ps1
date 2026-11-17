@@ -15,7 +15,7 @@ param(
 $ErrorActionPreference = 'Stop'
 $repo = Split-Path -Parent $PSScriptRoot
 
-# Current is a symlink in git; on a checkout without symlinks it is a file holding "./0.4.1",
+# Current is a symlink in git; on a checkout without symlinks it is a file holding "./0.5",
 # and on a folder shared from a Mac or Linux host it can show up as the directory it points at,
 # which no longer says which one: then take the highest-numbered SDK folder, as install.sh does
 $current = Join-Path $repo 'Current'

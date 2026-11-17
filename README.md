@@ -1,4 +1,4 @@
-# PalmSDK 0.4.1 Overview
+# PalmSDK 0.5 Overview
 
 This is a modernization of the 2011-era webOS SDK and driver for the Palm/HP mobile operating system. It works with devices like the Palm Pre or the HP TouchPad on modern desktop platforms.
 
@@ -11,7 +11,21 @@ The SDK consists of four parts, most of which were initially distributed separat
 
 The easiest, and most common deployment will use all four parts, but you can also pick and choose based on your needs.
 
-## What's new in 0.4.1
+## What's new in 0.5
+
+- **Luna DE.** [Luna DE](https://github.com/webOSArchive/Lunacy/blob/luna-de/Docs/luna-de.md),
+  Lunacy's desktop shell, runs webOS apps on Linux, macOS and Windows: the TouchPad's launcher,
+  cards and Just Type, the bus, db8 and JS services, for developing and testing apps without a
+  device. Its packages are part of this release. See [Luna DE](#luna-de) below.
+- **novacomd finds Luna DE** on the same machine, with no adb and no emulator: `novacom -l` lists
+  it as `local luna-de`, and `palm-install`, `palm-launch`, `palm-log` and `palm-run` work against
+  `-d luna-de`. `novacomd -L` turns this off. See [LUNACY.md](LUNACY.md#luna-de).
+- **Enyo and Mojo fixes from Lunacy** (Enyo's 0013 to 0017, Mojo's 0005 and
+  compat-mutation-events): the spinner at high density, scrolling at 120 Hz, WebViews in frames,
+  dashboards at any width, a dashboard's count on one line, removal events in order. See
+  [FRAMEWORKS.md](FRAMEWORKS.md).
+
+## What was new in 0.4.1
 
 A Windows release: Windows now gets what macOS and Linux got in 0.4. Thanks to
 [@achunt2143](https://github.com/achunt2143) for the port.
@@ -100,11 +114,11 @@ This is optional, but useful for some SDK operations and device troubleshooting
 If you want to build webOS applications, you'll need the SDK. You don't strictly have to install it, but it can be helpful to have it in your path. Typically you'll install this in the same place as novacom (if you built it).
 
 - Ensure you have installed novacomd and novacom
-- Run `./install-<platform>.sh` from the `0.4.1` folder
+- Run `./install-<platform>.sh` from the `0.5` folder
 
 The SDK ships in a numbered folder that changes with each release, with a
 `Current` symlink beside it. The installer mirrors that layout where it installs
-— `/opt/PalmSDK/Current -> /opt/PalmSDK/0.4.1` by default — and the `palm-*`
+— `/opt/PalmSDK/Current -> /opt/PalmSDK/0.5` by default — and the `palm-*`
 commands it puts on your PATH point *through* `Current`. Switching or rolling
 back a version is therefore one command, with no reinstall:
 
@@ -222,6 +236,22 @@ $ palm-log -d lunacy -f com.example.app
 ```
 
 There is nothing to set up beyond adb itself. See [LUNACY.md](LUNACY.md).
+
+## Luna DE
+
+Luna DE is Lunacy on your desktop: webOS apps in a TouchPad- or Pre3-shaped window (or full
+screen), with the same bus, db8 and JS services Lunacy runs on Android. Download its package for
+your system from this release and run it; with this SDK's novacomd installed, the tools find it:
+
+```
+$ novacom -l
+45233 6bff51fb47cb7aec05e6a806d87dc5927e65f8aa local luna-de
+$ palm-run -d luna-de myapp/
+```
+
+Luna DE runs none of your machine's programs for the tools, only its own few commands inside
+its webOS root, so `novaterm` and packages' install scripts aren't available there yet. See
+[LUNACY.md](LUNACY.md#luna-de).
 
 ## Novacom over Wi-Fi (TCP)
 

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-This is **PalmSDK 0.4.1 (Redux)** — a modernization of the 2011-era HP webOS SDK
+This is **PalmSDK 0.5 (Redux)** — a modernization of the 2011-era HP webOS SDK
 (3.0.5) and its USB driver stack, so that Palm/HP devices like the Palm Pre and
 HP TouchPad can still be developed against from current macOS and Linux hosts.
 
@@ -23,7 +23,7 @@ below, which is the one place that distinction has bitten us.
 ## Repository layout
 
 ```
-0.4.1/                        # The SDK itself — see "SDK versioning" below
+0.5/                          # The SDK itself — see "SDK versioning" below
 ├── bin/                      # Command-line tools (palm-* commands)
 ├── install-sdk-macos.sh      # SDK-only installers
 ├── install-sdk-linux.sh
@@ -40,7 +40,7 @@ below, which is the one place that distinction has bitten us.
     └── samplecode/
         ├── enyo/             # Enyo examples and templates
         └── mojo/             # Mojo examples and samples
-Current -> ./0.4.1            # Always points at the current SDK version
+Current -> ./0.5              # Always points at the current SDK version
 
 novacom/                      # novacom client source + build/install scripts
 novacomd/                     # novacomd daemon source + build/install scripts
@@ -62,8 +62,8 @@ set-apple-vars.sh             # Apple signing/notarization credentials
 ### SDK versioning
 
 The SDK lives in a **numbered folder that is renamed each release** (`0.2` →
-`0.3` → `0.4` → `0.4.1` → …), with a `Current` symlink alongside it. The same
-convention is reproduced at install time: `$SDK_INSTALL_DIR/Current -> $SDK_INSTALL_DIR/0.4.1`.
+`0.3` → `0.4` → `0.4.1` → `0.5` → …), with a `Current` symlink alongside it. The same
+convention is reproduced at install time: `$SDK_INSTALL_DIR/Current -> $SDK_INSTALL_DIR/0.5`.
 
 Because of this, **prefer `Current/` over a hardcoded version number** in
 scripts and docs — e.g. `Current/share/jars/webos-tools.jar`. The installers
@@ -86,7 +86,7 @@ Or piecemeal — build novacomd first, since novacom installs alongside it:
 ```bash
 cd novacomd && ./build.sh          # offers to install on success
 cd novacom  && ./build.sh
-cd 0.4.1    && sudo ./install-sdk-macos.sh    # or install-sdk-linux.sh
+cd 0.5      && sudo ./install-sdk-macos.sh    # or install-sdk-linux.sh
 cd pdk      && sudo ./install-pdk.sh          # same script on both platforms
 ```
 
@@ -97,7 +97,7 @@ SDK versions is just `ln -sfn`, not a reinstall.
 
 ## Device version detection (important)
 
-`0.4.1/share/jars/webos-tools.jar` in this repo is **patched** and is not
+`0.5/share/jars/webos-tools.jar` in this repo is **patched** and is not
 byte-identical to HP's original.
 
 Every `palm-*` tool resolves the device's OS version before doing anything else,
@@ -270,7 +270,7 @@ build the setup wizard and to test the Windows installers. Things to know there:
     (`pushd \\Mac\...` maps a temporary letter) or remap it there.
   - Inno Setup over a share is slow. `build.ps1 -OutputDir C:\some\local\dir`
     builds faster; copy the exe back if the Mac side needs it.
-- In a real Windows clone instead, `Current` is a text file holding `./0.4.1`
+- In a real Windows clone instead, `Current` is a text file holding `./0.5`
   unless `core.symlinks` is on (needs Developer Mode). Don't commit a change to
   it.
 - Never commit `installer-windows/Output/` (gitignored).
@@ -296,8 +296,12 @@ error). After uninstalling, `sc qc NovacomD` must show HP's path **in quotes**
 (`"C:\Program Files\Palm, Inc\..."`). An unquoted path with spaces is the bug
 fixed in `b4455e4`.
 
-Releases are tagged `<version>-Release` (`0.4-Release`, `0.4.1-Release`). Attach
-the wizard with `gh release upload <tag> <exe>`. Don't create, publish or
+Releases are tagged `<version>-Release` (`0.4-Release`, `0.4.1-Release`, `0.5-Release`). Attach
+the wizard with `gh release upload <tag> <exe>`. From 0.5, Luna DE (Lunacy's desktop shell, a
+feature of this SDK) is part of the release too: its packages from Lunacy's branch `luna-de`
+(`cd DesktopLuna && npm run dist`: the Linux tar and AppImage, both Macs' dmg, the Windows zip)
+and the matching Lunacy GPL source tar go up as assets of the same release, as they did on the
+`DE-0.0.1` prerelease. Don't create, publish or
 retag a release without the maintainer's go-ahead; the macOS `.pkg` assets come
 from the Mac side.
 
@@ -441,7 +445,7 @@ standard way to declare dependencies in an Enyo app.
 
 ## Version information
 
-- PalmSDK Redux: 0.4.1
+- PalmSDK Redux: 0.5
 - SDK tools: 3.0.5b38 (`palm-install --version`)
 - Enyo framework: 1.0
 - Mojo framework: 506

@@ -117,7 +117,8 @@ Each running copy of Luna DE listens on a Unix-domain socket of the user running
 `$XDG_RUNTIME_DIR/luna-de/novacom-<pid>.sock` (`/run/user/<uid>`) on Linux, since the systemd
 service's `PrivateTmp` hides the real `/tmp` from novacomd; `/tmp/luna-de-<uid>/novacom-<pid>.sock`
 on macOS (and a Linux without a runtime folder); each in a folder only that user can open;
-and `%ProgramData%\luna-de\novacom-<pid>.sock` on Windows (AF_UNIX, Windows 10 1803 and later).
+and `%ProgramData%\luna-de\<user>\novacom-<pid>.sock` on Windows (AF_UNIX, Windows 10 1803
+and later), in a folder Luna DE makes private to that user and SYSTEM.
 novacomd (`novacomd/src/host/local_relay.c`) looks there every few seconds, reads each copy's
 nduid with `get file:///proc/nduid`, gives it a port and splices each client connection to the
 socket, byte for byte, as `adb_relay.c` does for Lunacy. On Linux and macOS a folder or socket
