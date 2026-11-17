@@ -193,10 +193,10 @@ DLLs) and unsigned:
 
 | | |
 | --- | --- |
-| Version (`novacomd -V`) | `novacomd-redux-0.4-75d80d5` |
-| Built from | commit `75d80d5`; novacomd's sources are unchanged since |
-| SHA-256 | `a2a61ae20494e97c2e6ba199766fbaa81d0a169a1c16a6081f01a4ec84520ba8` |
-| Toolchain | MSYS2 UCRT64, gcc 16.2, libusb 1.0 (static) |
+| Version (`novacomd -V`) | `novacomd-redux-0.5-4cab786` |
+| Built from | commit `4cab786` (0.5: the Luna DE relay and the C23 `bool` fix) |
+| SHA-256 | `41edf41618e2bc20806b08d381b4d4b5412f9893a1cc1a422e34faf503c30ce3` |
+| Toolchain | cross-compiled on Linux: Ubuntu 24.04's MinGW-w64 (gcc 13, msvcrt), libusb 1.0.27 (static, built from its release source) |
 
 To build it yourself, install [MSYS2](https://www.msys2.org/)
 (`winget install MSYS2.MSYS2`), then in the **MSYS2 UCRT64** shell:
@@ -215,6 +215,22 @@ make spotless && BUILDVERSION=redux-0.5-$(git rev-parse --short HEAD) make host
 strip -o ../windows/novacomd.exe build-novacomd/novacomd.exe
 sha256sum ../windows/novacomd.exe   # update the table above
 ```
+
+Without a Windows machine, the same binary can be cross-compiled on Linux (this is
+how 0.5's was made). Install `gcc-mingw-w64-x86-64-posix`, build libusb for Windows
+(`./configure --host=x86_64-w64-mingw32 --prefix=<dir> --enable-static --disable-shared
+&& make install` in libusb's release source), then in `novacomd/`:
+
+```bash
+make spotless && BUILDVERSION=redux-0.5-$(git rev-parse --short HEAD) make host \
+    UNAME=UCRT64_NT-10.0 CC=x86_64-w64-mingw32-gcc-posix \
+    LIBUSB_CFLAGS="-I<dir>/include/libusb-1.0" LDFLAGS="-static -L<dir>/lib"
+x86_64-w64-mingw32-strip -o ../windows/novacomd.exe build-novacomd/novacomd.exe
+```
+
+`BUILDVERSION` goes in the environment, not on make's command line, where it would
+skip the makefile's quoting. This links Windows' msvcrt rather than the UCRT;
+`rand_s()` still comes from the system (MinGW looks it up at run time).
 
 The installer takes over the service, or you can do it by hand as
 Administrator:
