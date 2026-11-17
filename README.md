@@ -265,7 +265,8 @@ On Linux:
   the `.tar.gz` and start the `luna-de` program inside it.
 
 Luna DE runs none of your machine's programs for the tools, only its own few commands inside
-its webOS root, so `novaterm` and packages' install scripts aren't available there yet. See
+its webOS root. It's an app environment, not an operating system: there's no `novaterm`, and
+packages' install scripts don't run. See
 [LUNACY.md](LUNACY.md#luna-de).
 
 ## Novacom over Wi-Fi (TCP)

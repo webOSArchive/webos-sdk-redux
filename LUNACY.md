@@ -131,8 +131,8 @@ held inside its webOS root: `luna-send`, `tail` (`-f`, for `palm-log -f`), `grep
 `cat`, `ls`, `mkdir`,
 `rm`, `rmdir`, `uname`, and `sh -c` holding one of those, which is everything `palm-install`,
 `palm-launch`, `palm-log` and `palm-run` send. Anything else answers `file does not exist`.
-`get` and `put` reach files in the root only. `open tty://` (`novaterm`) and package scripts
-aren't there yet: they need a shell held inside the root on every host.
+`get` and `put` reach files in the root only. Luna DE is an app environment, not an operating
+system, so it has no `novaterm` (`open tty://`) and never runs packages' scripts.
 
 Built and checked on Linux (2026-11-17) with the installed service: `palm-install` (and `--list`,
 `-r`), `palm-launch` (and `-c`), `palm-log` (and `-f`) and `palm-run` against `-d luna-de`. Not yet
