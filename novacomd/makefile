@@ -156,7 +156,8 @@ HOSTOBJS := \
 	src/host/tokenstorage.o \
 	src/host/commands_service.o \
 	src/host/recovery.o \
-	src/host/adb_relay.o
+	src/host/adb_relay.o \
+	src/host/local_relay.o
 
 ifeq ($(HOSTOS),windows)
 HOSTOBJS += \

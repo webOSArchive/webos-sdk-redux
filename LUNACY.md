@@ -95,3 +95,39 @@ later. `patch-webos-tools-version.py` applies this along with the webOS CE fix; 
 - Windows: `install-windows.bat` installs this repo's novacomd, which finds Lunacy the same
   way (tested on Windows 11; see [WINDOWS.md](WINDOWS.md)). With `/hpnovacomd`, or on
   32-bit Windows, it is HP's novacomd, which knows nothing of adb.
+
+## Luna DE
+
+[Luna DE](https://github.com/webOSArchive/Lunacy/blob/luna-de/Docs/luna-de.md) is Lunacy's
+desktop shell: the same webOS apps, bus and services, on Linux, macOS and Windows, for
+developers. It speaks the same device protocol, and novacomd finds it on the same machine with
+no adb and no emulator:
+
+```
+$ novacom -l
+44079 c37f7a3418b2688e6d933844b48ba803061b4fac usb topaz-linux
+45233 6bff51fb47cb7aec05e6a806d87dc5927e65f8aa local luna-de
+
+$ palm-install -d luna-de com.example.app_1.0.0_all.ipk
+$ palm-launch -d luna-de com.example.app
+$ palm-log -d luna-de -f com.example.app
+```
+
+Each running copy of Luna DE listens on a Unix-domain socket of the user running it:
+`/tmp/luna-de-<uid>/novacom-<pid>.sock` on Linux and macOS, in a folder only that user can open,
+and `%ProgramData%\luna-de\novacom-<pid>.sock` on Windows (AF_UNIX, Windows 10 1803 and later).
+novacomd (`novacomd/src/host/local_relay.c`) looks there every few seconds, reads each copy's
+nduid with `get file:///proc/nduid`, gives it a port and splices each client connection to the
+socket, byte for byte, as `adb_relay.c` does for Lunacy. On Linux and macOS a folder or socket
+not owned by the user its name gives is passed over. `novacomd -L` (`--no-local`) turns the
+search off. Luna DE's build info says `Lunacy Luna DE`, which `webos-tools.jar` already
+recognises.
+
+Luna DE runs no program of the host's for a command. A `run` is one of its own few commands,
+held inside its webOS root: `luna-send`, `tail` (`-f`, for `palm-log`), `cat`, `ls`, `mkdir`,
+`rm`, `rmdir`, `uname`, and `sh -c` holding one of those, which is everything `palm-install`,
+`palm-launch`, `palm-log` and `palm-run` send. Anything else answers `file does not exist`.
+`get` and `put` reach files in the root only. `open tty://` (`novaterm`) and package scripts
+aren't there yet: they need a shell held inside the root on every host.
+
+Built and checked on Linux (2026-11-17); not yet built for Windows or macOS.

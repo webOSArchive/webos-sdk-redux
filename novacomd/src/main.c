@@ -35,6 +35,7 @@
 #if HOST
 #include "host/novacom_host.h"
 #include "host/adb_relay.h"
+#include "host/local_relay.h"
 #include "lib/cksum.h"
 #endif
 #if defined(_WIN32)
@@ -167,6 +168,7 @@ void usage(void)
 	TRACEL(LOG_ALWAYS, "  -d                  run in the background\n");
 #endif
 	TRACEL(LOG_ALWAYS, "  -A                  don't look for Lunacy devices through adb\n");
+	TRACEL(LOG_ALWAYS, "  -L                  don't look for Luna DE on this machine\n");
 	TRACEL(LOG_ALWAYS, "  -V                  print version info\n");
 	TRACEL(LOG_ALWAYS, "  -h                  display this help\n");
 
@@ -301,6 +303,8 @@ void dump_device_list(SOCKET socket)
 #if HOST
 	/* Lunacy devices found through adb, after the device's own */
 	adb_relay_dump(socket);
+	/* Luna DE, on this machine */
+	local_relay_dump(socket);
 #endif
 }
 
@@ -917,6 +921,10 @@ int handleopt(const char *opt, const char *val)
 #if HOST
 		g_adb_relay = 0;
 #endif
+	} else if (strcmp("no-local", opt) == 0) {
+#if HOST
+		g_local_relay = 0;
+#endif
 	} else if (strcmp("no-cpuaffinity", opt) == 0) {
 		g_cpuaffinity = 0;
 	} else if (strcmp("help", opt) == 0) {
@@ -941,15 +949,16 @@ struct option longopts[] = {
 #endif
 	{"version", no_argument, 0, 'V'},
 	{"no-adb", no_argument, 0, 'A'},
+	{"no-local", no_argument, 0, 'L'},
 	{0,0,0,0}
 };
 
 int getnextopt(int argc, char **argv, const char **opt, const char **val)
 {
 #if !defined(_WIN32)
-	int c = getopt_long(argc, argv, "ht:c:e:s:bdCVA", longopts, NULL);
+	int c = getopt_long(argc, argv, "ht:c:e:s:bdCVAL", longopts, NULL);
 #else
-	int c = getopt_long(argc, argv, "ht:c:e:s:bCVAiud", longopts, NULL);
+	int c = getopt_long(argc, argv, "ht:c:e:s:bCVALiud", longopts, NULL);
 #endif
 	*val = optarg;
 
@@ -990,6 +999,9 @@ int getnextopt(int argc, char **argv, const char **opt, const char **val)
 			return 1;
 		case 'A':
 			*opt = "no-adb";
+			return 1;
+		case 'L':
+			*opt = "no-local";
 			return 1;
 		case 'h':
 			*opt = "help";
@@ -1152,6 +1164,7 @@ static int novacomd_main(int argc, char **argv)
 
 #if HOST
 	adb_relay_start();
+	local_relay_start();
 #endif
 
 	main_loop();
